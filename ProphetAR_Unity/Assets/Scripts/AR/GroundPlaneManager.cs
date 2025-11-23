@@ -11,13 +11,7 @@ namespace ProphetAR
     public class GroundPlaneManager : MonoBehaviour
     {
         [SerializeField]
-        private GameObject _anchorPrefab = null;
-
-        [SerializeField]
-        private GroundPlane _groundPlanePrefab = null;
-
-        [SerializeField]
-        private GameObject _defaultPlacementIndicator = null;
+        private GameObject _defaultGroundPlanePlacementIndicatorPrefab = null;
         
         [Header("Debug")]
         [SerializeField]
