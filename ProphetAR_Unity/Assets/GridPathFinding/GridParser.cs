@@ -6,7 +6,7 @@ namespace GridPathFinding
 {
     public static class GridParser
     {
-        public static List<char[,]> ParseGridsFromFile(string filePath, IEnumerable<char>? ignorePoints = null)
+        public static List<char[,]> ParseGridsFromFile(string filePath, IEnumerable<char> ignorePoints = null)
         {
             HashSet<char> ignore = new HashSet<char>(ignorePoints ?? Array.Empty<char>());
         
@@ -57,7 +57,7 @@ namespace GridPathFinding
             return copiedGrid;
         }
 
-        private static char[,] ParseGrid(List<string> lines, HashSet<char>? ignorePoints = null)
+        private static char[,] ParseGrid(List<string> lines, HashSet<char> ignorePoints = null)
         {
             (int gridNumRows, int gridNumCols) = (lines.Count, lines[0].Length);
             char[,] grid = new char[gridNumRows, gridNumCols];

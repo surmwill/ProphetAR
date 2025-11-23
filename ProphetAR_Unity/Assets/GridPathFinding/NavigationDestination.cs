@@ -10,9 +10,9 @@ namespace GridPathFinding
     
         public int StepsRequired { get; }
     
-        private NavigationInstructionSet? _pathTo;
+        private NavigationInstructionSet _pathTo;
     
-        private char[,] _solvedGrid;
+        private readonly char[,] _solvedGrid;
 
         public NavigationInstructionSet PathTo
         {
@@ -20,7 +20,7 @@ namespace GridPathFinding
             {
                 if (_pathTo == null)
                 {
-                    NavigationInstructionSet? pathToOrigin = GridPathFinder.ReverseBuildPathToOrigin(Position, _solvedGrid);
+                    NavigationInstructionSet pathToOrigin = GridPathFinder.ReverseBuildPathToOrigin(Position, _solvedGrid);
                     _pathTo = pathToOrigin ?? throw new InvalidDataException("A navigation destination should not exist if it cannot be reached from its origin");
                 }
 

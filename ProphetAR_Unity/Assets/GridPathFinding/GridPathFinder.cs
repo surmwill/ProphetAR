@@ -10,7 +10,7 @@ namespace GridPathFinding
 
         private static char[,] CreateOrClearGrid(int numRows, int numCols)
         {
-            if (!GridCache.TryGetValue((numRows, numCols), out char[,]? grid))
+            if (!GridCache.TryGetValue((numRows, numCols), out char[,] grid))
             {
                 grid = new char[numRows, numCols];
                 GridCache[(numRows, numCols)] = grid;
@@ -161,7 +161,7 @@ namespace GridPathFinding
             return new NavigationDestinationSet(serializedGrid.Origin, maxNumSteps, navigationDestinations, validNavigationDestinations);
         }
 
-        public static NavigationInstructionSet? GetPathTo(SerializedGrid serializedGrid)
+        public static NavigationInstructionSet GetPathTo(SerializedGrid serializedGrid)
         {
             if (!serializedGrid.HasOrigin)
             {

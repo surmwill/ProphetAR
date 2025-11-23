@@ -14,7 +14,7 @@ namespace GridPathFinding
 
             Console.WriteLine("------------ Misc Tests ------------");
             SerializedGrid outOfBoundsGrid = new SerializedGrid((1, 1), (0, 0), (99, 99), null, null);
-            NavigationInstructionSet? navigationInstructionSet = GridPathFinder.GetPathTo(outOfBoundsGrid);
+            NavigationInstructionSet navigationInstructionSet = GridPathFinder.GetPathTo(outOfBoundsGrid);
             Console.WriteLine($"Testing we receive null instructions if the target is out of bounds. Instructions are null: {navigationInstructionSet == null}");
         }
 
@@ -29,7 +29,7 @@ namespace GridPathFinding
             
                 Console.WriteLine($"------------ Path To - Test Grid {i} ------------");
             
-                NavigationInstructionSet? instructionSet = GridPathFinder.GetPathTo(serializedGrid);
+                NavigationInstructionSet instructionSet = GridPathFinder.GetPathTo(serializedGrid);
                 if (instructionSet != null)
                 {
                     if (instructionSet.Origin == instructionSet.Target)
