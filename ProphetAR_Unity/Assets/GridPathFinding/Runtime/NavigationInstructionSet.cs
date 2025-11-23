@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace GridPathFinding
 {
@@ -26,15 +27,17 @@ namespace GridPathFinding
             Magnitude = magnitude;
         }
 
-        public void PrintInstructions()
+        public string ShowInstructions()
         {
+            StringBuilder sb = new StringBuilder();
+            
             for (int i = 0; i < PathToTarget.Count; i++)
             {
                 NavigationInstruction navigationInstruction = PathToTarget[i];
-                Console.WriteLine($"{i}: {navigationInstruction.Direction},{navigationInstruction.Magnitude}");
+                sb.AppendLine($"{i}: {navigationInstruction.Direction},{navigationInstruction.Magnitude}");
             }
             
-            Console.WriteLine();
+            return sb.ToString();
         }
     }
 }

@@ -41,15 +41,21 @@ namespace GridPathFinding
             {
                 grid[serializedGrid.Target.row, serializedGrid.Target.col] = GridPoints.Target;
             }
-        
-            foreach ((int row, int col) in serializedGrid.Obstacles.Where(obstacle => IsPointInGrid(obstacle, gridDimensions)))
+
+            if (serializedGrid.HasObstacles)
             {
-                grid[row, col] = GridPoints.Obstacle;
+                foreach ((int row, int col) in serializedGrid.Obstacles.Where(obstacle => IsPointInGrid(obstacle, gridDimensions)))
+                {
+                    grid[row, col] = GridPoints.Obstacle;
+                }   
             }
-        
-            foreach (ModificationStep modificationStep in serializedGrid.ModificationSteps.Where(modificationStep => IsPointInGrid(modificationStep.Position, gridDimensions)))
+
+            if (serializedGrid.HasModificationSteps)
             {
-                grid[modificationStep.Position.row, modificationStep.Position.col] = GridPoints.ModificationStepValueToGridPoint(modificationStep.Value);
+                foreach (ModificationStep modificationStep in serializedGrid.ModificationSteps.Where(modificationStep => IsPointInGrid(modificationStep.Position, gridDimensions)))
+                {
+                    grid[modificationStep.Position.row, modificationStep.Position.col] = GridPoints.ModificationStepValueToGridPoint(modificationStep.Value);
+                }   
             }
         }
 

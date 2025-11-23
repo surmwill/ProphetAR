@@ -22,9 +22,9 @@ namespace GridPathFinding
     
         public bool HasModificationSteps => ModificationSteps != null;
 
-        private (int row, int col)? _origin;
+        private readonly (int row, int col)? _origin;
 
-        private (int row, int col)? _target;
+        private readonly (int row, int col)? _target;
 
         public SerializedGrid(
             (int numRows, int numCols) dimensions, 
@@ -76,13 +76,6 @@ namespace GridPathFinding
                     }
                 }
             }
-        }
-        
-        public static SerializedGrid Empty(int numRows = 1, int numCols = 1)
-        {
-            char[,] grid = new char[1,1];
-            grid[0, 0] = GridPoints.Origin;
-            return new SerializedGrid(grid);
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
-namespace GridPathFinding
+namespace GridPathFinding.Editor
 {
     public static class GridParser
     {
@@ -34,20 +35,22 @@ namespace GridPathFinding
             return grids;
         }
 
-        public static void PrintGrid(char[,] grid)
+        public static string ShowGrid(char[,] grid)
         {
+            StringBuilder sb = new StringBuilder();
+            
             for (int x = 0; x < grid.GetLength(0); x++)
             {
                 for (int y = 0; y < grid.GetLength(1); y++)
                 {
                     char point = grid[x, y];
-                    Console.Write(point == GridPoints.Clear ? GridPoints.DEBUG_PRINT_PATH : point); // Null doesn't show up
+                    sb.Append(point == GridPoints.Clear ? GridPoints.DEBUG_PRINT_PATH : point); // Null doesn't show up
                 }
             
-                Console.WriteLine();
+                sb.AppendLine();
             }
-        
-            Console.WriteLine();
+            
+            return sb.ToString();
         }
     
         public static char[,] CopyGrid(char[,] grid)
