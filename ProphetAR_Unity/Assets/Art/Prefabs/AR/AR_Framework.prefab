@@ -132,9 +132,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b958bfac38599f147ba04f81dfbb8b3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _groundPlanePrefab: {fileID: 0}
-  _defaultGroundPlanePlacementIndicatorPrefab: {fileID: 0}
-  _debugHitTestIndicatorPrefab: {fileID: 0}
+  _groundPlanePrefab: {fileID: 4172404195046769533, guid: 576acf6e9796fa74ab03e02087c6b9b1, type: 3}
+  _defaultGroundPlanePlacementIndicatorPrefab: {fileID: 7933894924932190663, guid: 3dbb79671214c7146b0ff047f3b5e49b, type: 3}
+  _debugHitTestIndicatorPrefab: {fileID: 2712420255294336780, guid: 79ffab7c67ce2de4c92a1c052b3c4af0, type: 3}
 --- !u!1 &3649810393835642695
 GameObject:
   m_ObjectHideFlags: 0
