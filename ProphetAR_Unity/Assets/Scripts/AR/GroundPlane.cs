@@ -8,5 +8,7 @@ namespace ProphetAR
         private Transform _content = null;
 
         public Transform Content => _content;
+        
+        public const string Layer = "GroundPlane";
     }
 }

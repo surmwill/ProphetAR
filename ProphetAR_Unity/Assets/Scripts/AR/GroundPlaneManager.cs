@@ -11,55 +11,48 @@ namespace ProphetAR
     public class GroundPlaneManager : MonoBehaviour
     {
         [SerializeField]
+        private GroundPlane _groundPlanePrefab;
+        
+        [SerializeField]
         private GameObject _defaultGroundPlanePlacementIndicatorPrefab = null;
         
         [Header("Debug")]
         [SerializeField]
         private GameObject _debugHitTestIndicatorPrefab = null;
         
-        public GroundPlane Plane { get; private set; }
-
+        public Transform Content => _groundPlane.Content;
+        
         private const float ScanRoomHitTestInterval = 0.1f;
 
+        private GroundPlane _groundPlane;
+        private Transform _prevContent;
+
         private Coroutine _scanRoomCoroutine;
+        private Coroutine _updateGroundPlanePlacementCoroutine;
+        
+        private GameObject _placementIndicator = null;
 
-        private Transform _prevGroundPlane;
-
-        public void RecalculateGroundPlane(GameObject oldGroundPlaneContent)
+        public void ScanRoomForPlanes(Action onComplete, Action<float> onProgress = null)
         {
             if (_scanRoomCoroutine != null)
             {
                 StopCoroutine(_scanRoomCoroutine);
-            }
-            _scanRoomCoroutine = StartCoroutine(ScanRoom());
-        }
-
-        public void PlaceGroundPlane(bool preservePreviousContent, GameObject placementIndicatorPrefab = null)
-        {
-            Transform prevContent = null;
-            if (preservePreviousContent && Plane != null)
-            {
-                prevContent = Plane.Content;
-            }
-
-            if (Plane != null)
-            {
-                Destroy(Plane.gameObject);   
+                _scanRoomCoroutine = null;
             }
             
-            
+            _scanRoomCoroutine = StartCoroutine(ScanRoom(onComplete, onProgress));
         }
-
-        private IEnumerator ScanRoom()
+        
+        private IEnumerator ScanRoom(Action onComplete, Action<float> onProgress)
         {
             const float Interval = 0.1f;
             const float MinDistance = 0.1f;
-            const float NumHitTests = 20;
+            const int NumHitsRequired = 20;
 
             List<Pose> prevHitTests = new List<Pose>();
             List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
-            while (prevHitTests.Count < NumHitTests)
+            while (prevHitTests.Count < NumHitsRequired)
             {
                 if (ARManager.Instance.RaycastManager.Raycast(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f), hits, TrackableType.PlaneWithinPolygon))
                 {
@@ -67,28 +60,132 @@ namespace ProphetAR
                     if (!prevHitTests.Any(prevHit => (prevHit.position - currentHit.position).sqrMagnitude < MinDistance))
                     {
                         prevHitTests.Add(currentHit);
+                        onProgress?.Invoke((float) prevHitTests.Count / NumHitsRequired);
                     }
                 }
 
                 yield return new WaitForSeconds(Interval);
             }
-
+            
             _scanRoomCoroutine = null;
+            onComplete?.Invoke();
+        }
+        
+        public void StartPlacingGroundPlane(bool preservePreviousContent, GameObject placementIndicatorPrefab = null)
+        {
+            CancelPlacingGroundPlane();
+            
+            if (preservePreviousContent && _groundPlane != null)
+            {
+                _prevContent = Content;
+            }
+            else if (!preservePreviousContent)
+            {
+                _prevContent = null;
+            }
+
+            if (_groundPlane != null)
+            {
+                Destroy(_groundPlane.gameObject);
+                _groundPlane = null;
+            }
+            
+            _updateGroundPlanePlacementCoroutine = StartCoroutine(UpdateGroundPlanePlacement(placementIndicatorPrefab));
+        }
+        
+        public bool TryPlaceGroundPlane()
+        {
+            if (_placementIndicator == null)
+            {
+                return false;
+            }
+
+            _groundPlane = Instantiate(_groundPlanePrefab, _placementIndicator.transform.position, _placementIndicator.transform.rotation);
+            if (_prevContent != null)
+            {
+                ParentToGround(_prevContent, false);
+                _prevContent.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            }
+            
+            CancelPlacingGroundPlane();
+            return true;
+        }
+        
+        public void CancelPlacingGroundPlane()
+        {
+            if (_updateGroundPlanePlacementCoroutine != null)
+            {
+                StopCoroutine(_updateGroundPlanePlacementCoroutine);
+                _updateGroundPlanePlacementCoroutine = null;
+            }
+           
+            if (_placementIndicator != null)
+            {
+                Destroy(_placementIndicator);
+                _placementIndicator = null;
+            }
+        }
+
+        private IEnumerator UpdateGroundPlanePlacement(GameObject placementIndicatorPrefab)
+        {
+            List<ARRaycastHit> hits = new List<ARRaycastHit>();
+            
+            for (;;)
+            {
+                if (ARManager.Instance.RaycastManager.Raycast(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f), hits, TrackableType.PlaneWithinPolygon))
+                {
+                    Pose hit = hits[0].pose;
+                    Vector3 faceAwayFromUser = Vector3.ProjectOnPlane(hit.position - ARManager.Instance.ARCamera.transform.position, hit.up);
+                    
+                    if (_placementIndicator == null)
+                    {
+                        _placementIndicator = Instantiate(placementIndicatorPrefab);
+                    }
+                    
+                    _placementIndicator.transform.SetPositionAndRotation(hit.position, Quaternion.LookRotation(faceAwayFromUser, hit.up));
+                }
+            }
+        }
+
+        public bool RaycastGroundPlane(Vector2 normalizedScreenPosition, out RaycastHit hit)
+        {
+            if (_groundPlane == null)
+            {
+                throw new InvalidOperationException("Ground plane does not exist");
+            }
+
+            Ray ray = ARManager.Instance.ARCamera.ScreenPointToRay(new Vector2(Screen.width * normalizedScreenPosition.x, Screen.height * normalizedScreenPosition.y));
+            return Physics.Raycast(ray, out hit, LayerMask.GetMask(GroundPlane.Layer));
         }
         
         public GameObject GroundedInstantiate(GameObject prefab, Vector3 position, Quaternion rotation)
         {
-            return Instantiate(prefab, position, rotation, Plane.Content);   
+            if (_groundPlane == null)
+            {
+                throw new InvalidOperationException("Ground plane does not exist");
+            }
+            
+            return Instantiate(prefab, position, rotation, _groundPlane.Content);   
         }
         
         public GameObject GroundedInstantiate(GameObject prefab, bool instantiateInWorldSpace = false)
         {
-            return Instantiate(prefab, Plane.Content, instantiateInWorldSpace);
+            if (_groundPlane == null)
+            {
+                throw new InvalidOperationException("Ground plane does not exist");
+            }
+            
+            return Instantiate(prefab, _groundPlane.Content, instantiateInWorldSpace);
         }
 
-        public void ParentToGround(GameObject go, bool worldPositionStays)
+        public void ParentToGround(Transform t, bool worldPositionStays)
         {
-            go.transform.SetParent(Plane.Content, worldPositionStays);
+            if (_groundPlane == null)
+            {
+                throw new InvalidOperationException("Ground plane does not exist");
+            }
+            
+            t.SetParent(_groundPlane.Content, worldPositionStays);
         }
         
         private void OnDestroy()
@@ -97,6 +194,8 @@ namespace ProphetAR
             {
                 StopCoroutine(_scanRoomCoroutine);
             }
+            
+            CancelPlacingGroundPlane();
         }
     }
 }
