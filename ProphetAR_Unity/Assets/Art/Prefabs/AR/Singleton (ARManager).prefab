@@ -13,8 +13,6 @@ GameObject:
   - component: {fileID: 9034370049575777163}
   - component: {fileID: 884452982070009470}
   - component: {fileID: 7058565423784579140}
-  - component: {fileID: 6438315428638485054}
-  - component: {fileID: 192448920906063271}
   m_Layer: 0
   m_Name: XR Origin
   m_TagString: Untagged
@@ -53,7 +51,7 @@ MonoBehaviour:
   m_Camera: {fileID: 7987374068046989972}
   m_OriginBaseGameObject: {fileID: 1052467032778715313}
   m_CameraFloorOffsetObject: {fileID: 3649810393835642695}
-  m_RequestedTrackingOriginMode: 2
+  m_RequestedTrackingOriginMode: 1
   m_CameraYOffset: 1.1176
 --- !u!114 &9034370049575777163
 MonoBehaviour:
@@ -104,37 +102,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_RaycastPrefab: {fileID: 0}
---- !u!114 &6438315428638485054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1052467032778715313}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68a03f19458af3e478049cc69fe0279e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _raycastManager: {fileID: 7058565423784579140}
-  _anchorManager: {fileID: 884452982070009470}
-  _cameraManager: {fileID: 9099171476053670473}
-  _groundPlaneManager: {fileID: 192448920906063271}
---- !u!114 &192448920906063271
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1052467032778715313}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b958bfac38599f147ba04f81dfbb8b3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _groundPlanePrefab: {fileID: 4172404195046769533, guid: 576acf6e9796fa74ab03e02087c6b9b1, type: 3}
-  _defaultGroundPlanePlacementIndicatorPrefab: {fileID: 7933894924932190663, guid: 3dbb79671214c7146b0ff047f3b5e49b, type: 3}
-  _debugHitTestIndicatorPrefab: {fileID: 2712420255294336780, guid: 79ffab7c67ce2de4c92a1c052b3c4af0, type: 3}
 --- !u!1 &3649810393835642695
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,8 +257,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6436926230324512477}
+  - component: {fileID: 5462809900715180981}
+  - component: {fileID: 2585684113496497725}
   m_Layer: 0
-  m_Name: AR_Framework
+  m_Name: Singleton (ARManager)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -314,6 +283,38 @@ Transform:
   - {fileID: 4682722114866427058}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5462809900715180981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6708456480355271324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68a03f19458af3e478049cc69fe0279e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _raycastManager: {fileID: 7058565423784579140}
+  _anchorManager: {fileID: 884452982070009470}
+  _cameraManager: {fileID: 9099171476053670473}
+  _groundPlaneManager: {fileID: 2585684113496497725}
+  _arSession: {fileID: 7888618215937193668}
+--- !u!114 &2585684113496497725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6708456480355271324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b958bfac38599f147ba04f81dfbb8b3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _groundPlanePrefab: {fileID: 4172404195046769533, guid: 576acf6e9796fa74ab03e02087c6b9b1, type: 3}
+  _defaultGroundPlanePlacementIndicatorPrefab: {fileID: 7933894924932190663, guid: 3dbb79671214c7146b0ff047f3b5e49b, type: 3}
+  _debugHitTestIndicatorPrefab: {fileID: 2712420255294336780, guid: 79ffab7c67ce2de4c92a1c052b3c4af0, type: 3}
 --- !u!1 &9195696967005740564
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,8 +328,8 @@ GameObject:
   - component: {fileID: 9002875866948379492}
   - component: {fileID: 9099171476053670473}
   - component: {fileID: 404701288448435321}
-  - component: {fileID: 3644489884412635604}
   - component: {fileID: 8669440988217886394}
+  - component: {fileID: 3452367325705833866}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -443,107 +444,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_UseCustomMaterial: 0
   m_CustomMaterial: {fileID: 0}
---- !u!114 &3644489884412635604
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9195696967005740564}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2fadf230d1919748a9aa21d40f74619, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TrackingType: 0
-  m_UpdateType: 0
-  m_IgnoreTrackingState: 0
-  m_PositionInput:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Position
-      m_Type: 0
-      m_ExpectedControlType: Vector3
-      m_Id: 9ea9e7b1-fa13-4658-ae22-207414b32d1c
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings:
-      - m_Name: 
-        m_Id: 6307865f-9493-4b03-a702-3279df38f218
-        m_Path: <XRHMD>/centerEyePosition
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Position
-        m_Flags: 0
-      - m_Name: 
-        m_Id: d2272878-e6c6-4f5d-9003-845f2d43013c
-        m_Path: <HandheldARInputDevice>/devicePosition
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Position
-        m_Flags: 0
-      m_Flags: 0
-    m_Reference: {fileID: 0}
-  m_RotationInput:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Rotation
-      m_Type: 0
-      m_ExpectedControlType: Quaternion
-      m_Id: 9691a004-e9d7-40c7-80b7-36125f05107f
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings:
-      - m_Name: 
-        m_Id: be1164b2-dfae-417f-bfa2-27a217af0af0
-        m_Path: <XRHMD>/centerEyeRotation
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Rotation
-        m_Flags: 0
-      - m_Name: 
-        m_Id: 22718914-fa82-43c3-84df-b3ff95b04fd5
-        m_Path: <HandheldARInputDevice>/deviceRotation
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Rotation
-        m_Flags: 0
-      m_Flags: 0
-    m_Reference: {fileID: 0}
-  m_TrackingStateInput:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Tracking State
-      m_Type: 0
-      m_ExpectedControlType: Integer
-      m_Id: a0c8e963-f255-4158-9a81-4754cf97ef1f
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 0}
-  m_PositionAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 36ab38a9-ef45-4dc0-b4d7-6c4019874cfa
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  m_RotationAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 13a81a83-6d2f-4714-8189-611508b44d31
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
 --- !u!114 &8669440988217886394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -588,3 +488,21 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &3452367325705833866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9195696967005740564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2a9c34df4095f47b9ca8f975175f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Device: 0
+  m_PoseSource: 2
+  m_PoseProviderComponent: {fileID: 0}
+  m_TrackingType: 0
+  m_UpdateType: 0
+  m_UseRelativeTransform: 0

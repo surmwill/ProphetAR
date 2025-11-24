@@ -31,17 +31,17 @@ namespace ProphetAR
         private GameObject _placementIndicator;
         private readonly List<GameObject> _debugScanRoomHitIndicators = new();
 
-        public void ScanRoomForPlanes(Action onComplete, Action<float> onProgress = null)
+        public void ScanRoomForPlanes(Action<float> onProgress, Action onComplete)
         {
             CancelScanningRoom();
-            _scanRoomCoroutine = StartCoroutine(ScanRoom(onComplete, onProgress));
+            _scanRoomCoroutine = StartCoroutine(ScanRoom(onProgress, onComplete));
         }
         
-        private IEnumerator ScanRoom(Action onComplete, Action<float> onProgress)
+        private IEnumerator ScanRoom(Action<float> onProgress, Action onComplete)
         {
             const float Interval = 0.1f;
             const float MinDistance = 0.1f;
-            const int NumHitsRequired = 20;
+            const int NumHitsRequired = 5; // 20
 
             List<Pose> prevHitTests = new List<Pose>();
             List<ARRaycastHit> hits = new List<ARRaycastHit>();
@@ -55,7 +55,7 @@ namespace ProphetAR
                     {
                         prevHitTests.Add(currentHit);
                         onProgress?.Invoke((float) prevHitTests.Count / NumHitsRequired);
-
+                        
                         _debugScanRoomHitIndicators.Add(Instantiate(_debugHitTestIndicatorPrefab, currentHit.position, currentHit.rotation));
                     }
                 }
@@ -82,7 +82,7 @@ namespace ProphetAR
             _debugScanRoomHitIndicators.Clear();
         }
         
-        public void StartPlacingGroundPlane(bool preservePreviousContent, GameObject customPlacementIndicatorPrefab = null)
+        public void StartPlacingGroundPlane(bool preservePreviousContent = false, GameObject customPlacementIndicatorPrefab = null)
         {
             if (preservePreviousContent && _groundPlane != null)
             {
@@ -155,6 +155,8 @@ namespace ProphetAR
                     
                     _placementIndicator.transform.SetPositionAndRotation(hit.position, Quaternion.LookRotation(faceAwayFromUser, hit.up));
                 }
+                
+                yield return null;
             }
         }
 
