@@ -11,7 +11,7 @@ namespace ProphetAR
     public class GroundPlaneManager : MonoBehaviour
     {
         [SerializeField]
-        private GroundPlane _groundPlanePrefab;
+        private GroundPlane _groundPlanePrefab = null;
         
         [SerializeField]
         private GameObject _defaultGroundPlanePlacementIndicatorPrefab = null;
@@ -21,8 +21,6 @@ namespace ProphetAR
         private GameObject _debugHitTestIndicatorPrefab = null;
         
         public Transform Content => _groundPlane.Content;
-        
-        private const float ScanRoomHitTestInterval = 0.1f;
 
         private GroundPlane _groundPlane;
         private Transform _prevContent;
@@ -30,16 +28,12 @@ namespace ProphetAR
         private Coroutine _scanRoomCoroutine;
         private Coroutine _updateGroundPlanePlacementCoroutine;
         
-        private GameObject _placementIndicator = null;
+        private GameObject _placementIndicator;
+        private readonly List<GameObject> _debugScanRoomHitIndicators = new();
 
         public void ScanRoomForPlanes(Action onComplete, Action<float> onProgress = null)
         {
-            if (_scanRoomCoroutine != null)
-            {
-                StopCoroutine(_scanRoomCoroutine);
-                _scanRoomCoroutine = null;
-            }
-            
+            CancelScanningRoom();
             _scanRoomCoroutine = StartCoroutine(ScanRoom(onComplete, onProgress));
         }
         
@@ -61,20 +55,35 @@ namespace ProphetAR
                     {
                         prevHitTests.Add(currentHit);
                         onProgress?.Invoke((float) prevHitTests.Count / NumHitsRequired);
+
+                        _debugScanRoomHitIndicators.Add(Instantiate(_debugHitTestIndicatorPrefab, currentHit.position, currentHit.rotation));
                     }
                 }
 
                 yield return new WaitForSeconds(Interval);
             }
             
-            _scanRoomCoroutine = null;
+            CancelScanningRoom();
             onComplete?.Invoke();
         }
-        
-        public void StartPlacingGroundPlane(bool preservePreviousContent, GameObject placementIndicatorPrefab = null)
+
+        public void CancelScanningRoom()
         {
-            CancelPlacingGroundPlane();
+            if (_scanRoomCoroutine != null)
+            {
+                StopCoroutine(_scanRoomCoroutine);
+                _scanRoomCoroutine = null;
+            }
             
+            foreach (GameObject hitIndicator in _debugScanRoomHitIndicators)
+            {
+                Destroy(hitIndicator);
+            }
+            _debugScanRoomHitIndicators.Clear();
+        }
+        
+        public void StartPlacingGroundPlane(bool preservePreviousContent, GameObject customPlacementIndicatorPrefab = null)
+        {
             if (preservePreviousContent && _groundPlane != null)
             {
                 _prevContent = Content;
@@ -90,7 +99,9 @@ namespace ProphetAR
                 _groundPlane = null;
             }
             
-            _updateGroundPlanePlacementCoroutine = StartCoroutine(UpdateGroundPlanePlacement(placementIndicatorPrefab));
+            GameObject placementIndicator = customPlacementIndicatorPrefab == null ? _defaultGroundPlanePlacementIndicatorPrefab : customPlacementIndicatorPrefab;
+            CancelPlacingGroundPlane();
+            _updateGroundPlanePlacementCoroutine = StartCoroutine(UpdateGroundPlanePlacement(placementIndicator));
         }
         
         public bool TryPlaceGroundPlane()
@@ -190,11 +201,7 @@ namespace ProphetAR
         
         private void OnDestroy()
         {
-            if (_scanRoomCoroutine != null)
-            {
-                StopCoroutine(_scanRoomCoroutine);
-            }
-            
+            CancelScanningRoom();
             CancelPlacingGroundPlane();
         }
     }
