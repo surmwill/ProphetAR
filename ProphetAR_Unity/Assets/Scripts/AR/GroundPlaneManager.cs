@@ -31,13 +31,13 @@ namespace ProphetAR
         private GameObject _placementIndicator;
         private readonly List<GameObject> _debugScanRoomHitIndicators = new();
 
-        public void ScanRoomForPlanes(Action<float> onProgress, Action onComplete)
+        public void ScanRoomForPlanes(Action<float> onProgress, Action onComplete, bool debugShowHits = false)
         {
             CancelScanningRoom();
-            _scanRoomCoroutine = StartCoroutine(ScanRoom(onProgress, onComplete));
+            _scanRoomCoroutine = StartCoroutine(ScanRoom(onProgress, onComplete, debugShowHits));
         }
         
-        private IEnumerator ScanRoom(Action<float> onProgress, Action onComplete)
+        private IEnumerator ScanRoom(Action<float> onProgress, Action onComplete, bool debugShowHits)
         {
             const float Interval = 0.1f;
             const float MinDistance = 0.1f;
@@ -55,8 +55,11 @@ namespace ProphetAR
                     {
                         prevHitTests.Add(currentHit);
                         onProgress?.Invoke((float) prevHitTests.Count / NumHitsRequired);
-                        
-                        _debugScanRoomHitIndicators.Add(Instantiate(_debugHitTestIndicatorPrefab, currentHit.position, currentHit.rotation));
+
+                        if (debugShowHits)
+                        {
+                            _debugScanRoomHitIndicators.Add(Instantiate(_debugHitTestIndicatorPrefab, currentHit.position, currentHit.rotation));
+                        }
                     }
                 }
 

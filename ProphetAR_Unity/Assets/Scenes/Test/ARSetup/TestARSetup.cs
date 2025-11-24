@@ -38,7 +38,8 @@ public class TestARSetup : MonoBehaviour
                 SetStatusText("placing ground plane");
                 _placeGroundPlaneButton.gameObject.SetActive(true);
                 ARManager.Instance.GroundPlaneManager.StartPlacingGroundPlane();
-            });
+            },
+            true);
     }
 
     private void TryPlaceGroundPlane()
