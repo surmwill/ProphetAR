@@ -1,1 +1,1 @@
-AR Isometric turned based game.
+AR top-down turned-based strategy game. 
