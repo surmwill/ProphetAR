@@ -13,8 +13,6 @@ public class TestARSetup : MonoBehaviour
 
     [SerializeField]
     private TMP_Text _statusText = null;
-
-    private GameObject cube;
     
     private void Start()
     {
