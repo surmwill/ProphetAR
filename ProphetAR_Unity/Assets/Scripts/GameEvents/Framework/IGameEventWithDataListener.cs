@@ -7,6 +7,6 @@
     /// </summary>
     public interface IGameEventWithDataListener : IGameEventListener
     {
-        
+        // Raise method found in GameEventWithTypedDataListener
     }
 }

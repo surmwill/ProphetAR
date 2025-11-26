@@ -5,60 +5,128 @@ using UnityEngine;
 
 namespace ProphetAR
 {
-    public static class GameEventProcessor
+    public class GameEventProcessor
     {
-        private static readonly LinkedList<GameEvent> GameEventQueue = new();
+        // Maps the game event type to their corresponding list of listeners
+        private readonly Dictionary<Type, List<IGameEventWithoutDataListener>> GameEventWithoutDataListeners = new();
+        private readonly Dictionary<Type, List<IGameEventWithDataListener>> GameEventWithDataListeners = new();
         
-        private static readonly Dictionary<GameEventType, LinkedList<CachedGameEventWithoutDataListener>> GameEventWithoutDataListeners = new();
-        private static readonly Dictionary<GameEventType, LinkedList<CachedGameEventWithDataListener>> GameEventWithDataListeners = new();
+        private static readonly Dictionary<Type, MethodInfo> DataListenerTypeToEventRaiseMethodInfo = new();
+        private readonly Dictionary<IGameEventWithDataListener, Action<object>> DataListenerToEventRaise = new(); 
 
         // Remember to shift these if we delete
-        private static LinkedListNode<CachedGameEventWithoutDataListener> _currentlyHandlingListenerWithoutDataNode;
-        private static LinkedListNode<CachedGameEventWithDataListener> _currentlyHandlingListenerWithDataNode;
+        private LinkedListNode<CachedGameEventWithoutDataListener> _currentlyHandlingListenerWithoutDataNode;
+        private LinkedListNode<CachedGameEventWithDataListener> _currentlyHandlingListenerWithDataNode;
 
-        public static void RaiseEvent(GameEvent gameEvent)
+        private readonly Dictionary<Type, Dictionary<long, int>> _currentEventRaiseIterations = new();
+        private long _numEventRaises = 0;
+
+        // Note: it is important this method is generic to preserve the specialized interface reference type instead of casting it up to a more generic base
+        public void AddListener<T>(T gameEventListener) where T : IGameEventListener
         {
-            // Data
-            if (gameEvent is GameEventWithData gameEventWithData)
+            // No data
+            if (gameEventListener is IGameEventWithoutDataListener gameEventWithoutDataListener)
             {
-                if (!GameEventWithDataListeners.TryGetValue(gameEvent.GameEventType, out LinkedList<CachedGameEventWithDataListener> listenersWithDataQueue) || listenersWithDataQueue.Count == 0)
+                Type gameEventType = GameEventListenerUtils.GetEventTypeForListenerType<T>();
+                if (!GameEventWithoutDataListeners.TryGetValue(gameEventType, out List<IGameEventWithoutDataListener> listenersWithoutData))
                 {
-                    Debug.LogWarning($"Raised event `{gameEvent.GameEventType}` with no listeners");
+                    listenersWithoutData = new List<IGameEventWithoutDataListener>();
+                    GameEventWithoutDataListeners.Add(gameEventType, listenersWithoutData);
+                }
+                
+                // Add the listener
+                listenersWithoutData.Add(gameEventWithoutDataListener);
+                return;
+            }
+
+            // Has data
+            if (!(gameEventListener is IGameEventWithDataListener gameEventWithDataListener))
+            {
+                Debug.LogWarning($"All listeners must derive from `{nameof(IGameEventWithoutDataListener)} or `{nameof(IGameEventWithDataListener)}`");
+                return;
+            }
+            
+            // We need to figure out how to raise the event
+            if (!DataListenerToEventRaise.ContainsKey(gameEventWithDataListener))
+            {
+                Type dataListenerType = typeof(T);
+                if (!DataListenerTypeToEventRaiseMethodInfo.TryGetValue(dataListenerType, out MethodInfo eventRaiseMethodInfo))
+                {
+                    eventRaiseMethodInfo = dataListenerType.GetMethod(IGameEventListener.OnEventMethodName);
+                    DataListenerTypeToEventRaiseMethodInfo.Add(dataListenerType, eventRaiseMethodInfo);
+                }
+            
+                DataListenerToEventRaise.Add(gameEventWithDataListener, data => eventRaiseMethodInfo.Invoke(gameEventWithDataListener, new[] { data }));
+            }
+            
+            // Add the listener
+            Type gameEventWithDataType = GameEventListenerUtils.GetEventTypeForListenerType<T>();
+            if (!GameEventWithDataListeners.TryGetValue(gameEventWithDataType, out List<IGameEventWithDataListener> listenersWithData))
+            {
+                listenersWithData = new List<IGameEventWithDataListener>();
+                GameEventWithDataListeners.Add(gameEventWithDataType, listenersWithData);
+            }
+            listenersWithData.Add(gameEventWithDataListener);
+        }
+        
+        public void RemoveListener
+
+        public void RaiseEvent<T>(T gameEvent) where T : GameEvent
+        {
+            Dictionary<long, int> iterations = null;
+            long iterationKey = 0;
+            
+            // No Data
+            if (gameEvent is GameEventWithoutData gameEventWithoutData)
+            {
+                Type gameEventType = typeof(T);  
+                if (!GameEventWithoutDataListeners.TryGetValue(gameEventType, out List<IGameEventWithoutDataListener> listenersWithoutData))
+                {
+                    Debug.LogWarning($"Raised event `{gameEventType}` with no listeners");
                     return;
                 }
 
-                _currentlyHandlingListenerWithDataNode = listenersWithDataQueue.First;
-                while (_currentlyHandlingListenerWithDataNode != null)
+                if (!_currentEventRaiseIterations.TryGetValue(gameEventType, out iterations))
                 {
-                    CachedGameEventWithDataListener listener = _currentlyHandlingListenerWithDataNode.Value;
-                    listener.RaiseEvent(gameEventWithData.RawData);
-                    _currentlyHandlingListenerWithDataNode = _currentlyHandlingListenerWithDataNode.Next;
+                    iterations = new Dictionary<long, int>();
+                    _currentEventRaiseIterations.Add(gameEventType, iterations);
                 }
 
+                iterationKey = _numEventRaises++;
+                iterations.Add(iterationKey, 0);
+
+                for (iterations[iterationKey] = 0; iterations[iterationKey] < listenersWithoutData.Count; iterations[iterationKey]++)
+                {
+                    listenersWithoutData[iterations[iterationKey]].OnEvent();
+                }
+            }
+            
+            // Has Data
+            if (!(gameEvent is GameEventWithData gameEventWithData))
+            {
+                Debug.LogWarning($"All game events must derive from GameEventWithoutData or GameEventWithTypedData.");
                 return;
             }
             
-            // No data
-            if (!(gameEvent is GameEventWithoutData gameEventWithoutData))
+            Type gameEventWithDataType = typeof(T);  
+            if (!GameEventWithDataListeners.TryGetValue(gameEventWithDataType, out List<IGameEventWithDataListener> listenersWithData))
             {
-                Debug.LogWarning($"Error handling event `{gameEvent.GameEventType}`. All game events must derive from GameEventWithoutData or GameEventWithTypedData. " +
-                                 $"Check the associated listener in `${nameof(GameEventType)}`");
-                return;
-            }
-            
-            
-            if (!GameEventWithoutDataListeners.TryGetValue(gameEvent.GameEventType, out LinkedList<CachedGameEventWithoutDataListener> listenersQueue))
-            {
-                Debug.LogWarning($"Raised event `{gameEvent.GameEventType}` with no listeners");
+                Debug.LogWarning($"Raised event `{gameEventWithDataType}` with no listeners");
                 return;
             }
 
-            _currentlyHandlingListenerWithoutDataNode = listenersQueue.First;
-            while (_currentlyHandlingListenerWithoutDataNode != null)
+            if (!_currentEventRaiseIterations.TryGetValue(gameEventWithDataType, out iterations))
             {
-                CachedGameEventWithoutDataListener listener = _currentlyHandlingListenerWithoutDataNode.Value;
-                listener.RaiseEvent();
-                _currentlyHandlingListenerWithoutDataNode = _currentlyHandlingListenerWithoutDataNode.Next;
+                iterations = new Dictionary<long, int>();
+                _currentEventRaiseIterations.Add(gameEventWithDataType, iterations);
+            }
+
+            iterationKey = _numEventRaises++;
+            iterations.Add(iterationKey, 0);
+
+            for (iterations[iterationKey] = 0; iterations[iterationKey] < listenersWithData.Count; iterations[iterationKey]++)
+            {
+                DataListenerToEventRaise[listenersWithData[iterations[iterationKey]]].Invoke(gameEventWithData.RawData);
             }
         }
     }

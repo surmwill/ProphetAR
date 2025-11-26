@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace ProphetAR
 {
+    /*
     public static class GameEventTypeExtensions
     {
         private static readonly Dictionary<GameEventType, Type> CachedListenerInterfaces = new();
@@ -29,4 +30,5 @@ namespace ProphetAR
             return listenerInterface;
         }
     }
+    */
 }
