@@ -7,7 +7,7 @@
     {
         public TData Data { get; }
 
-        public GameEventWithTypedData(GameEventType gameEventType, TData data, int? customPriority = null) : base(gameEventType, data, customPriority)
+        public GameEventWithTypedData(TData data) : base(data)
         {
             Data = data;
         }

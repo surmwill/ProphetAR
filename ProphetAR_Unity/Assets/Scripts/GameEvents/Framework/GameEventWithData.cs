@@ -9,7 +9,7 @@
     {
         public object RawData { get; }
         
-        protected GameEventWithData(GameEventType gameEventType, object rawData, int? customPriority = null) : base(gameEventType, customPriority)
+        protected GameEventWithData(object rawData)
         {
             RawData = rawData;
         }

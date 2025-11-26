@@ -1,8 +1,7 @@
 ﻿namespace ProphetAR
 {
-    public class GameEventCharacterMove : GameEventWithTypedData<GameEventMovementStepData>
+    public class GameEventCharacterMove : GameEventWithTypedData<GameEventCharacterMoveData>
     {
-        public GameEventCharacterMove(GameEventType gameEventType, GameEventMovementStepData data, int? customPriority = null) : 
-            base(gameEventType, data, customPriority) { }
+        public GameEventCharacterMove(GameEventCharacterMoveData data) : base(data) { }
     }
 }
