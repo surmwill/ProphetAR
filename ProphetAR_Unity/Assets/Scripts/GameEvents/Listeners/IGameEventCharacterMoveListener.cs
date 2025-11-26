@@ -1,7 +1,7 @@
 ﻿namespace ProphetAR
 {
     [ListensToGameEventType(typeof(GameEventCharacterMove))]
-    public interface IGameEventCharacterMoveListener : IGameEventWithTypedDataListener<GameEventCharacterMoveData>
+    public interface IGameEventCharacterMoveListener : IGameEventWithTypedDataListener<IGameEventCharacterMoveListener, GameEventCharacterMoveData>
     {
     }
 }   

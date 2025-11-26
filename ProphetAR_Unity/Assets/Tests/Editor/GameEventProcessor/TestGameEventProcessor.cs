@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using UnityEngine;
 
 namespace ProphetAR.Tests
 {
@@ -16,26 +17,25 @@ namespace ProphetAR.Tests
         public void TestSimpleRaise()
         {
             GameEventProcessor gameEventProcessor = new GameEventProcessor();
+            SampleListenerWithData sampleListenerWithData = new SampleListenerWithData();
+            
+            gameEventProcessor.AddListener((IGameEventCharacterMoveListener) sampleListenerWithData);
+            gameEventProcessor.AddListener((IGameEventFireballStrikeListener) sampleListenerWithData);
+            
+            gameEventProcessor.RaiseEvent(new GameEventFireballStrike(new GameEventFireballStrikeData()));
+            gameEventProcessor.RaiseEvent(new GameEventCharacterMove(new GameEventCharacterMoveData()));
         }
 
         private class SampleListenerWithData : IGameEventCharacterMoveListener, IGameEventFireballStrikeListener
         {
-            public void OnEvent(GameEventCharacterMoveData data)
+            void IGameEventWithTypedDataListener<IGameEventCharacterMoveListener, GameEventCharacterMoveData>.OnEvent(GameEventCharacterMoveData data)
             {
-                
+                Debug.Log("ON MOVE");
             }
 
-            public void OnEvent(GameEventFireballStrikeData data)
+            void IGameEventWithTypedDataListener<IGameEventFireballStrikeListener, GameEventFireballStrikeData>.OnEvent(GameEventFireballStrikeData data)
             {
-                
-            }
-        }
-
-        private class SampleListenerWithoutData : IGameEventOpenMainMenuListener, IGameEventOpenSettingsListener
-        {
-            public void IGameEventOpenMainMenuListener.OnEvent()
-            {
-                throw new System.NotImplementedException();
+                Debug.Log("ON FIREBALL");
             }
         }
     }

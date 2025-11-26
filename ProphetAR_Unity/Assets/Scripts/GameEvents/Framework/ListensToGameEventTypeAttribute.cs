@@ -11,7 +11,7 @@ namespace ProphetAR
         {
             if (!typeof(GameEvent).IsAssignableFrom(typeGameEvent))
             {
-                throw new ArgumentException($"Can only listen to `{nameof(GameEvent)}` types.");
+                throw new ArgumentException($"`{typeGameEvent.Name}` must be a `{nameof(GameEvent)}` type.");
             }
             
             TypeGameEvent = typeGameEvent;
