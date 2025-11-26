@@ -2,7 +2,7 @@
 
 namespace ProphetAR
 {
-    public struct GameEventCharacterMoveData
+    public class GameEventCharacterMoveData
     {
         public Vector2 From { get; }
         
