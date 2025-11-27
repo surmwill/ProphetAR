@@ -19,8 +19,10 @@ namespace ProphetAR.Tests
             GameEventProcessor gameEventProcessor = new GameEventProcessor();
             SampleListenerWithData sampleListenerWithData = new SampleListenerWithData();
             
-            gameEventProcessor.AddListener((IGameEventCharacterMoveListener) sampleListenerWithData);
-            gameEventProcessor.AddListener((IGameEventFireballStrikeListener) sampleListenerWithData);
+            gameEventProcessor.AddListenerWithData<IGameEventCharacterMoveListener, GameEventCharacterMoveData>(sampleListenerWithData);
+            gameEventProcessor.AddListenerWithData<IGameEventFireballStrikeListener, GameEventFireballStrikeData>(sampleListenerWithData);
+            
+            gameEventProcessor.RemoveListenerWithData<IGameEventFireballStrikeListener>(sampleListenerWithData);
             
             gameEventProcessor.RaiseEvent(new GameEventFireballStrike(new GameEventFireballStrikeData()));
             gameEventProcessor.RaiseEvent(new GameEventCharacterMove(new GameEventCharacterMoveData()));

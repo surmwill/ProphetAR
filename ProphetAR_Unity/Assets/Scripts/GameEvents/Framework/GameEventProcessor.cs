@@ -17,37 +17,27 @@ namespace ProphetAR
         
         // For each concrete game event listener that takes data, store how we send various data to that listener
         private readonly Dictionary<IGameEventWithDataListener, Dictionary<Type, Action<object>>> _dataListenerToEventRaises = new();
-
-        private static readonly object[] CachedDataArguments = new object[1];
-
+        
         private readonly Dictionary<Type, Dictionary<long, int>> _currentEventRaiseIterations = new();
         private long _numEventRaises = 0;
 
-        // Note: it is important this method is generic to preserve the derived interface type instead of casting it up
-        public void AddListener<T>(T gameEventListener) where T : IGameEventListener
+        // Note: it is important this method is generic to preserve the derived interface type, instead of casting it up
+        public void AddListenerWithoutData<TListener>(TListener gameEventWithoutDataListener) where TListener : IGameEventWithoutDataListener
         {
-            // No data
-            if (gameEventListener is IGameEventWithoutDataListener gameEventWithoutDataListener)
+            Type gameEventType = GameEventListenerUtils.GetEventTypeForListenerType<TListener>();
+            if (!_gameEventWithoutDataListeners.TryGetValue(gameEventType, out List<IGameEventWithoutDataListener> listenersWithoutData))
             {
-                Type gameEventType = GameEventListenerUtils.GetEventTypeForListenerType<T>();
-                if (!_gameEventWithoutDataListeners.TryGetValue(gameEventType, out List<IGameEventWithoutDataListener> listenersWithoutData))
-                {
-                    listenersWithoutData = new List<IGameEventWithoutDataListener>();
-                    _gameEventWithoutDataListeners.Add(gameEventType, listenersWithoutData);
-                }
+                listenersWithoutData = new List<IGameEventWithoutDataListener>();
+                _gameEventWithoutDataListeners.Add(gameEventType, listenersWithoutData);
+            }
                 
-                // Add the listener
-                listenersWithoutData.Add(gameEventWithoutDataListener);
-                return;
-            }
+            // Add the listener
+            listenersWithoutData.Add(gameEventWithoutDataListener);
+        }
 
-            // Has data
-            if (!(gameEventListener is IGameEventWithDataListener gameEventWithDataListener))
-            {
-                Debug.LogWarning($"All listeners must derive from `{nameof(IGameEventWithoutDataListener)} or `{nameof(IGameEventWithDataListener)}`");
-                return;
-            }
-            
+        // Note: it is important this method is generic to preserve the derived interface type, instead of casting it up
+        public void AddListenerWithData<TListener, TEventData>(TListener gameEventWithDataListener) where TListener : IGameEventWithDataListener
+        {
             // We need to figure out how to raise the event
             if (!_dataListenerToEventRaises.TryGetValue(gameEventWithDataListener, out Dictionary<Type, Action<object>> eventRaises))
             {
@@ -55,8 +45,8 @@ namespace ProphetAR
                 _dataListenerToEventRaises.Add(gameEventWithDataListener, eventRaises);
             }
             
-            Type listenerType = typeof(T);
-            Type gameEventWithDataType = GameEventListenerUtils.GetEventTypeForListenerType<T>();
+            Type listenerType = typeof(TListener);
+            Type gameEventWithDataType = GameEventListenerUtils.GetEventTypeForListenerType<TListener>();
             
             if (!eventRaises.ContainsKey(gameEventWithDataType))
             {
@@ -67,11 +57,10 @@ namespace ProphetAR
                     DataListenerTypeToEventRaiseMethodInfo.Add(listenerType, eventRaiseMethodInfo);
                 }
                 
-                eventRaises.Add(gameEventWithDataType, data =>
-                {
-                    CachedDataArguments[0] = data;
-                    eventRaiseMethodInfo.Invoke(gameEventWithDataListener, CachedDataArguments);
-                });
+                Type delegateType = typeof(Action<TEventData>);
+                Delegate closedDelegate = eventRaiseMethodInfo.CreateDelegate(delegateType, gameEventWithDataListener);
+                
+                eventRaises.Add(gameEventWithDataType, data => ((Action<TEventData>) closedDelegate).Invoke((TEventData) data));
             }
             
             // Add the listener
@@ -83,70 +72,59 @@ namespace ProphetAR
             listenersWithData.Add(gameEventWithDataListener);
         }
 
-        public void RemoveListener<T>(T gameEventListener) where T : IGameEventListener
+        // Note: it is important this method is generic to preserve the derived interface type, instead of casting it up
+        public void RemoveListenerWithoutData<TListener>(IGameEventWithoutDataListener listenerInstance) where TListener : IGameEventWithoutDataListener
         {
-            Dictionary<long, int> iterations = null;
-            int removalIndex = -1;
-            
-             // No data
-            if (gameEventListener is IGameEventWithoutDataListener gameEventWithoutDataListener)
+            Type gameEventType = GameEventListenerUtils.GetEventTypeForListenerType<TListener>();
+            if (!_gameEventWithoutDataListeners.TryGetValue(gameEventType, out List<IGameEventWithoutDataListener> listenersWithoutData)) 
             {
-                Type gameEventType = GameEventListenerUtils.GetEventTypeForListenerType<T>();
-                if (!_gameEventWithoutDataListeners.TryGetValue(gameEventType, out List<IGameEventWithoutDataListener> listenersWithoutData)) 
-                {
-                    return;
-                }
+                return;
+            }
 
-                // Removal might affect a current event raise
-                removalIndex = listenersWithoutData.IndexOf(gameEventWithoutDataListener);
-                if (removalIndex < 0)
+            // Removal might affect a current event raise
+            int removalIndex = listenersWithoutData.IndexOf(listenerInstance);
+            if (removalIndex < 0)
+            {
+                return;
+            }
+            
+            if (_currentEventRaiseIterations.TryGetValue(gameEventType, out Dictionary<long, int> iterations))
+            {
+                foreach ((long iterationKey, int iteration) in iterations)
                 {
-                    return;
-                }
-                
-                if (_currentEventRaiseIterations.TryGetValue(gameEventType, out iterations))
-                {
-                    foreach ((long iterationKey, int iteration) in iterations)
+                    if (iteration <= removalIndex)
                     {
-                        if (iteration <= removalIndex)
-                        {
-                            iterations[iterationKey]--;
-                        }
+                        iterations[iterationKey]--;
                     }
                 }
-                
-                // Remove the listener
-                listenersWithoutData.Remove(gameEventWithoutDataListener);
-                if (listenersWithoutData.Count == 0)
-                {
-                    _gameEventWithoutDataListeners.Remove(gameEventType);
-                    _currentEventRaiseIterations.Remove(gameEventType);
-                }
-                
-                return;
-            }
-
-            // Has data
-            if (!(gameEventListener is IGameEventWithDataListener gameEventWithDataListener))
-            {
-                Debug.LogWarning($"All listeners must derive from `{nameof(IGameEventWithoutDataListener)} or `{nameof(IGameEventWithDataListener)}`");
-                return;
             }
             
-            Type gameEventWithDataType = GameEventListenerUtils.GetEventTypeForListenerType<T>();
+            // Remove the listener
+            listenersWithoutData.Remove(listenerInstance);
+            if (listenersWithoutData.Count == 0)
+            {
+                _gameEventWithoutDataListeners.Remove(gameEventType);
+                _currentEventRaiseIterations.Remove(gameEventType);
+            }
+        }
+        
+        // Note: it is important this method is generic to preserve the derived interface type, instead of casting it up
+        public void RemoveListenerWithData<TListener>(IGameEventWithDataListener listenerInstance) where TListener : IGameEventWithDataListener
+        {
+            Type gameEventWithDataType = GameEventListenerUtils.GetEventTypeForListenerType<TListener>();
             if (!_gameEventWithDataListeners.TryGetValue(gameEventWithDataType, out List<IGameEventWithDataListener> listenersWithData)) 
             {
                 return;
             }
 
             // Removal might affect a current event raise
-            removalIndex = listenersWithData.IndexOf(gameEventWithDataListener);
+            int removalIndex = listenersWithData.IndexOf(listenerInstance);
             if (removalIndex < 0)
             {
                 return;
             }
 
-            if (_currentEventRaiseIterations.TryGetValue(gameEventWithDataType, out iterations))
+            if (_currentEventRaiseIterations.TryGetValue(gameEventWithDataType, out Dictionary<long, int> iterations))
             {
                 foreach ((long iterationKey, int iteration) in iterations)
                 {
@@ -158,7 +136,7 @@ namespace ProphetAR
             }
                 
             // Remove the listener
-            listenersWithData.Remove(gameEventWithDataListener);
+            listenersWithData.Remove(listenerInstance);
             if (listenersWithData.Count == 0)
             {
                 _gameEventWithDataListeners.Remove(gameEventWithDataType);
@@ -229,9 +207,9 @@ namespace ProphetAR
             iterations.Remove(iterationKey);
         }
         
-        public bool TryGetListenersForEvent<T>(out List<IGameEventWithoutDataListener> listeners) where T : GameEventWithoutData
+        public bool TryGetListenersWithoutData<TEventWithoutData>(out List<IGameEventWithoutDataListener> listeners) where TEventWithoutData : GameEventWithoutData
         {
-            Type gameEventType = typeof(T);
+            Type gameEventType = typeof(TEventWithoutData);
             if (_currentEventRaiseIterations.ContainsKey(gameEventType))
             {
                 Debug.LogWarning("Possibly modification of listener list during an active event");
@@ -240,9 +218,9 @@ namespace ProphetAR
             return _gameEventWithoutDataListeners.TryGetValue(gameEventType, out listeners);
         }
         
-        public bool TryGetDataListenersForEvent<T>(out List<IGameEventWithDataListener> dataListeners) where T : GameEventWithData
+        public bool TryGetDataListenersWithData<TEventWithData>(out List<IGameEventWithDataListener> dataListeners) where TEventWithData : GameEventWithData
         {
-            Type gameEventWithDataType = typeof(T);
+            Type gameEventWithDataType = typeof(TEventWithData);
             if (_currentEventRaiseIterations.ContainsKey(gameEventWithDataType))
             {
                 Debug.LogWarning("Possibly modification of listener list during an active event");
