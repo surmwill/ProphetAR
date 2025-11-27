@@ -13,6 +13,8 @@ namespace ProphetAR.Tests
         
         // Test raise, move to next, remove first, and we should exit
         
+        // Test multiple objects with same listeners
+        
         [Test]
         public void TestSimpleRaise()
         {

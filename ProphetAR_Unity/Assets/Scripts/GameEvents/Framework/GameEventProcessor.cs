@@ -14,11 +14,14 @@ namespace ProphetAR
         private readonly Dictionary<Type, List<IGameEventWithoutDataListener>> _gameEventWithoutDataListeners = new();
         private readonly Dictionary<Type, List<IGameEventWithDataListener>> _gameEventWithDataListeners = new();
         
-        // For each type of game event listener that takes data, store the method that receives that data
+        // For each type of listener that takes data, store the method that receives that data
         private static readonly Dictionary<Type, MethodInfo> DataListenerTypeToEventRaiseMethodInfo = new();
         
-        // For each concrete game event listener that takes data, store how we send various data to that listener
+        // For each concrete listener instance that takes data, store how we send various data to that listener instance
         private readonly Dictionary<IGameEventWithDataListener, Dictionary<Type, Action<object>>> _dataListenerToEventRaises = new();
+        
+        // Track the number of listener instances
+        private readonly Dictionary<IGameEventListener, int> _listenerInstances = new();
         
         private readonly Dictionary<Type, Dictionary<long, int>> _currentEventRaiseIterations = new();
         private long _numEventRaises = 0;
@@ -70,6 +73,11 @@ namespace ProphetAR
                 _gameEventWithDataListeners.Add(gameEventWithDataType, listenersWithData);
             }
             listenersWithData.Add(listenerInstance);
+
+            if (!_listenerInstances.TryAdd(listenerInstance, 1))
+            {
+                _listenerInstances[listenerInstance]++;
+            }
         }
         
         public void RemoveListenerWithoutData<TListener>(IGameEventWithoutDataListener listenerInstance) where TListener : IGameEventWithoutDataListener
@@ -104,6 +112,15 @@ namespace ProphetAR
             {
                 _gameEventWithoutDataListeners.Remove(gameEventType);
                 _currentEventRaiseIterations.Remove(gameEventType);
+            }
+
+            if (_listenerInstances[listenerInstance] == 1)
+            {
+                _listenerInstances.Remove(listenerInstance);
+            }
+            else
+            {
+                _listenerInstances[listenerInstance]--;
             }
         }
         
