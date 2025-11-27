@@ -16,7 +16,7 @@ namespace ProphetAR.Tests
         // Test multiple objects with same listeners
         
         [Test]
-        public void TestSimpleRaise()
+        public void TestSimpleDataRaise()
         {
             GameEventProcessor gameEventProcessor = new GameEventProcessor();
             SampleListenerWithData sampleListenerWithData = new SampleListenerWithData();
@@ -26,8 +26,21 @@ namespace ProphetAR.Tests
             
             gameEventProcessor.RemoveListenerWithData<IGameEventFireballStrikeListener>(sampleListenerWithData);
             
-            gameEventProcessor.RaiseEvent(new GameEventFireballStrike(new GameEventFireballStrikeData()));
-            gameEventProcessor.RaiseEvent(new GameEventCharacterMove(new GameEventCharacterMoveData()));
+            gameEventProcessor.RaiseEventWithData(new GameEventFireballStrike(new GameEventFireballStrikeData()));
+            gameEventProcessor.RaiseEventWithData(new GameEventCharacterMove(new GameEventCharacterMoveData()));
+        }
+
+        [Test]
+        public void TestSimpleNoDataRaise()
+        {
+            GameEventProcessor gameEventProcessor = new GameEventProcessor();
+            SampleListenerWithoutData sampleListenerWithoutData = new SampleListenerWithoutData();
+            
+            gameEventProcessor.AddListenerWithoutData<IGameEventOpenMainMenuListener>(sampleListenerWithoutData);
+            gameEventProcessor.AddListenerWithoutData<IGameEventOpenSettingsListener>(sampleListenerWithoutData);
+            
+            gameEventProcessor.RaiseEventWithoutData(new GameEventOpenMainMenu());
+            gameEventProcessor.RaiseEventWithoutData(new GameEventOpenSettings());
         }
 
         private class SampleListenerWithData : IGameEventCharacterMoveListener, IGameEventFireballStrikeListener
@@ -40,6 +53,19 @@ namespace ProphetAR.Tests
             void IGameEventWithTypedDataListener<IGameEventFireballStrikeListener, GameEventFireballStrikeData>.OnEvent(GameEventFireballStrikeData data)
             {
                 Debug.Log("ON FIREBALL");
+            }
+        }
+
+        private class SampleListenerWithoutData : IGameEventOpenMainMenuListener, IGameEventOpenSettingsListener
+        {
+            void IGameEventWithoutDataListenerExplicit<IGameEventOpenMainMenuListener>.OnEvent()
+            {
+                Debug.Log("ON OPEN MAIN MENU");
+            }
+
+            void IGameEventWithoutDataListenerExplicit<IGameEventOpenSettingsListener>.OnEvent()
+            {
+                Debug.Log("ON OPEN SETTINGS");
             }
         }
     }
