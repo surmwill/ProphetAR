@@ -16,7 +16,9 @@ namespace ProphetAR
         private static readonly Dictionary<Type, MethodInfo> DataListenerTypeToEventRaiseMethodInfo = new();
         
         // For each concrete game event listener that takes data, store how we send various data to that listener
-        private readonly Dictionary<IGameEventWithDataListener, Dictionary<Type, Action<object>>> _dataListenerToEventRaises = new(); 
+        private readonly Dictionary<IGameEventWithDataListener, Dictionary<Type, Action<object>>> _dataListenerToEventRaises = new();
+
+        private static readonly object[] CachedDataArguments = new object[1];
 
         private readonly Dictionary<Type, Dictionary<long, int>> _currentEventRaiseIterations = new();
         private long _numEventRaises = 0;
@@ -65,7 +67,11 @@ namespace ProphetAR
                     DataListenerTypeToEventRaiseMethodInfo.Add(listenerType, eventRaiseMethodInfo);
                 }
                 
-                eventRaises.Add(gameEventWithDataType, data => eventRaiseMethodInfo.Invoke(gameEventWithDataListener, new[] { data }));
+                eventRaises.Add(gameEventWithDataType, data =>
+                {
+                    CachedDataArguments[0] = data;
+                    eventRaiseMethodInfo.Invoke(gameEventWithDataListener, CachedDataArguments);
+                });
             }
             
             // Add the listener
