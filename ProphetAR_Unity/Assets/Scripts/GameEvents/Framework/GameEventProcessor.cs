@@ -20,9 +20,8 @@ namespace ProphetAR
         
         private readonly Dictionary<Type, Dictionary<long, int>> _currentEventRaiseIterations = new();
         private long _numEventRaises = 0;
-
-        // Note: it is important this method is generic to preserve the derived interface type, instead of casting it up
-        public void AddListenerWithoutData<TListener>(TListener gameEventWithoutDataListener) where TListener : IGameEventWithoutDataListener
+        
+        public void AddListenerWithoutData<TListener>(IGameEventWithoutDataListener listenerInstance) where TListener : IGameEventWithoutDataListener
         {
             Type gameEventType = GameEventListenerUtils.GetEventTypeForListenerType<TListener>();
             if (!_gameEventWithoutDataListeners.TryGetValue(gameEventType, out List<IGameEventWithoutDataListener> listenersWithoutData))
@@ -32,17 +31,16 @@ namespace ProphetAR
             }
                 
             // Add the listener
-            listenersWithoutData.Add(gameEventWithoutDataListener);
+            listenersWithoutData.Add(listenerInstance);
         }
-
-        // Note: it is important this method is generic to preserve the derived interface type, instead of casting it up
-        public void AddListenerWithData<TListener, TEventData>(TListener gameEventWithDataListener) where TListener : IGameEventWithDataListener
+        
+        public void AddListenerWithData<TListener, TListenerData>(IGameEventWithDataListener listenerInstance) where TListener : IGameEventWithDataListener
         {
             // We need to figure out how to raise the event
-            if (!_dataListenerToEventRaises.TryGetValue(gameEventWithDataListener, out Dictionary<Type, Action<object>> eventRaises))
+            if (!_dataListenerToEventRaises.TryGetValue(listenerInstance, out Dictionary<Type, Action<object>> eventRaises))
             {
                 eventRaises = new Dictionary<Type, Action<object>>();
-                _dataListenerToEventRaises.Add(gameEventWithDataListener, eventRaises);
+                _dataListenerToEventRaises.Add(listenerInstance, eventRaises);
             }
             
             Type listenerType = typeof(TListener);
@@ -57,10 +55,10 @@ namespace ProphetAR
                     DataListenerTypeToEventRaiseMethodInfo.Add(listenerType, eventRaiseMethodInfo);
                 }
                 
-                Type delegateType = typeof(Action<TEventData>);
-                Delegate closedDelegate = eventRaiseMethodInfo.CreateDelegate(delegateType, gameEventWithDataListener);
+                Type delegateType = typeof(Action<TListenerData>);
+                Delegate closedDelegate = eventRaiseMethodInfo.CreateDelegate(delegateType, listenerInstance);
                 
-                eventRaises.Add(gameEventWithDataType, data => ((Action<TEventData>) closedDelegate).Invoke((TEventData) data));
+                eventRaises.Add(gameEventWithDataType, data => ((Action<TListenerData>) closedDelegate).Invoke((TListenerData) data));
             }
             
             // Add the listener
@@ -69,10 +67,9 @@ namespace ProphetAR
                 listenersWithData = new List<IGameEventWithDataListener>();
                 _gameEventWithDataListeners.Add(gameEventWithDataType, listenersWithData);
             }
-            listenersWithData.Add(gameEventWithDataListener);
+            listenersWithData.Add(listenerInstance);
         }
-
-        // Note: it is important this method is generic to preserve the derived interface type, instead of casting it up
+        
         public void RemoveListenerWithoutData<TListener>(IGameEventWithoutDataListener listenerInstance) where TListener : IGameEventWithoutDataListener
         {
             Type gameEventType = GameEventListenerUtils.GetEventTypeForListenerType<TListener>();
@@ -108,7 +105,6 @@ namespace ProphetAR
             }
         }
         
-        // Note: it is important this method is generic to preserve the derived interface type, instead of casting it up
         public void RemoveListenerWithData<TListener>(IGameEventWithDataListener listenerInstance) where TListener : IGameEventWithDataListener
         {
             Type gameEventWithDataType = GameEventListenerUtils.GetEventTypeForListenerType<TListener>();
