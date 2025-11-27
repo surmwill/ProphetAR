@@ -8,6 +8,7 @@ namespace ProphetAR
 {
     public class GameEventProcessor
     {
+        // These two interfaces are what each listener should derive from
         private const string InterfaceNameTypedGameEventListener = "IGameEventWithTypedDataListener";
         private const string InterfaceNameGameEventWithoutDataListener = "IGameEventWithoutDataListenerExplicit";
         
