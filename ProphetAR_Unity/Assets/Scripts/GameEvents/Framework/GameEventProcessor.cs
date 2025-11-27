@@ -8,6 +8,8 @@ namespace ProphetAR
 {
     public class GameEventProcessor
     {
+        private const string InterfaceNameTypedGameEventListener = "IGameEventWithTypedDataListener";
+        
         // Maps the game event type to their corresponding list of listeners
         private readonly Dictionary<Type, List<IGameEventWithoutDataListener>> _gameEventWithoutDataListeners = new();
         private readonly Dictionary<Type, List<IGameEventWithDataListener>> _gameEventWithDataListeners = new();
@@ -51,7 +53,7 @@ namespace ProphetAR
                 if (!DataListenerTypeToEventRaiseMethodInfo.TryGetValue(listenerType, out MethodInfo eventRaiseMethodInfo))
                 {
                     // Every listener that receives data should directly derive from IGameEventWithTypedDataListener
-                    eventRaiseMethodInfo = GetDirectParentInterface(listenerType).GetMethod(IGameEventListener.OnEventMethodName);
+                    eventRaiseMethodInfo = GetImplementedInterfaceType(listenerType, InterfaceNameTypedGameEventListener).GetMethod(IGameEventListener.OnEventMethodName);
                     DataListenerTypeToEventRaiseMethodInfo.Add(listenerType, eventRaiseMethodInfo);
                 }
                 
@@ -224,17 +226,17 @@ namespace ProphetAR
             
             return _gameEventWithDataListeners.TryGetValue(gameEventWithDataType, out dataListeners);
         }
-
-        private static Type GetDirectParentInterface(Type t)
+        
+        public static Type GetImplementedInterfaceType(Type type, string interfaceName)
         {
-            Type[] allInterfaces = t.GetInterfaces();
-            if (allInterfaces.Length == 0)
+            foreach (Type interfaceType in type.GetInterfaces().Where(i => i.IsGenericType))
             {
-                return null;
+                if (interfaceType.GetGenericTypeDefinition().Name.StartsWith(interfaceName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return interfaceType;
+                }
             }
-
-            IEnumerable<Type> allAncestors = allInterfaces.SelectMany(i => i.GetInterfaces());
-            return allInterfaces.Except(allAncestors).FirstOrDefault();
+            return null;
         }
     }
 }

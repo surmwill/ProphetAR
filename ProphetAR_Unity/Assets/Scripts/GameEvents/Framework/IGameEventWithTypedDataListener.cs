@@ -1,4 +1,7 @@
-﻿namespace ProphetAR
+﻿using System;
+using System.Linq;
+
+namespace ProphetAR
 {
     /// <summary>
     /// Listens to a game event that passes data.
