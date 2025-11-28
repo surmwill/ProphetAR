@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 
 namespace ProphetAR.Tests.GameEvents
@@ -22,15 +23,32 @@ namespace ProphetAR.Tests.GameEvents
         // Test multiple adds and removes
         
         [Test]
-        public void TestSimpleDataRaise()
+        public void TestDataRaise()
         {
             GameEventProcessor gameEventProcessor = new GameEventProcessor();
             SampleListener sampleListener = new SampleListener();
             
             gameEventProcessor.AddListenerWithData<ITestGameEventIntListener, int>(sampleListener);
+            if (gameEventProcessor.TryGetListenersForDataEvent<TestGameEventInt>(out List<IGameEventWithDataListener> listeners))
+            {
+                Assert.IsTrue(listeners.Count == 1, $"Only added one listener but there are {listeners.Count} present");
+            }
+            else
+            {
+                Assert.Fail("Added listener but it is not present in the listener list");
+            }
             
             gameEventProcessor.RaiseEventWithData(new TestGameEventInt(5));
-            Debug.Log(sampleListener.LastIntData);
+            Assert.IsTrue(sampleListener.LastIntData == 5);
+            
+            gameEventProcessor.RaiseEventWithData(new TestGameEventInt(6));
+            Assert.IsTrue(sampleListener.LastIntData == 6);
+            
+            gameEventProcessor.RemoveListenerWithData<ITestGameEventIntListener>(sampleListener);
+            if (gameEventProcessor.TryGetListenersForDataEvent<TestGameEventInt>(out listeners))
+            {
+                Assert.Fail($"Removed all listeners but there are still {listeners.Count} present");
+            }
         }
 
         [Test]

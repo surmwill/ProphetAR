@@ -225,7 +225,7 @@ namespace ProphetAR
             iterations.Remove(iterationKey);
         }
         
-        public bool TryGetListenersWithoutData<TEventWithoutData>(out List<IGameEventWithoutDataListener> listeners) where TEventWithoutData : GameEventWithoutData
+        public bool TryGetListenersForNonDataEvent<TEventWithoutData>(out List<IGameEventWithoutDataListener> listeners) where TEventWithoutData : GameEventWithoutData
         {
             Type gameEventType = typeof(TEventWithoutData);
             if (_currentEventRaiseIterations.ContainsKey(gameEventType))
@@ -236,7 +236,7 @@ namespace ProphetAR
             return _gameEventWithoutDataListeners.TryGetValue(gameEventType, out listeners);
         }
         
-        public bool TryGetDataListenersWithData<TEventWithData>(out List<IGameEventWithDataListener> dataListeners) where TEventWithData : GameEventWithData
+        public bool TryGetListenersForDataEvent<TEventWithData>(out List<IGameEventWithDataListener> dataListeners) where TEventWithData : GameEventWithData
         {
             Type gameEventWithDataType = typeof(TEventWithData);
             if (_currentEventRaiseIterations.ContainsKey(gameEventWithDataType))
