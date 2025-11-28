@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -127,6 +128,65 @@ namespace ProphetAR.Tests.GameEvents
             gameEventProcessor.RemoveListenerWithoutData<ITestGameEventNoDataListener>(sampleListener);
             gameEventProcessor.RemoveListenerWithoutData<ITestGameEventNoDataCopyListener>(sampleListener);
         }
+        
+        [Test]
+        public void TestMultipleListenerInstances()
+        {
+            GameEventProcessor gameEventProcessor = new GameEventProcessor();
+            SampleListener sampleListener1 = new SampleListener();
+            SampleListener sampleListener2 = new SampleListener();
+            
+            gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(sampleListener1);
+            gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(sampleListener2);
+            
+            gameEventProcessor.RaiseEventWithoutData(new TestGameEventNoData());
+            
+            Assert.IsTrue(sampleListener1.NumNoDataEvents == 1);
+            Assert.IsTrue(sampleListener2.NumNoDataEvents == 1);
+            
+            gameEventProcessor.RemoveListenerWithoutData<ITestGameEventNoDataListener>(sampleListener1);
+            gameEventProcessor.RemoveListenerWithoutData<ITestGameEventNoDataListener>(sampleListener2);
+        }
+        
+        [Test]
+        public void TestMultipleAdd()
+        {
+            GameEventProcessor gameEventProcessor = new GameEventProcessor();
+            SampleListener sampleListener = new SampleListener();
+            
+            // Both receive the same event and therefore have the same signature. Ensure there are two different method calls
+            gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(sampleListener);
+            gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(sampleListener);
+            
+            if (gameEventProcessor.TryGetListenersForNonDataEvent<TestGameEventNoData>(out List<IGameEventWithoutDataListener> listeners))
+            {
+                Assert.IsTrue(listeners.Count == 2, $"Added a listener twice (expecting two listeners) but there are {listeners.Count} present");
+            }
+            else
+            {
+                Assert.Fail("Added a listener twice but nothing is present in the listener list");
+            }
+            
+            gameEventProcessor.RaiseEventWithoutData(new TestGameEventNoData());
+            Assert.IsTrue(sampleListener.NumNoDataEvents == 2);
+            
+            gameEventProcessor.RemoveListenerWithoutData<ITestGameEventNoDataListener>(sampleListener);
+            if (gameEventProcessor.TryGetListenersForNonDataEvent<TestGameEventNoData>(out listeners))
+            {
+                Assert.IsTrue(listeners.Count == 1);
+            }
+            else
+            {
+                Assert.Fail("Removed one of two listeners, but there is no remaining listener present");
+            }
+            
+            
+            gameEventProcessor.RemoveListenerWithoutData<ITestGameEventNoDataListener>(sampleListener);
+            if (gameEventProcessor.TryGetListenersForNonDataEvent<TestGameEventNoData>(out listeners))
+            {
+                Assert.Fail($"Removed all listeners, but there is still {listeners.Count} present");
+            }
+        }
 
         private class SampleListener : 
             ITestGameEventIntListener, 
@@ -197,6 +257,21 @@ namespace ProphetAR.Tests.GameEvents
                 {
                     Debug.Log(message);
                 }
+            }
+        }
+
+        private class ListenerWithCallback : ITestGameEventNoDataListener
+        {
+            private readonly Action _callback;
+            
+            public ListenerWithCallback(Action callback)
+            {
+                _callback = callback;
+            }
+            
+            public void OnEvent()
+            {
+                _callback.Invoke();
             }
         }
     }
