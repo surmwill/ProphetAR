@@ -1,0 +1,3 @@
+<linker>
+  <assembly fullname="ARProphetDontStrip" preserve="all"/>
+</linker>

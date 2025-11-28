@@ -8,9 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Main.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
-    path: Assets/Scenes/Test/ARSetup/ARSetup.unity
+  - enabled: 0
+    path: Assets/Scenes/Test/ARSetup/TestARSetupScene.unity
     guid: c14a986b39026544592c4296561df748
+  - enabled: 1
+    path: Assets/Scripts/TestScenes/GameEvents/TestGameEventsScene.unity
+    guid: c2ee738309b77274c99bb26f0efe2ac8
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 6ea10e84bb9aa2c47873c4a081eb5610, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 7f4c467f6a96e0c46a86ce6634d61322, type: 2}
