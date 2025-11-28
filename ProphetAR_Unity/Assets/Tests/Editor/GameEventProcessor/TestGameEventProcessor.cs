@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
 using UnityEngine;
 
-namespace ProphetAR.Tests
+namespace ProphetAR.Tests.GameEvents
 {
-    public class TestGameEventProcessor
+    public partial class TestGameEventProcessor
     {
         // Test basic raise
         
@@ -15,57 +15,79 @@ namespace ProphetAR.Tests
         
         // Test multiple objects with same listeners
         
+        // Test same 
+        
+        // Add anti-stripping
+        
+        // Test multiple adds and removes
+        
         [Test]
         public void TestSimpleDataRaise()
         {
             GameEventProcessor gameEventProcessor = new GameEventProcessor();
-            SampleListenerWithData sampleListenerWithData = new SampleListenerWithData();
+            SampleListener sampleListener = new SampleListener();
             
-            gameEventProcessor.AddListenerWithData<IGameEventCharacterMoveListener, GameEventCharacterMoveData>(sampleListenerWithData);
-            gameEventProcessor.AddListenerWithData<IGameEventFireballStrikeListener, GameEventFireballStrikeData>(sampleListenerWithData);
+            gameEventProcessor.AddListenerWithData<ITestGameEventIntListener, int>(sampleListener);
             
-            gameEventProcessor.RemoveListenerWithData<IGameEventFireballStrikeListener>(sampleListenerWithData);
-            
-            gameEventProcessor.RaiseEventWithData(new GameEventFireballStrike(new GameEventFireballStrikeData()));
-            gameEventProcessor.RaiseEventWithData(new GameEventCharacterMove(new GameEventCharacterMoveData()));
+            gameEventProcessor.RaiseEventWithData(new TestGameEventInt(5));
+            Debug.Log(sampleListener.LastIntData);
         }
 
         [Test]
         public void TestSimpleNoDataRaise()
         {
-            GameEventProcessor gameEventProcessor = new GameEventProcessor();
-            SampleListenerWithoutData sampleListenerWithoutData = new SampleListenerWithoutData();
-            
-            gameEventProcessor.AddListenerWithoutData<IGameEventOpenMainMenuListener>(sampleListenerWithoutData);
-            gameEventProcessor.AddListenerWithoutData<IGameEventOpenSettingsListener>(sampleListenerWithoutData);
-            
-            gameEventProcessor.RaiseEventWithoutData(new GameEventOpenMainMenu());
-            gameEventProcessor.RaiseEventWithoutData(new GameEventOpenSettings());
+        
         }
 
-        private class SampleListenerWithData : IGameEventCharacterMoveListener, IGameEventFireballStrikeListener
+        private class SampleListener : 
+            ITestGameEventIntListener, 
+            ITestGameEventObjectListener, 
+            ITestGameEventObjectCopyListener,
+            ITestGameEventNoDataListener,
+            ITestGameEventNoDataCopyListener
         {
-            void IGameEventWithTypedDataListener<IGameEventCharacterMoveListener, GameEventCharacterMoveData>.OnEvent(GameEventCharacterMoveData data)
+            public int LastIntData { get; private set; }
+            
+            public TestObject LastTestObjectData { get; private set; }
+            
+            public TestObject LastTestObjectCopyData { get; private set; }
+            
+            public int NumIntEvents { get; private set; }
+            
+            public int NumTestObjectEvents { get; private set; }
+            
+            public int NumTestObjectCopyEvents { get; private set; }
+            
+            public int NumNoDataEvents { get; private set; }
+            
+            public int NumNoDataCopyEvents { get; private set; }
+            
+            void IGameEventWithTypedDataListener<ITestGameEventIntListener, int>.OnEvent(int data)
             {
-                Debug.Log("ON MOVE");
+                LastIntData = data;
+                NumIntEvents++;
             }
 
-            void IGameEventWithTypedDataListener<IGameEventFireballStrikeListener, GameEventFireballStrikeData>.OnEvent(GameEventFireballStrikeData data)
+            void IGameEventWithTypedDataListener<ITestGameEventObjectListener, TestObject>.OnEvent(TestObject data)
             {
-                Debug.Log("ON FIREBALL");
-            }
-        }
-
-        private class SampleListenerWithoutData : IGameEventOpenMainMenuListener, IGameEventOpenSettingsListener
-        {
-            void IGameEventWithoutDataListenerExplicit<IGameEventOpenMainMenuListener>.OnEvent()
-            {
-                Debug.Log("ON OPEN MAIN MENU");
+                LastTestObjectData = data;
+                NumTestObjectEvents++;
             }
 
-            void IGameEventWithoutDataListenerExplicit<IGameEventOpenSettingsListener>.OnEvent()
+            void IGameEventWithTypedDataListener<ITestGameEventObjectCopyListener, TestObject>.OnEvent(TestObject data)
             {
-                Debug.Log("ON OPEN SETTINGS");
+                LastTestObjectCopyData = data;
+                NumTestObjectCopyEvents++;
+            }
+
+            void IGameEventWithoutDataListenerExplicit<ITestGameEventNoDataListener>.OnEvent()
+            {
+                NumNoDataEvents++;
+            }
+
+            void IGameEventWithoutDataListenerExplicit<ITestGameEventNoDataCopyListener>.OnEvent()
+            {
+                NumNoDataCopyEvents++;
             }
         }
     }
