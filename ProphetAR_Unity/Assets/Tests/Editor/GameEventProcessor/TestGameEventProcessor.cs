@@ -7,22 +7,6 @@ namespace ProphetAR.Tests.GameEvents
 {
     public class TestGameEventProcessor
     {
-        // Test basic raise
-        
-        // Test multiple raises 
-        
-        // Test raises, add, and the added gets raised too
-        
-        // Test raise, move to next, remove first, and we should exit
-        
-        // Test multiple objects with same listeners
-        
-        // Test same 
-        
-        // Add anti-stripping
-        
-        // Test multiple adds and removes
-        
         [Test]
         public void TestSimpleDataRaise()
         {
@@ -239,6 +223,23 @@ namespace ProphetAR.Tests.GameEvents
             }
             
             gameEventProcessor.RemoveListenerWithoutData<ITestGameEventNoDataListener>(listenerWithCallback);
+        }
+
+        [Test]
+        public void TestListenerSelfRemoval()
+        {
+            GameEventProcessor gameEventProcessor = new GameEventProcessor();
+            
+            ListenerWithCallback listenerWithCallback = null;
+            listenerWithCallback = new ListenerWithCallback(() => gameEventProcessor.RemoveListenerWithoutData<ITestGameEventNoDataListener>(listenerWithCallback));
+            
+            gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(listenerWithCallback);
+            gameEventProcessor.RaiseEventWithoutData(new TestGameEventNoData());
+            
+            if (gameEventProcessor.TryGetListenersForNonDataEvent<TestGameEventNoData>(out List<IGameEventWithoutDataListener> listeners))
+            {
+                Assert.Fail($"Removed all listeners, but there is still {listeners.Count} present");
+            }
         }
 
         private class SampleListener : 
