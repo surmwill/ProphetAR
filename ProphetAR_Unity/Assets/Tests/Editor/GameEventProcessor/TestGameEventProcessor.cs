@@ -188,6 +188,59 @@ namespace ProphetAR.Tests.GameEvents
             }
         }
 
+        [Test]
+        public void TestAddingListenerDuringEvent()
+        {
+            GameEventProcessor gameEventProcessor = new GameEventProcessor();
+            
+            SampleListener sampleListener = new SampleListener();
+            ListenerWithCallback listenerWithCallback = new ListenerWithCallback(() => gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(sampleListener));
+            
+            gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(listenerWithCallback);
+            
+            gameEventProcessor.RaiseEventWithoutData(new TestGameEventNoData());
+            Assert.IsTrue(sampleListener.NumNoDataEvents == 1);
+            
+            gameEventProcessor.RemoveListenerWithoutData<ITestGameEventNoDataListener>(sampleListener);
+            gameEventProcessor.RemoveListenerWithoutData<ITestGameEventNoDataListener>(listenerWithCallback);
+        }
+
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestRemovingListenerDuringEvent(bool removePrecedingEvent)
+        {
+            GameEventProcessor gameEventProcessor = new GameEventProcessor();
+            
+            SampleListener sampleListener = new SampleListener();
+            ListenerWithCallback listenerWithCallback = new ListenerWithCallback(() => gameEventProcessor.RemoveListenerWithoutData<ITestGameEventNoDataListener>(sampleListener));
+
+            if (removePrecedingEvent)
+            {
+                SampleListener postSampleListener = new SampleListener(true);
+                
+                gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(sampleListener);
+                gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(listenerWithCallback);
+                gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(postSampleListener);
+                
+                gameEventProcessor.RaiseEventWithoutData(new TestGameEventNoData());
+                Assert.IsTrue(postSampleListener.NumNoDataEvents == 1, postSampleListener.NumNoDataEvents.ToString());
+                
+                gameEventProcessor.RemoveListenerWithoutData<ITestGameEventNoDataListener>(postSampleListener);
+            }
+            // Remove following event
+            else
+            {
+                gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(listenerWithCallback);
+                gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(sampleListener);
+                
+                gameEventProcessor.RaiseEventWithoutData(new TestGameEventNoData());
+                Assert.IsTrue(sampleListener.NumNoDataEvents == 0);
+            }
+            
+            gameEventProcessor.RemoveListenerWithoutData<ITestGameEventNoDataListener>(listenerWithCallback);
+        }
+
         private class SampleListener : 
             ITestGameEventIntListener, 
             ITestGameEventObjectListener, 

@@ -64,7 +64,11 @@ namespace ProphetAR
             }
             listenersWithoutData.Add(listenerInstance);
 
-            if (!_listenerInstances.TryAdd(listenerInstance, 1))
+            if (!_listenerInstances.ContainsKey(listenerInstance))
+            {
+                _listenerInstances[listenerInstance] = 1;
+            }
+            else
             {
                 _listenerInstances[listenerInstance]++;
             }
@@ -105,7 +109,11 @@ namespace ProphetAR
             }
             listenersWithData.Add(listenerInstance);
 
-            if (!_listenerInstances.TryAdd(listenerInstance, 1))
+            if (!_listenerInstances.ContainsKey(listenerInstance))
+            {
+                _listenerInstances[listenerInstance] = 1;
+            }
+            else
             {
                 _listenerInstances[listenerInstance]++;
             }
@@ -254,12 +262,21 @@ namespace ProphetAR
                 return;
             }
             
+            List<(long iterationKey, int newIteration)> newIterations = null;
             foreach ((long iterationKey, int iteration) in iterations)
             {
-                if (iteration <= indexRemovedListener)
+                if (iteration >= indexRemovedListener)
                 {
-                    iterations[iterationKey]--;
+                    (newIterations ??= new List<(long iterationKey, int newIteration)>()).Add((iterationKey, iteration - 1));
                 }
+            }
+
+            if (newIterations != null)
+            {
+                foreach ((long iterationKey, int newIteration) in newIterations)
+                {
+                    iterations[iterationKey] = newIteration;
+                }   
             }
         }
         
