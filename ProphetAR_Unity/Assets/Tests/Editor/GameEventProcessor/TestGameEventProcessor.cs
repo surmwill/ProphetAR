@@ -241,6 +241,35 @@ namespace ProphetAR.Tests.GameEvents
                 Assert.Fail($"Removed all listeners, but there is still {listeners.Count} present");
             }
         }
+        
+        [Test]
+        public void TestDerivedListener()
+        {
+            GameEventProcessor gameEventProcessor = new GameEventProcessor();
+            DerivedSampleListener derivedSampleListener = new DerivedSampleListener();
+            
+            gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(derivedSampleListener);
+            if (gameEventProcessor.TryGetListenersForNonDataEvent<TestGameEventNoData>(out List<IGameEventWithoutDataListener> listeners))
+            {
+                Assert.IsTrue(listeners.Count == 1, $"Only added one listener but there are {listeners.Count} present");
+            }
+            else
+            {
+                Assert.Fail("Added listener but it is not present in the listener list");
+            }
+            
+            gameEventProcessor.RaiseEventWithoutData(new TestGameEventNoData());
+            Assert.IsTrue(derivedSampleListener.NumNoDataEvents == 1);
+            
+            gameEventProcessor.RaiseEventWithoutData(new TestGameEventNoData());
+            Assert.IsTrue(derivedSampleListener.NumNoDataEvents == 2);
+            
+            gameEventProcessor.RemoveListenerWithoutData<ITestGameEventNoDataListener>(derivedSampleListener);
+            if (gameEventProcessor.TryGetListenersForNonDataEvent<TestGameEventNoData>(out listeners))
+            {
+                Assert.Fail($"Removed all listeners but there are still {listeners.Count} present");
+            }
+        }
 
         private class SampleListener : 
             ITestGameEventIntListener, 
@@ -312,6 +341,11 @@ namespace ProphetAR.Tests.GameEvents
                     Debug.Log(message);
                 }
             }
+        }
+
+        private class DerivedSampleListener : SampleListener
+        {
+            
         }
 
         private class ListenerWithCallback : ITestGameEventNoDataListener
