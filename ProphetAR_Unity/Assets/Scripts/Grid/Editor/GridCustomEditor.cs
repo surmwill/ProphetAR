@@ -11,7 +11,7 @@ namespace ProphetAR
             DrawDefaultInspector();
             if (GUILayout.Button("Parse Grid From Origin"))
             {
-                ((Grid)target).ParseGridFromOrigin();
+                
             }
         }
     }

@@ -1,40 +1,83 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ProphetAR
 {
+    // Editor only calls. Extra functionality is needed for building the grid through the editor
     public partial class GridCell
     {
-        public void SetLeftCell(GridCell left)
+        public void SetLeftCell(GridCell cell)
         {
-            LeftCell = left;
+            LeftCell = cell;
         }
         
-        public void SetRightCell(GridCell right)
+        public void SetRightCell(GridCell cell)
         {
-            RightCell = right;
+            LeftCell = cell;
         }
         
-        public void SetUpCell(GridCell up)
+        public void SetUpCell(GridCell cell)
         {
-            UpCell = up;
+            LeftCell = cell;
         }
         
-        public void SetDownCell(GridCell down)
+        public void SetDownCell(GridCell cell)
         {
-            DownCell = down;
+            LeftCell = cell;
         }
 
-        public void SetDimensions(float newWidth, float newHeight)
+        public void CopyToLeftCell()
         {
-            if (!Mathf.Approximately(_dimensions.x, newWidth) && _coordinates.x > 0)
+            GridCell cell = Create(transform.TransformVector(transform.localPosition.WithX(transform.localPosition.x - Dimensions.x)), _dimensions);
+            _grid.AddCell(cell);
+        }
+
+        public void CopyToRightCell()
+        {
+            GridCell cell = Create(transform.TransformVector(transform.localPosition.WithX(transform.localPosition.x + Dimensions.x)), _dimensions);
+            _grid.AddCell(cell);
+        }
+
+        public void CopyToUpCell()
+        {
+            GridCell cell = Create(transform.TransformVector(transform.localPosition.WithZ(transform.localPosition.z + Dimensions.y)), _dimensions);
+            _grid.AddCell(cell);
+        }
+
+        public void CopyToDownCell()
+        {
+            GridCell cell = Create(transform.TransformVector(transform.localPosition.WithZ(transform.localPosition.z - Dimensions.y)), _dimensions);
+            _grid.AddCell(cell);
+        }
+        
+        public void AddToGrid()
+        {
+            _grid.AddCell(this);
+        }
+
+        public void RebuildGrid()
+        {
+            _grid.RebuildGrid();
+        }
+
+        public void RecalculateCoordinates()
+        {
+            _coordinates = new Vector2(
+                Mathf.RoundToInt((transform.localPosition.x - _grid.OriginCell.transform.localPosition.x) / _grid.CellDimensions.x),
+                Mathf.RoundToInt((transform.localPosition.z - _grid.OriginCell.transform.localPosition.z) * -1 / _grid.CellDimensions.y));
+        }
+
+        public void UpdateDimensions(Vector2 newDimensions)
+        {
+            if (!Mathf.Approximately(Dimensions.x, newDimensions.x) && _coordinates.x > _grid.MinCoordinates.x)
             {
-                float widthDiff = newWidth - _dimensions.x;
+                float widthDiff = newDimensions.x - Dimensions.x;
                 transform.localPosition = transform.localPosition.WithX(transform.position.x + widthDiff);
             }
 
-            if (!Mathf.Approximately(_dimensions.y, newHeight) && _coordinates.y > 0)
+            if (!Mathf.Approximately(Dimensions.y, newDimensions.y) && _coordinates.y > _grid.MinCoordinates.y)
             {
-                float heightDiff = newHeight - _dimensions.y;
+                float heightDiff = newDimensions.y - Dimensions.y;
                 transform.localPosition = transform.localPosition.WithZ((transform.position.z + heightDiff) * -1);
             }
         }
