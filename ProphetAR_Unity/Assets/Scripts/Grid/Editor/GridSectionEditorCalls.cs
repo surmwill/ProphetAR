@@ -1,4 +1,6 @@
 ﻿#if UNITY_EDITOR
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace ProphetAR
@@ -215,6 +217,22 @@ namespace ProphetAR
             }
 
             _gridDimensions = _gridDimensions.AddX(-1);
+        }
+        
+        public IEnumerable<GridCell> GetCells()
+        {
+            if (_gridDimensions.x <= 0 || _gridDimensions.y <= 0)
+            {
+                yield break;
+            }
+            
+            foreach (Transform rowTransform in _cellsParent)
+            {
+                foreach (Transform colTransform in rowTransform)
+                {
+                    yield return colTransform.GetComponent<GridCell>();
+                }
+            }
         }
     }
 }

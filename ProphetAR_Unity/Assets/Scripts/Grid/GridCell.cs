@@ -13,13 +13,7 @@ namespace ProphetAR
 
         [SerializeField]
         [ReadOnly]
-        private Vector2 _dimensions = default;
-
-        [SerializeField]
-        [ReadOnly]
         private Vector2 _coordinates;
-        
-        private Vector2 Dimensions => _grid.CellDimensions;
 
         public Vector2 Coordinates => _coordinates;
         

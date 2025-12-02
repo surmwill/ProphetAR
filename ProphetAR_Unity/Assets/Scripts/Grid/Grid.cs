@@ -1,128 +1,99 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProphetAR
 {
-    [ExecuteAlways]
-    public partial class Grid : MonoBehaviour
+    public partial class Grid : MonoBehaviour, ISerializationCallbackReceiver
     {
         [Tooltip("(rows, columns)")]
         [SerializeField]
         [ReadOnly]
         private Vector2 _gridDimensions = default;
-
+        
         [SerializeField]
         [ReadOnly]
-        private Transform _cellsParent = null;
-
-        [ReadOnly]
-        [SerializeField]
         private Vector2 _cellDimensions = default;
-
+        
+        [SerializeField]
         [ReadOnly]
-        [SerializeField]
-        private List<GridCell> _serializedCells = null;
+        private GridCell _origin = null;
         
         [SerializeField]
-        private GridCell _originCell = null;
+        [ReadOnly]
+        private List<SavedGridCell> _savedGrid = null;
 
-        public Transform CellsParent => _cellsParent;
+        [SerializeField]
+        private List<GridSection> _gridSections = null;
         
-        public GridCell OriginCell => _originCell;
-        
-        public Vector2 GridDimensions => _gridDimensions;
-
-        public Vector2 CellDimensions => _cellDimensions;
-
-        public Vector2 MinCoordinates { get; private set; }
-        
-        public Vector2 MaxCoordinates { get; private set; }
-        
-        private readonly Dictionary<Vector2, GridCell> _cells = new();
-
-        private void Awake()
-        {
-            RebuildGrid();
-        }
-
-        private void RecalculateMinMaxCoordinates()
-        { 
-            bool hasMinX = false; 
-            bool hasMinY = false;
-            
-            bool hasMaxX = false; 
-            bool hasMaxY = false;
-            
-            foreach (GridCell serializedCell in _serializedCells)
-            {
-                if (!hasMinX || serializedCell.Coordinates.x < MinCoordinates.x)
-                {
-                    hasMinX = true;
-                    MinCoordinates = MinCoordinates.WithX(serializedCell.Coordinates.x);
-                }
-
-                if (!hasMinY || serializedCell.Coordinates.y < MinCoordinates.y)
-                {
-                    hasMinY = true;
-                    MinCoordinates = MinCoordinates.WithY(serializedCell.Coordinates.y);
-                }
-
-                if (!hasMaxX || serializedCell.Coordinates.x > MaxCoordinates.x)
-                {
-                    hasMaxX = true;
-                    MaxCoordinates = MaxCoordinates.WithX(serializedCell.Coordinates.x);
-                }
-
-                if (!hasMaxY || serializedCell.Coordinates.y > MaxCoordinates.y)
-                {
-                    hasMaxY = true;
-                    MaxCoordinates = MaxCoordinates.WithY(serializedCell.Coordinates.y);
-                }
-            }
-            
-            _gridDimensions = new Vector2(MaxCoordinates.x - MinCoordinates.x + 1, MaxCoordinates.y - MinCoordinates.y + 1);
-        }
+        private readonly Dictionary<Vector2, GridCell> _grid = new();
 
         private void RecalculateCellNeighbours(GridCell cell)
         {
-            if (_cells.TryGetValue(cell.Coordinates + Vector2.right, out GridCell right))
+            if (_grid.TryGetValue(cell.Coordinates + Vector2.right, out GridCell right))
             {
                 cell.SetRightCell(right);
             }
             
-            if (_cells.TryGetValue(cell.Coordinates - Vector2.right, out GridCell left))
+            if (_grid.TryGetValue(cell.Coordinates - Vector2.right, out GridCell left))
             {
                 cell.SetLeftCell(left);
             }
 
-            if (_cells.TryGetValue(cell.Coordinates + Vector2.up, out GridCell down))
+            if (_grid.TryGetValue(cell.Coordinates + Vector2.up, out GridCell down))
             {
                 cell.SetDownCell(down);
             }
 
-            if (_cells.TryGetValue(cell.Coordinates - Vector2.up, out GridCell up))
+            if (_grid.TryGetValue(cell.Coordinates - Vector2.up, out GridCell up))
             {
                 cell.SetUpCell(up);
             }
         }
 
-        public void RebuildGrid()
+        public void BuildGrid()
         {
-            _cells.Clear();
-            
-            foreach (GridCell serializedCell in _serializedCells)
+            _grid.Clear();
+
+            foreach (SavedGridCell savedGridCell in _savedGrid)
             {
-                serializedCell.RecalculateCoordinates();
-                serializedCell.name = $"Cell ({serializedCell.Coordinates.x}, {serializedCell.Coordinates.y})";
-                _cells.Add(serializedCell.Coordinates, serializedCell);
+                _grid[savedGridCell.Coordinates] = savedGridCell.GridCell;
             }
             
-            foreach (GridCell cell in _cells.Values)
+            foreach (GridCell cell in _grid.Values)
             {
                 RecalculateCellNeighbours(cell);
             }
+        }
+        
+        public void OnBeforeSerialize()
+        {
+            // Empty
+        }
+
+        public void OnAfterDeserialize()
+        {
+            BuildGrid();
+        }
+
+        [Serializable]
+        private class SavedGridCell
+        {
+            [SerializeField]
+            private GridCell _gridCell = null;
+
+            [SerializeField]
+            private Vector2 _coordinates = default;
+
+            public GridCell GridCell => _gridCell;
+
+            public Vector2 Coordinates => _coordinates;
             
-            RecalculateMinMaxCoordinates();
+            public SavedGridCell(GridCell gridCell, Vector2 coordinates)
+            {
+                _gridCell = gridCell;
+                _coordinates = coordinates;
+            }
         }
     }
 }

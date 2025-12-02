@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using UnityEngine.Serialization;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace ProphetAR
 {
@@ -10,12 +11,17 @@ namespace ProphetAR
         private Vector2 _gridDimensions = default;
 
         [SerializeField]
-        private Transform _cellsParent = null;
+        private Vector2 _cellDimensions = default;
         
         [SerializeField]
-        private GameObject _cellPrefab = null;
+        [ReadOnly]
+        private Transform _cellsParent = null;
 
         [SerializeField]
-        private Vector2 _cellDimensions = default;
+        private GridCellContent _cellContent = null;
+
+        public Vector2 GridDimensions => _gridDimensions;
+
+        public Vector2 CellDimensions => _cellDimensions;
     }
 }

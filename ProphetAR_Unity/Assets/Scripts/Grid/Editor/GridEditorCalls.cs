@@ -1,104 +1,102 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace ProphetAR
 {
-    public partial class Grid : ISerializationCallbackReceiver
+    public partial class Grid
     {
-        private const string CellsParentName = "Cells";
-        private HashSet<GridCell> _serializedCellsLookup = null;
-
-        public void SetCellDimensions(Vector2 cellDimensions)
+        private bool DoGridSectionsAlign()
         {
-            _cellDimensions = cellDimensions;
-            foreach (GridCell cell in _serializedCells)
+            if (_gridSections.Count == 0)
             {
-                cell.UpdateDimensions(cellDimensions);
+                return true;
             }
-        }
 
-        public void AddCell(GridCell cell)
-        {
-            if (cell.transform.parent != _cellsParent)
-            {
-                Debug.LogError($"All cells must be a child of `{_cellsParent.name}`");
-                return;
-            }
-            
-            if (_serializedCellsLookup.Add(cell))
-            {
-                _serializedCells.Add(cell);
-            }
-        }
+            GridSection firstSection = _gridSections[0];
+            Vector2 firstCellDimensions = firstSection.CellDimensions;
 
-        public void AddCells(IEnumerable<GridCell> cells)
-        {
-            foreach (GridCell cell in cells)
+            foreach (GridSection gridSection in _gridSections.Skip(1))
             {
-                AddCell(cell);
-            }
-        }
-
-        public void RemoveCell(GridCell gridCell)
-        {
-            if (_serializedCellsLookup.Remove(gridCell))
-            {
-                _serializedCells.Remove(gridCell);
-            }
-        }
-
-        public void RemoveCells(IEnumerable<GridCell> toRemoveGridCells)
-        {
-            HashSet<GridCell> removed = new HashSet<GridCell>();
-            foreach (GridCell gridCell in toRemoveGridCells)
-            {
-                if (_serializedCellsLookup.Remove(gridCell))
+                if (gridSection.CellDimensions != firstCellDimensions)
                 {
-                    removed.Add(gridCell);
+                    Debug.LogError($"Grid section `{firstSection.name}` has different cell dimensions than `{gridSection.name}`");
+                    return false;
                 }
             }
-            _serializedCells.RemoveAll(cell => removed.Contains(cell));
+
+            return true;
         }
 
-        public void AddOrigin()
+        private bool AreAnySectionsEmpty()
         {
-            if (_originCell != null)
+            foreach (GridSection section in _gridSections)
             {
-                Debug.LogWarning("Origin already present");
+                if (!section.GetCells().Any())
+                {
+                    Debug.LogError($"Grid section `{section.name}` is empty");
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        
+        public void SaveGrid()
+        {
+            if (_gridSections.Count == 0)
+            {
+                _origin = null;
+                _cellDimensions = Vector2.zero;
+                _savedGrid.Clear();
+                
                 return;
             }
             
-            AddCellsParentIfNeeded();
-            GridCell.Create(Vector3.zero, _cellDimensions);
-        }
-
-        private void AddCellsParentIfNeeded()
-        {
-            if (_cellsParent != null)
+            if (!DoGridSectionsAlign() || AreAnySectionsEmpty())
             {
                 return;
             }
+            
+            GridSection firstSection = _gridSections[0];
+            GridCell origin = firstSection.GetCells().First();
+            Vector2 cellDimensions = firstSection.CellDimensions;
+            
+            List<SavedGridCell> savedGridCells = new List<SavedGridCell>();
+            Dictionary<Vector2, GridSection> previousCoordinates = new Dictionary<Vector2, GridSection>();
+            
+            foreach (GridSection gridSection in _gridSections)
+            {
+                foreach (GridCell gridCell in gridSection.GetCells())
+                {
+                    Vector2 coordinates = CalculateCellCoordinatesFromOrigin(gridCell, origin, cellDimensions);
+                    if (previousCoordinates.TryGetValue(coordinates, out GridSection fromGridSection))
+                    {
+                        Debug.LogError($"Duplicate coordinates {coordinates} found in sections `{gridSection.name}` and `{fromGridSection.name}`");
+                        return;
+                    }
+                   
+                    previousCoordinates.Add(coordinates, gridSection);
+                    savedGridCells.Add(new SavedGridCell(gridCell, coordinates));
+                }
+            }
 
-            _cellsParent = new GameObject(CellsParentName).transform;
-            _cellsParent.SetParent(gameObject.transform);
-            _cellsParent.SetLocalPositionAndRotation(Vector3.one, Quaternion.identity);
-            _cellsParent.localScale = Vector3.one;
+            foreach (SavedGridCell savedGridCell in savedGridCells)
+            {
+                savedGridCell.GridCell.SetCoordinates(savedGridCell.Coordinates);
+            }
+
+            _origin = origin;
+            _cellDimensions = cellDimensions;
+            _savedGrid = savedGridCells;
         }
         
-        private void OnValidate()
+        private Vector2 CalculateCellCoordinatesFromOrigin(GridCell cell, GridCell origin, Vector2 cellDimensions)
         {
-            AddCellsParentIfNeeded();
-        }
-
-        public void OnBeforeSerialize()
-        {
-            // Empty
-        }
-
-        public void OnAfterDeserialize()
-        {
-            _serializedCellsLookup = new HashSet<GridCell>(_serializedCells);
+            return new Vector2(
+                Mathf.RoundToInt((cell.transform.position.x - origin.transform.position.x) / cellDimensions.x),
+                Mathf.RoundToInt((cell.transform.position.z - origin.transform.position.z) * -1 / cellDimensions.y));
         }
     }
 }
