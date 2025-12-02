@@ -39,5 +39,15 @@ namespace ProphetAR
         {
             return new Vector3(vec.x, vec.y, z);
         }
+        
+        public static Vector2 AddX(this Vector2 vec, float x)
+        {
+            return new Vector2(vec.x + x, vec.y);
+        }
+        
+        public static Vector2 AddY(this Vector2 vec, float y)
+        {
+            return new Vector2(vec.x, vec.y + y);
+        }
     }
 }
