@@ -7,7 +7,6 @@ using UnityEngine;
 namespace ProphetAR
 {
     [CustomEditor(typeof(GridCell))]
-    [CanEditMultipleObjects]
     public class GridCellCustomEditor : UnityEditor.Editor
     {
         private SerializedProperty _editorNextGridCellSpawnLocationProperty;
@@ -24,21 +23,25 @@ namespace ProphetAR
             serializedObject.Update();
             
             EditorGUILayout.PropertyField(_editorNextGridCellSpawnLocationProperty);
-            if (GUILayout.Button("Spawn Adjacent Cell"))
+            if (GUILayout.Button("Copy To Left Cell"))
             {
-                foreach (var o in targets)
-                {
-                    
-                }
+            }
+            else if (GUILayout.Button("Copy To Right Cell"))
+            {
+            }
+            else if (GUILayout.Button("Copy To Up Cell"))
+            {
+            }
+            else if (GUILayout.Button("Copy To Down Cell"))
+            {
+            }
+            else if (GUILayout.Button("Add to Grid"))
+            {
+            }
+            else if (GUILayout.Button("Rebuild Grid"))
+            {
             }
         }
-
-        public void SpawnAdjacentCell(GridCell source, NextGridCellSpawnLocation spawnLocation)
-        {
-            
-        }
-        
-        
     }
 }
 

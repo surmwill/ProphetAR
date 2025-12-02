@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProphetAR
@@ -16,16 +15,20 @@ namespace ProphetAR
         [ReadOnly]
         private Transform _cellsParent = null;
 
+        [ReadOnly]
         [SerializeField]
         private Vector2 _cellDimensions = default;
 
+        [ReadOnly]
+        [SerializeField]
+        private List<GridCell> _serializedCells = null;
+        
         [SerializeField]
         private GridCell _originCell = null;
 
-        [SerializeField]
-        private List<GridCell> _serializedCells = null;
-
         public Transform CellsParent => _cellsParent;
+        
+        public GridCell OriginCell => _originCell;
         
         public Vector2 GridDimensions => _gridDimensions;
 
@@ -34,8 +37,6 @@ namespace ProphetAR
         public Vector2 MinCoordinates { get; private set; }
         
         public Vector2 MaxCoordinates { get; private set; }
-        
-        public GridCell OriginCell => _originCell;
         
         private readonly Dictionary<Vector2, GridCell> _cells = new();
 

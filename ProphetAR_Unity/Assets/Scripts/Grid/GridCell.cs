@@ -19,9 +19,6 @@ namespace ProphetAR
         [ReadOnly]
         private Vector2 _coordinates;
         
-        [SerializeField]
-        private NextGridCellSpawnLocation _editorNextGridCellSpawnLocation = default;
-        
         private Vector2 Dimensions => _grid.CellDimensions;
 
         public Vector2 Coordinates => _coordinates;

@@ -9,10 +9,16 @@ namespace ProphetAR
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
-            if (GUILayout.Button("Parse Grid From Origin"))
+            
+            // Rebuild Grid
+            if (GUILayout.Button("Rebuild Grid"))
             {
                 
             }
+            
+            // Add origin
+            
+            // Set cell dimensions
         }
     }
 }
