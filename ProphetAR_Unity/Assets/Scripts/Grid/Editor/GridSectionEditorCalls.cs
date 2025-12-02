@@ -148,17 +148,73 @@ namespace ProphetAR
 
         public void AddUpRow()
         {
+            foreach (Transform rowTransform in _cellsParent)
+            {
+                int row = int.Parse(rowTransform.name);
+                rowTransform.name = $"{row + 1}";
+                rowTransform.localPosition.AddZ(-_cellDimensions.y);
+            }
             
+            Transform newRowTransform = Instantiate(_cellPrefab, _cellsParent).GetComponent<Transform>();
+            newRowTransform.name = "0";
+            newRowTransform.SetAsFirstSibling();
+
+            int currNumCols = (int) _gridDimensions.y;
+            for (int col = 0; col < currNumCols; col++)
+            {
+                Transform cellTransform = Instantiate(_cellPrefab, newRowTransform).GetComponent<Transform>();
+                cellTransform.name = $"{col}";
+            }
+            
+            _gridDimensions = _gridDimensions.AddX(1);
         }
 
         public void AddDownRow()
         {
+            (int currNumRows, int currNumCols) = ((int) _gridDimensions.x, (int) _gridDimensions.y);
             
+            Transform newRowTransform = Instantiate(_cellPrefab, _cellsParent).GetComponent<Transform>();
+            newRowTransform.name = $"{currNumRows}";
+            
+            for (int col = 0; col < currNumCols; col++)
+            {
+                Transform cellTransform = Instantiate(_cellPrefab, newRowTransform).GetComponent<Transform>();
+                cellTransform.name = $"{col}";
+            }
+
+            _gridDimensions = _gridDimensions.AddX(1);
         }
 
-        public void RemoveLeftRow()
+        public void RemoveUpRow()
         {
+            foreach (Transform rowTransform in _cellsParent)
+            {
+                int row = int.Parse(rowTransform.name);
+                if (row > 0)
+                {
+                    rowTransform.localPosition = rowTransform.localPosition.AddZ(_cellDimensions.y);
+                    rowTransform.name = $"{row - 1}";
+                }
+                else
+                {
+                    Destroy(rowTransform.gameObject);
+                }
+            }
+
+            _gridDimensions = _gridDimensions.AddX(-1);
+        }
+
+        public void RemoveDownRow()
+        {
+            int currNumRows = (int) _gridDimensions.y;
+            Transform lastRow = _cellsParent.GetChild(_cellsParent.childCount - 1);
             
+            if (int.Parse(lastRow.name) == currNumRows - 1)
+            {
+                Destroy(lastRow.gameObject);
+            }
+
+            _gridDimensions = _gridDimensions.AddX(-1);
         }
     }
 }
