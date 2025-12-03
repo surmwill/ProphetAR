@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -68,6 +69,8 @@ namespace ProphetAR
             
             foreach (GridSection gridSection in _gridSections)
             {
+                gridSection.SetParentGrid(this);
+                
                 foreach (GridCell gridCell in gridSection.GetCells())
                 {
                     Vector2 coordinates = CalculateCellCoordinatesFromOrigin(gridCell, origin, cellDimensions);

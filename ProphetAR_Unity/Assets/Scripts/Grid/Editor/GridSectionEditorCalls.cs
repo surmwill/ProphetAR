@@ -1,12 +1,16 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace ProphetAR
 {
     public partial class GridSection
     {
+        public void SetParentGrid(Grid grid)
+        {
+            _parentGrid = grid;
+        }
+        
         public void CreateNewSection(Vector2 gridDimensions, GridCellContent cellContent)
         {
             if (_cellsParent != null)
@@ -48,7 +52,7 @@ namespace ProphetAR
                 }
             }
 
-            _gridDimensions = gridDimensions;
+            _sectionDimensions = gridDimensions;
         }
 
         public void SetCellDimensions(Vector2 newCellDimensions)
@@ -77,7 +81,7 @@ namespace ProphetAR
         
         public void AddRightCol()
         {
-            int currNumCols = (int) _gridDimensions.y;
+            int currNumCols = (int) _sectionDimensions.y;
             
             foreach (Transform rowTransform in _cellsParent)
             {
@@ -86,7 +90,7 @@ namespace ProphetAR
                 newCellTransform.localPosition = newCellTransform.localPosition.AddX(_cellDimensions.x * currNumCols);
             }
             
-            _gridDimensions = _gridDimensions.AddY(1);
+            _sectionDimensions = _sectionDimensions.AddY(1);
         }
 
         public void AddLeftCol()
@@ -105,12 +109,12 @@ namespace ProphetAR
                 newCellTransform.SetAsFirstSibling();
             }
 
-            _gridDimensions = _gridDimensions.AddY(1);
+            _sectionDimensions = _sectionDimensions.AddY(1);
         }
 
         public void RemoveRightCol()
         {
-            int currNumCols = (int) _gridDimensions.y;
+            int currNumCols = (int) _sectionDimensions.y;
             
             foreach (Transform rowTransform in _cellsParent)
             {
@@ -123,7 +127,7 @@ namespace ProphetAR
                 }
             }
 
-            _gridDimensions = _gridDimensions.AddY(-1);
+            _sectionDimensions = _sectionDimensions.AddY(-1);
         }
 
         public void RemoveLeftCol()
@@ -145,7 +149,7 @@ namespace ProphetAR
                 }
             }
 
-            _gridDimensions = _gridDimensions.AddY(-1);
+            _sectionDimensions = _sectionDimensions.AddY(-1);
         }
 
         public void AddUpRow()
@@ -161,19 +165,19 @@ namespace ProphetAR
             newRowTransform.name = "0";
             newRowTransform.SetAsFirstSibling();
 
-            int currNumCols = (int) _gridDimensions.y;
+            int currNumCols = (int) _sectionDimensions.y;
             for (int col = 0; col < currNumCols; col++)
             {
                 Transform cellTransform = Instantiate(_cellPrefab, newRowTransform).GetComponent<Transform>();
                 cellTransform.name = $"{col}";
             }
             
-            _gridDimensions = _gridDimensions.AddX(1);
+            _sectionDimensions = _sectionDimensions.AddX(1);
         }
 
         public void AddDownRow()
         {
-            (int currNumRows, int currNumCols) = ((int) _gridDimensions.x, (int) _gridDimensions.y);
+            (int currNumRows, int currNumCols) = ((int) _sectionDimensions.x, (int) _sectionDimensions.y);
             
             Transform newRowTransform = Instantiate(_cellPrefab, _cellsParent).GetComponent<Transform>();
             newRowTransform.name = $"{currNumRows}";
@@ -184,7 +188,7 @@ namespace ProphetAR
                 cellTransform.name = $"{col}";
             }
 
-            _gridDimensions = _gridDimensions.AddX(1);
+            _sectionDimensions = _sectionDimensions.AddX(1);
         }
 
         public void RemoveUpRow()
@@ -203,12 +207,12 @@ namespace ProphetAR
                 }
             }
 
-            _gridDimensions = _gridDimensions.AddX(-1);
+            _sectionDimensions = _sectionDimensions.AddX(-1);
         }
 
         public void RemoveDownRow()
         {
-            int currNumRows = (int) _gridDimensions.y;
+            int currNumRows = (int) _sectionDimensions.y;
             Transform lastRow = _cellsParent.GetChild(_cellsParent.childCount - 1);
             
             if (int.Parse(lastRow.name) == currNumRows - 1)
@@ -216,12 +220,12 @@ namespace ProphetAR
                 Destroy(lastRow.gameObject);
             }
 
-            _gridDimensions = _gridDimensions.AddX(-1);
+            _sectionDimensions = _sectionDimensions.AddX(-1);
         }
         
         public IEnumerable<GridCell> GetCells()
         {
-            if (_gridDimensions.x <= 0 || _gridDimensions.y <= 0)
+            if (_sectionDimensions.x <= 0 || _sectionDimensions.y <= 0)
             {
                 yield break;
             }

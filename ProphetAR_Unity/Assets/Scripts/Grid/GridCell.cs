@@ -9,11 +9,20 @@ namespace ProphetAR
     {
         [SerializeField]
         [ReadOnly]
-        private Grid _grid = null;
+        private GridSection _gridSection = null;
 
         [SerializeField]
         [ReadOnly]
         private Vector2 _coordinates;
+
+        [SerializeField]
+        private GridCellContent _cellContentPrefab;
+        
+        [SerializeField]
+        [ReadOnly]
+        private GridCellContent _cellContent;
+
+        public GridCellContent Content => _cellContent;
 
         public Vector2 Coordinates => _coordinates;
         
@@ -24,24 +33,5 @@ namespace ProphetAR
         public GridCell UpCell { get; private set; }
         
         public GridCell DownCell { get; private set; }
-        
-        public void SetData(GridCellData data)
-        {
-            
-        }
-
-        public static GridCell Create(Vector3 botLeftCornerWorldPosition, Vector2 dimensions)
-        {
-            GridCell cell = new GameObject("Cell (Uninitialized)", typeof(GridCell)).GetComponent<GridCell>();
-            cell._dimensions = dimensions;
-            
-            cell._grid = FindFirstObjectByType<Grid>();
-            cell.transform.SetParent(cell._grid.CellsParent);
-            
-            cell.transform.SetPositionAndRotation(botLeftCornerWorldPosition, Quaternion.identity);
-            cell.transform.localScale = Vector3.one;
-            
-            return cell;
-        }
     }
 }
