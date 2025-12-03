@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace ProphetAR
@@ -8,31 +9,45 @@ namespace ProphetAR
     {
         private Vector2 _createNewSectionDimensions;
         private Vector2 _setCellDimensions;
-        
+
+        private void OnEnable()
+        {
+            _createNewSectionDimensions = new Vector2(1f, 1f);
+            _setCellDimensions = serializedObject.FindProperty("_cellDimensions").vector2Value;
+        }
+
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
             
             GridSection gridSection = (GridSection) target;
 
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Clear Section", EditorStyles.boldLabel);
             if (GUILayout.Button("Clear Section"))
             {
                 gridSection.ClearSection();
             }
 
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Cell Dimensions", EditorStyles.boldLabel);
             _setCellDimensions = EditorGUILayout.Vector2Field("Set Cell Dimensions", _setCellDimensions);
             if (GUILayout.Button("Set Cell Dimensions"))
             {
                 gridSection.SetCellDimensions(_setCellDimensions);
             }
 
-            _createNewSectionDimensions = EditorGUILayout.Vector2Field("New Section Dimensions", _createNewSectionDimensions);
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Create New Section", EditorStyles.boldLabel);
+            _createNewSectionDimensions = EditorGUILayout.Vector2Field("Section Dimensions", _createNewSectionDimensions);
             if (GUILayout.Button("Create New Section"))
             {
                 gridSection.CreateNewSection(_createNewSectionDimensions);
             }
 
+            EditorGUILayout.Space();
             EditorGUILayout.LabelField("Add Rows/Columns", EditorStyles.boldLabel);
+            
             if (GUILayout.Button("Add Up Row"))
             {
                 gridSection.AddUpRow();

@@ -1,3 +1,15 @@
-﻿fileFormatVersion: 2
+fileFormatVersion: 2
 guid: 84892ff2f6b04e389338947576e9f14f
-timeCreated: 1764683869
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _parentGrid: {instanceID: 0}
+  - _cellsParent: {instanceID: 0}
+  - _cellPrefab: {fileID: 1312050685488113654, guid: 4d4df6b1f3a42c04982f0214aed5adc3, type: 3}
+  - _cellContentPrefab: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

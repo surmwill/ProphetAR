@@ -17,7 +17,7 @@ namespace ProphetAR
         {
             if (_cellsParent != null)
             {
-                EditorUtils.DestroyInEditMode(_cellsParent);
+                EditorUtils.DestroyInEditMode(_cellsParent.gameObject);
             }
         }
         
@@ -60,14 +60,14 @@ namespace ProphetAR
                 
                 for (int col = 0; col < gridDimensions.y; col++)
                 {
-                    GridCell newCell = ((GameObject) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform)).GetComponent<GridCell>();
+                    GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform);
                     newCell.SetContent(_cellContentPrefab);
                     newCell.SetParentGridSection(this);
                     newCell.name = $"{col}";
                     
                     if (col > 0)
                     {
-                        newCell.transform.localPosition = newCell.transform.localPosition.AddX(_cellDimensions.x * row);   
+                        newCell.transform.localPosition = newCell.transform.localPosition.AddX(_cellDimensions.x * col);
                     }
                 }
             }
@@ -128,7 +128,7 @@ namespace ProphetAR
             
             foreach (Transform rowTransform in _cellsParent)
             {
-                GridCell newCell = ((GameObject) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform)).GetComponent<GridCell>();
+                GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform);
                 newCell.SetContent(_cellContentPrefab);
                 newCell.SetParentGridSection(this);
                 newCell.name = $"{currNumCols + 1}";
@@ -155,7 +155,7 @@ namespace ProphetAR
                     cellTransform.localPosition = cellTransform.localPosition.AddX(_cellDimensions.x);
                 }
                 
-                GridCell newCell = ((GameObject) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform)).GetComponent<GridCell>();
+                GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform);
                 newCell.SetContent(_cellContentPrefab);
                 newCell.SetParentGridSection(this);
                 newCell.name = "0";
@@ -241,7 +241,7 @@ namespace ProphetAR
             int currNumCols = (int) _sectionDimensions.y;
             for (int col = 0; col < currNumCols; col++)
             {
-                GridCell newCell = ((GameObject) PrefabUtility.InstantiatePrefab(_cellPrefab, newRowTransform)).GetComponent<GridCell>();
+                GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, newRowTransform);
                 newCell.SetContent(_cellContentPrefab);
                 newCell.SetParentGridSection(this);
                 newCell.name = $"{col}";
@@ -268,7 +268,7 @@ namespace ProphetAR
             
             for (int col = 0; col < currNumCols; col++)
             {
-                GridCell newCell = ((GameObject) PrefabUtility.InstantiatePrefab(_cellPrefab, newRowTransform)).GetComponent<GridCell>();
+                GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, newRowTransform);
                 newCell.SetContent(_cellContentPrefab);
                 newCell.SetParentGridSection(this);
                 newCell.name = $"{col}";

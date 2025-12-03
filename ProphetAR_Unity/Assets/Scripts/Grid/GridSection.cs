@@ -5,14 +5,16 @@ namespace ProphetAR
     public partial class GridSection : MonoBehaviour
     {
         [SerializeField]
+        [ReadOnly]
         private Grid _parentGrid = null;
         
         [SerializeField]
         [ReadOnly]
-        private Vector2 _sectionDimensions = default;
+        private Vector2 _sectionDimensions = new(1, 1);
 
         [SerializeField]
-        private Vector2 _cellDimensions = default;
+        [ReadOnly]
+        private Vector2 _cellDimensions = new(1, 1);
         
         [SerializeField]
         [ReadOnly]
