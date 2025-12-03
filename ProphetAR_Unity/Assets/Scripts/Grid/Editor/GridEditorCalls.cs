@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -42,6 +41,41 @@ namespace ProphetAR
             }
 
             return false;
+        }
+
+        public void SnapGridCellsTogether(GridCell snap, GridCell snapTo, GridDirection snapDirection)
+        {
+            if (snap.ParentGridSection.CellDimensions != snapTo.ParentGridSection.CellDimensions)
+            {
+                Debug.LogError("Cannot snap two cells of different dimensions together");
+                return;
+            }
+
+            Vector2 cellDimensions = snapTo.ParentGridSection.CellDimensions;
+            Vector3 snapToPosition = default;
+            Vector3 offset = default;
+            
+            switch (snapDirection)
+            {
+                case GridDirection.Left:
+                    snapToPosition = snapTo.transform.TransformPoint(snapTo.transform.localPosition.AddX(-cellDimensions.x));
+                    break;
+                
+                case GridDirection.Right:
+                    snapToPosition = snapTo.transform.TransformPoint(snapTo.transform.localPosition.AddX(cellDimensions.x));
+                    break;
+                
+                case GridDirection.Up:
+                    snapToPosition = snapTo.transform.TransformPoint(snapTo.transform.localPosition.AddZ(-cellDimensions.y));
+                    break;
+                
+                case GridDirection.Down:
+                    snapToPosition = snapTo.transform.TransformPoint(snapTo.transform.localPosition.AddZ(cellDimensions.y));
+                    break;
+            }
+            
+            offset = snapToPosition - snap.transform.position;
+            snap.ParentGridSection.transform.position += offset;
         }
         
         public void SaveGrid()

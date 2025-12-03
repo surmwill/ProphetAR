@@ -54,8 +54,10 @@ namespace ProphetAR
 
             for (int row = 0; row < gridDimensions.x; row++)
             {
-                Transform rowTransform = Instantiate(_cellPrefab, _cellsParent).GetComponent<Transform>();
-                rowTransform.name = $"{row}";
+                Transform rowTransform = new GameObject($"{row}").transform;
+                rowTransform.SetParent(_cellsParent);
+                rowTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                rowTransform.localScale = Vector3.one;
 
                 if (row > 0)
                 {
@@ -64,12 +66,14 @@ namespace ProphetAR
                 
                 for (int col = 0; col < gridDimensions.y; col++)
                 {
-                    Transform cellTransform = Instantiate(_cellPrefab, rowTransform).GetComponent<Transform>();
-                    cellTransform.name = $"{col}";
+                    GridCell newCell = Instantiate(_cellPrefab, rowTransform).GetComponent<GridCell>();
+                    newCell.SetContent(_cellContentPrefab);
+                    newCell.SetParentGridSection(this);
+                    newCell.name = $"{col}";
                     
                     if (col > 0)
                     {
-                        cellTransform.localPosition = cellTransform.localPosition.AddX(_cellDimensions.x * row);   
+                        newCell.transform.localPosition = newCell.transform.localPosition.AddX(_cellDimensions.x * row);   
                     }
                 }
             }
@@ -112,6 +116,10 @@ namespace ProphetAR
             }
 
             _cellDimensions = newCellDimensions;
+            foreach (GridCell gridCell in GetCells())
+            {
+                gridCell.NotifyCellDimensionsChanged(newCellDimensions);
+            }
         }
         
         public void AddRightCol()
@@ -126,9 +134,11 @@ namespace ProphetAR
             
             foreach (Transform rowTransform in _cellsParent)
             {
-                Transform newCellTransform = Instantiate(rowTransform);
-                newCellTransform.name = $"{currNumCols + 1}";
-                newCellTransform.localPosition = newCellTransform.localPosition.AddX(_cellDimensions.x * currNumCols);
+                GridCell newCell = Instantiate(_cellPrefab, rowTransform);
+                newCell.SetContent(_cellContentPrefab);
+                newCell.SetParentGridSection(this);
+                newCell.name = $"{currNumCols + 1}";
+                newCell.transform.localPosition = newCell.transform.localPosition.AddX(_cellDimensions.x * currNumCols);
             }
             
             _sectionDimensions = _sectionDimensions.AddY(1);
@@ -151,9 +161,11 @@ namespace ProphetAR
                     cellTransform.localPosition = cellTransform.localPosition.AddX(_cellDimensions.x);
                 }
                 
-                Transform newCellTransform = Instantiate(rowTransform);
-                newCellTransform.name = "0";
-                newCellTransform.SetAsFirstSibling();
+                GridCell newCell = Instantiate(_cellPrefab, rowTransform);
+                newCell.SetContent(_cellContentPrefab);
+                newCell.SetParentGridSection(this);
+                newCell.name = "0";
+                newCell.transform.SetAsFirstSibling();
             }
 
             _sectionDimensions = _sectionDimensions.AddY(1);
@@ -239,16 +251,20 @@ namespace ProphetAR
                 rowTransform.name = $"{row + 1}";
                 rowTransform.localPosition.AddZ(-_cellDimensions.y);
             }
-            
-            Transform newRowTransform = Instantiate(_cellPrefab, _cellsParent).GetComponent<Transform>();
-            newRowTransform.name = "0";
+
+            Transform newRowTransform = new GameObject("0").transform;
+            newRowTransform.SetParent(_cellsParent);
+            newRowTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            newRowTransform.localScale = Vector3.one;
             newRowTransform.SetAsFirstSibling();
 
             int currNumCols = (int) _sectionDimensions.y;
             for (int col = 0; col < currNumCols; col++)
             {
-                Transform cellTransform = Instantiate(_cellPrefab, newRowTransform).GetComponent<Transform>();
-                cellTransform.name = $"{col}";
+                GridCell newCell = Instantiate(_cellPrefab, newRowTransform).GetComponent<GridCell>();
+                newCell.SetContent(_cellContentPrefab);
+                newCell.SetParentGridSection(this);
+                newCell.name = $"{col}";
             }
             
             _sectionDimensions = _sectionDimensions.AddX(1);
@@ -263,14 +279,19 @@ namespace ProphetAR
             }
             
             (int currNumRows, int currNumCols) = ((int) _sectionDimensions.x, (int) _sectionDimensions.y);
-            
-            Transform newRowTransform = Instantiate(_cellPrefab, _cellsParent).GetComponent<Transform>();
+
+            Transform newRowTransform = new GameObject($"{currNumRows}").transform;
+            newRowTransform.SetParent(_cellsParent);
+            newRowTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            newRowTransform.localScale = Vector3.one;
             newRowTransform.name = $"{currNumRows}";
             
             for (int col = 0; col < currNumCols; col++)
             {
-                Transform cellTransform = Instantiate(_cellPrefab, newRowTransform).GetComponent<Transform>();
-                cellTransform.name = $"{col}";
+                GridCell newCell = Instantiate(_cellPrefab, newRowTransform);
+                newCell.SetContent(_cellContentPrefab);
+                newCell.SetParentGridSection(this);
+                newCell.name = $"{col}";
             }
 
             _sectionDimensions = _sectionDimensions.AddX(1);

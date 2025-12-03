@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using System;
 using ProphetAR.Editor;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ namespace ProphetAR
     public partial class GridCell
     {
         private GridCellContent _lastCellContentPrefab;
+
+        public event Action<Vector2> OnCellDimensionsChanged; 
         
         public void SetLeftCell(GridCell cell)
         {
@@ -29,12 +32,17 @@ namespace ProphetAR
             LeftCell = cell;
         }
 
+        public void SetParentGridSection(GridSection gridSection)
+        {
+            _parentGridSection = gridSection;
+        }
+
         public void SetCoordinates(Vector2 coordinates)
         {
             _coordinates = coordinates;
         }
 
-        public void SetCellContent(GridCellContent contentPrefab)
+        public void SetContent(GridCellContent contentPrefab)
         {
             if (_cellContentPrefab == contentPrefab)
             {
@@ -53,8 +61,18 @@ namespace ProphetAR
                 }
             }
 
-            _cellContent = Instantiate(contentPrefab, transform);
+            if (contentPrefab != null)
+            {
+                _cellContent = Instantiate(contentPrefab, transform);  
+                _cellContent.SetGridCell(this);
+            }
+            
             _cellContentPrefab = contentPrefab;
+        }
+
+        public void NotifyCellDimensionsChanged(Vector2 newDimensions)
+        {
+            OnCellDimensionsChanged?.Invoke(newDimensions);
         }
 
         private void OnValidate()
@@ -69,6 +87,7 @@ namespace ProphetAR
                 if (_cellContentPrefab != null)
                 {
                     _cellContent = Instantiate(_cellContentPrefab, transform);
+                    _cellContent.SetGridCell(this);
                 }
             }
 
