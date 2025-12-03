@@ -16,14 +16,7 @@ namespace ProphetAR
         {
             if (_cellsParent != null)
             {
-                if (Application.isEditor && !Application.isPlaying)
-                {
-                    EditorUtils.DestroyInEditMode(_cellsParent);
-                }
-                else
-                {
-                    Destroy(_cellsParent);    
-                }
+                EditorUtils.DestroyInEditMode(_cellsParent);
             }
         }
         
@@ -185,17 +178,10 @@ namespace ProphetAR
             {
                 Transform lastCellTransform = rowTransform.GetChild(rowTransform.childCount - 1);
                 int col = int.Parse(lastCellTransform.name);
-
+                
                 if (col == currNumCols - 1)
                 {
-                    if (Application.isEditor && !Application.isPlaying)
-                    {
-                        EditorUtils.DestroyInEditMode(lastCellTransform.gameObject);   
-                    }
-                    else
-                    {
-                        Destroy(lastCellTransform.gameObject);
-                    }
+                    EditorUtils.DestroyInEditMode(lastCellTransform.gameObject);   
                 }
             }
 
@@ -222,14 +208,7 @@ namespace ProphetAR
                     }
                     else
                     {
-                        if (Application.isEditor && !Application.isPlaying)
-                        {
-                            EditorUtils.DestroyInEditMode(cellTransform.gameObject);
-                        }
-                        else
-                        {
-                            Destroy(cellTransform.gameObject);
-                        }
+                        EditorUtils.DestroyInEditMode(cellTransform.gameObject);
                     }
                 }
             }
@@ -315,14 +294,7 @@ namespace ProphetAR
                 }
                 else
                 {
-                    if (Application.isEditor && !Application.isPlaying)
-                    {
-                        EditorUtils.DestroyInEditMode(rowTransform.gameObject);
-                    }
-                    else
-                    {
-                        Destroy(rowTransform.gameObject);   
-                    }
+                    EditorUtils.DestroyInEditMode(rowTransform.gameObject);
                 }
             }
 
@@ -342,14 +314,7 @@ namespace ProphetAR
             
             if (int.Parse(lastRow.name) == currNumRows - 1)
             {
-                if (Application.isEditor && !Application.isPlaying)
-                {
-                    EditorUtils.DestroyInEditMode(lastRow.gameObject);
-                }
-                else
-                {
-                    Destroy(lastRow.gameObject);     
-                }
+                EditorUtils.DestroyInEditMode(lastRow.gameObject);
             }
 
             _sectionDimensions = _sectionDimensions.AddX(-1);

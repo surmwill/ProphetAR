@@ -51,7 +51,8 @@ namespace ProphetAR
 
             if (_cellContent != null)
             {
-                if (Application.isEditor && !Application.isPlaying)
+                #if UNITY_EDITOR
+                if (!Application.isPlaying)
                 {
                     EditorUtils.DestroyInEditMode(_cellContent.gameObject);
                 }
@@ -59,6 +60,9 @@ namespace ProphetAR
                 {
                     Destroy(_cellContent.gameObject);   
                 }
+                #else 
+                Destroy(_cellContent.gameObject);  
+                #endif
             }
 
             if (contentPrefab != null)
