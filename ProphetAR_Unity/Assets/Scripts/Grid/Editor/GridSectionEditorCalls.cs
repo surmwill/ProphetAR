@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
+using ProphetAR.Editor;
 using UnityEngine;
 
 namespace ProphetAR
@@ -10,12 +11,27 @@ namespace ProphetAR
         {
             _parentGrid = grid;
         }
-        
-        public void CreateNewSection(Vector2 gridDimensions, GridCellContent cellContent)
+
+        public void ClearSection()
         {
             if (_cellsParent != null)
             {
-                Debug.LogError($"The grid already exists, please clear it by deleting the child `{_cellsParent.name}` and retry");
+                if (Application.isEditor && !Application.isPlaying)
+                {
+                    EditorUtils.DestroyInEditMode(_cellsParent);
+                }
+                else
+                {
+                    Destroy(_cellsParent);    
+                }
+            }
+        }
+        
+        public void CreateNewSection(Vector2 gridDimensions)
+        {
+            if (_cellsParent != null)
+            {
+                Debug.LogError($"The grid already exists, please clear before creating a new one");
                 return;
             }
 
@@ -123,7 +139,14 @@ namespace ProphetAR
 
                 if (col == currNumCols - 1)
                 {
-                    Destroy(lastCellTransform.gameObject);
+                    if (Application.isEditor && !Application.isPlaying)
+                    {
+                        EditorUtils.DestroyInEditMode(lastCellTransform.gameObject);   
+                    }
+                    else
+                    {
+                        Destroy(lastCellTransform.gameObject);
+                    }
                 }
             }
 
@@ -144,7 +167,14 @@ namespace ProphetAR
                     }
                     else
                     {
-                        Destroy(cellTransform.gameObject);
+                        if (Application.isEditor && !Application.isPlaying)
+                        {
+                            EditorUtils.DestroyInEditMode(cellTransform.gameObject);
+                        }
+                        else
+                        {
+                            Destroy(cellTransform.gameObject);
+                        }
                     }
                 }
             }
@@ -203,7 +233,14 @@ namespace ProphetAR
                 }
                 else
                 {
-                    Destroy(rowTransform.gameObject);
+                    if (Application.isEditor && !Application.isPlaying)
+                    {
+                        EditorUtils.DestroyInEditMode(rowTransform.gameObject);
+                    }
+                    else
+                    {
+                        Destroy(rowTransform.gameObject);   
+                    }
                 }
             }
 
@@ -217,7 +254,14 @@ namespace ProphetAR
             
             if (int.Parse(lastRow.name) == currNumRows - 1)
             {
-                Destroy(lastRow.gameObject);
+                if (Application.isEditor && !Application.isPlaying)
+                {
+                    EditorUtils.DestroyInEditMode(lastRow.gameObject);
+                }
+                else
+                {
+                    Destroy(lastRow.gameObject);     
+                }
             }
 
             _sectionDimensions = _sectionDimensions.AddX(-1);

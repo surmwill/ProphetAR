@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEditor;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace ProphetAR.Editor
@@ -14,8 +15,13 @@ namespace ProphetAR.Editor
         /// If we wish to destroy something during OnValidate we'll need to move the actual destruction outside of the call.
         /// </summary>
         /// <param name="obj"> The object to destroy </param>
-        public static void OnValidateDestroy(Object obj, Action callback = null)
+        public static void DestroyInEditMode(Object obj, Action callback = null)
         {
+            if (!Application.isEditor || Application.isPlaying)
+            {
+                Debug.LogWarning($"{nameof(DestroyInEditMode)} should only be called while you are in the editor and not running the application");
+            }
+            
             EditorApplication.delayCall += () =>
             {
                 Object.DestroyImmediate(obj);

@@ -9,8 +9,11 @@ namespace ProphetAR
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
-            
-            if (GUILayout.Button(""))
+
+            if (GUILayout.Button("Create New Section"))
+            {
+                
+            }
         }
     }
 }

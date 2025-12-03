@@ -43,11 +43,14 @@ namespace ProphetAR
 
             if (_cellContent != null)
             {
-                #if UNITY_EDITOR
-                EditorUtils.OnValidateDestroy(_cellContent.gameObject);
-                #else
-                Destroy(_cellContent.gameObject);
-                #endif
+                if (Application.isEditor && !Application.isPlaying)
+                {
+                    EditorUtils.DestroyInEditMode(_cellContent.gameObject);
+                }
+                else
+                {
+                    Destroy(_cellContent.gameObject);   
+                }
             }
 
             _cellContent = Instantiate(contentPrefab, transform);
@@ -60,7 +63,7 @@ namespace ProphetAR
             {
                 if (_cellContent != null)
                 {
-                    EditorUtils.OnValidateDestroy(_cellContent.gameObject);   
+                    EditorUtils.DestroyInEditMode(_cellContent.gameObject);   
                 }
 
                 if (_cellContentPrefab != null)
