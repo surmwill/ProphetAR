@@ -24,6 +24,8 @@ namespace ProphetAR
         [SerializeField]
         private GridCellContent _cellContentPrefab = null;
 
+        public Grid ParentGrid => _parentGrid;
+
         public Vector2 SectionDimensions => _sectionDimensions;
 
         public Vector2 CellDimensions => _cellDimensions;

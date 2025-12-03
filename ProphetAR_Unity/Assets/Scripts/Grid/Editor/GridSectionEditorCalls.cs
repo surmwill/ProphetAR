@@ -40,6 +40,12 @@ namespace ProphetAR
                 Debug.LogError($"Cells cannot have zero or negative dimensions");
                 return;
             }
+
+            if (gridDimensions.x <= 0 || gridDimensions.y <= 0)
+            {
+                Debug.LogError("Cannot create a grid with zero or negative dimensions");
+                return;
+            }
             
             _cellsParent = new GameObject("CellsParent").GetComponent<Transform>();
             _cellsParent.SetParent(transform);
@@ -73,6 +79,17 @@ namespace ProphetAR
 
         public void SetCellDimensions(Vector2 newCellDimensions)
         {
+            if (newCellDimensions.x <= 0 || newCellDimensions.y <= 0)
+            {
+                Debug.LogError($"Cells cannot have zero or negative dimensions");
+                return;
+            }
+
+            if (_sectionDimensions.x <= 0 || _sectionDimensions.y <= 0)
+            {
+                return;
+            }
+            
             float widthDiff = newCellDimensions.x - _cellDimensions.x;
             float heightDiff = newCellDimensions.y - _cellDimensions.y;
             
@@ -93,10 +110,18 @@ namespace ProphetAR
                     }
                 }
             }
+
+            _cellDimensions = newCellDimensions;
         }
         
         public void AddRightCol()
         {
+            if (_sectionDimensions.x <= 0 || _sectionDimensions.y <= 0)
+            {
+                Debug.LogError("A grid does not exist to add to. Please create one");
+                return;
+            }
+            
             int currNumCols = (int) _sectionDimensions.y;
             
             foreach (Transform rowTransform in _cellsParent)
@@ -111,6 +136,12 @@ namespace ProphetAR
 
         public void AddLeftCol()
         {
+            if (_sectionDimensions.x <= 0 || _sectionDimensions.y <= 0)
+            {
+                Debug.LogError("A grid does not exist to add to. Please create one");
+                return;
+            }
+            
             foreach (Transform rowTransform in _cellsParent)
             {
                 foreach (Transform cellTransform in rowTransform)
@@ -130,6 +161,12 @@ namespace ProphetAR
 
         public void RemoveRightCol()
         {
+            if (_sectionDimensions.x <= 0 || _sectionDimensions.y <= 0)
+            {
+                Debug.LogError("A grid does not exist to remove from. Please create one");
+                return;
+            }
+            
             int currNumCols = (int) _sectionDimensions.y;
             
             foreach (Transform rowTransform in _cellsParent)
@@ -155,6 +192,12 @@ namespace ProphetAR
 
         public void RemoveLeftCol()
         {
+            if (_sectionDimensions.x <= 0 || _sectionDimensions.y <= 0)
+            {
+                Debug.LogError("A grid does not exist to remove from. Please create one");
+                return;
+            }
+            
             foreach (Transform rowTransform in _cellsParent)
             {
                 foreach (Transform cellTransform in rowTransform)
@@ -184,6 +227,12 @@ namespace ProphetAR
 
         public void AddUpRow()
         {
+            if (_sectionDimensions.x <= 0 || _sectionDimensions.y <= 0)
+            {
+                Debug.LogError("A grid does not exist to add to. Please create one");
+                return;
+            }
+            
             foreach (Transform rowTransform in _cellsParent)
             {
                 int row = int.Parse(rowTransform.name);
@@ -207,6 +256,12 @@ namespace ProphetAR
 
         public void AddDownRow()
         {
+            if (_sectionDimensions.x <= 0 || _sectionDimensions.y <= 0)
+            {
+                Debug.LogError("A grid does not exist to add to. Please create one");
+                return;
+            }
+            
             (int currNumRows, int currNumCols) = ((int) _sectionDimensions.x, (int) _sectionDimensions.y);
             
             Transform newRowTransform = Instantiate(_cellPrefab, _cellsParent).GetComponent<Transform>();
@@ -223,6 +278,12 @@ namespace ProphetAR
 
         public void RemoveUpRow()
         {
+            if (_sectionDimensions.x <= 0 || _sectionDimensions.y <= 0)
+            {
+                Debug.LogError("A grid does not exist to remove from. Please create one");
+                return;
+            }
+            
             foreach (Transform rowTransform in _cellsParent)
             {
                 int row = int.Parse(rowTransform.name);
@@ -249,6 +310,12 @@ namespace ProphetAR
 
         public void RemoveDownRow()
         {
+            if (_sectionDimensions.x <= 0 || _sectionDimensions.y <= 0)
+            {
+                Debug.LogError("A grid does not exist to remove from. Please create one");
+                return;
+            }
+            
             int currNumRows = (int) _sectionDimensions.y;
             Transform lastRow = _cellsParent.GetChild(_cellsParent.childCount - 1);
             
