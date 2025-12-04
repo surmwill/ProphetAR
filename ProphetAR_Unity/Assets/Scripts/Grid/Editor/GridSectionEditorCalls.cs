@@ -61,8 +61,8 @@ namespace ProphetAR
                 for (int col = 0; col < gridDimensions.y; col++)
                 {
                     GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform);
-                    newCell.SetContent(_cellContentPrefab);
                     newCell.SetParentGridSection(this);
+                    newCell.SetContent(_cellContentPrefab);
                     newCell.name = $"{col}";
                     
                     if (col > 0)
@@ -129,8 +129,8 @@ namespace ProphetAR
             foreach (Transform rowTransform in _cellsParent)
             {
                 GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform);
-                newCell.SetContent(_cellContentPrefab);
                 newCell.SetParentGridSection(this);
+                newCell.SetContent(_cellContentPrefab);
                 newCell.name = $"{currNumCols + 1}";
                 newCell.transform.localPosition = newCell.transform.localPosition.AddX(_cellDimensions.x * currNumCols);
             }
@@ -156,8 +156,8 @@ namespace ProphetAR
                 }
                 
                 GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform);
-                newCell.SetContent(_cellContentPrefab);
                 newCell.SetParentGridSection(this);
+                newCell.SetContent(_cellContentPrefab);
                 newCell.name = "0";
                 newCell.transform.SetAsFirstSibling();
             }
@@ -242,8 +242,8 @@ namespace ProphetAR
             for (int col = 0; col < currNumCols; col++)
             {
                 GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, newRowTransform);
-                newCell.SetContent(_cellContentPrefab);
                 newCell.SetParentGridSection(this);
+                newCell.SetContent(_cellContentPrefab);
                 newCell.name = $"{col}";
             }
             
@@ -269,8 +269,8 @@ namespace ProphetAR
             for (int col = 0; col < currNumCols; col++)
             {
                 GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, newRowTransform);
-                newCell.SetContent(_cellContentPrefab);
                 newCell.SetParentGridSection(this);
+                newCell.SetContent(_cellContentPrefab);
                 newCell.name = $"{col}";
             }
 

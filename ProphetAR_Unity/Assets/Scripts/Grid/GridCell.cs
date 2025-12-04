@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿using ProphetAR.Editor;
+using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace ProphetAR
 {
@@ -47,5 +52,49 @@ namespace ProphetAR
         public GridCell UpCell { get; private set; }
         
         public GridCell DownCell { get; private set; }
+        
+        public void SetContent(GridCellContent contentPrefab)
+        {
+            if (_cellContentPrefab == contentPrefab)
+            {
+                return;
+            }
+
+            if (_cellContent != null)
+            {
+                #if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    EditorUtils.DestroyInEditMode(_cellContent.gameObject);
+                }
+                else
+                {
+                    Destroy(_cellContent.gameObject);   
+                }
+                #else 
+                Destroy(_cellContent.gameObject);  
+                #endif
+            }
+
+            if (contentPrefab != null)
+            {
+                #if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    _cellContent = (GridCellContent) PrefabUtility.InstantiatePrefab(contentPrefab, transform);
+                }
+                else
+                {
+                    _cellContent = Instantiate(contentPrefab, transform);     
+                }
+                #else
+                _cellContent = Instantiate(contentPrefab, transform); 
+                #endif
+                
+                _cellContent.SetGridCell(this);
+            }
+            
+            _cellContentPrefab = contentPrefab;
+        }
     }
 }
