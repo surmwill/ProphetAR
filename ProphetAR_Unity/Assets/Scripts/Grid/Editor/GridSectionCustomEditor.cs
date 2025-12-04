@@ -50,7 +50,6 @@ namespace ProphetAR
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Add Rows/Columns", EditorStyles.boldLabel);
-            
             if (GUILayout.Button("Add Up Row"))
             {
                 gridSection.AddUpRow();
@@ -75,6 +74,7 @@ namespace ProphetAR
                 EditorUtility.SetDirty(target);
             }
             
+            EditorGUILayout.Space();
             EditorGUILayout.LabelField("Remove Rows/Columns", EditorStyles.boldLabel); 
             if (GUILayout.Button("Remove Up Row"))
             {
@@ -97,6 +97,14 @@ namespace ProphetAR
             if (GUILayout.Button("Remove Right Column"))
             {
                 gridSection.RemoveRightCol();
+                EditorUtility.SetDirty(target);
+            }
+            
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Snap", EditorStyles.boldLabel);
+            if (GUILayout.Button("Snap Sections Together"))
+            {
+                gridSection.SnapSectionsTogether();
                 EditorUtility.SetDirty(target);
             }
         }

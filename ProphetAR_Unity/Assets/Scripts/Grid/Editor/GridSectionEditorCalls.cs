@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using ProphetAR.Editor;
 using UnityEditor;
@@ -341,6 +342,38 @@ namespace ProphetAR
                 foreach (Transform colTransform in rowTransform)
                 {
                     yield return colTransform.GetComponent<GridCell>();
+                }
+            }
+        }
+
+        public void SnapSectionsTogether()
+        {
+            _gridSnaps.ForEach(gridSnap => gridSnap.SnapTogether());
+        }
+
+        private void OnValidate()
+        {
+            foreach (GridSnap gridSnap in _gridSnaps)
+            {
+                if (gridSnap.Snap.ParentGridSection != this)
+                {
+                    Debug.LogWarning("Cannot snap a cell that's in another grid section");
+                    gridSnap.SetSnap(null);
+                }
+
+                if (gridSnap.SnapTo != null && gridSnap.SnapTo.ParentGridSection == this)
+                {
+                    Debug.LogWarning("Cannot snap to a cell on the same grid");
+                    gridSnap.SetSnapTo(null);
+                }
+
+                if (gridSnap.SnapTo != null)
+                {
+                    gridSnap.SetSnapToSection(gridSnap.SnapTo.ParentGridSection);
+                }
+                else
+                {
+                    gridSnap.SetSnapToSection(null);
                 }
             }
         }

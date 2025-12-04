@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace ProphetAR
 {
@@ -25,6 +26,9 @@ namespace ProphetAR
         
         [SerializeField]
         private GridCellContent _cellContentPrefab = null;
+
+        [SerializeField]
+        private List<GridSnap> _gridSnaps = null;
 
         public CustomGrid ParentGrid => _parentGrid;
 
