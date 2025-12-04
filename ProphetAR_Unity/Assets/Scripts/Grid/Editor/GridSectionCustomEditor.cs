@@ -27,6 +27,7 @@ namespace ProphetAR
             if (GUILayout.Button("Clear Section"))
             {
                 gridSection.ClearSection();
+                EditorUtility.SetDirty(target);
             }
 
             EditorGUILayout.Space();
@@ -35,6 +36,7 @@ namespace ProphetAR
             if (GUILayout.Button("Set Cell Dimensions"))
             {
                 gridSection.SetCellDimensions(_setCellDimensions);
+                EditorUtility.SetDirty(target);
             }
 
             EditorGUILayout.Space();
@@ -43,6 +45,7 @@ namespace ProphetAR
             if (GUILayout.Button("Create New Section"))
             {
                 gridSection.CreateNewSection(_createNewSectionDimensions);
+                EditorUtility.SetDirty(target);
             }
 
             EditorGUILayout.Space();
@@ -51,42 +54,50 @@ namespace ProphetAR
             if (GUILayout.Button("Add Up Row"))
             {
                 gridSection.AddUpRow();
+                EditorUtility.SetDirty(target);
             }
 
             if (GUILayout.Button("Add Down Row"))
             {
                 gridSection.AddDownRow();
+                EditorUtility.SetDirty(target);
             }
             
             if (GUILayout.Button("Add Left Column"))
             {
                 gridSection.AddLeftCol();
+                EditorUtility.SetDirty(target);
             }
 
             if (GUILayout.Button("Add Right Column"))
             {
                 gridSection.AddRightCol();
+                EditorUtility.SetDirty(target);
             }
             
             EditorGUILayout.LabelField("Remove Rows/Columns", EditorStyles.boldLabel); 
             if (GUILayout.Button("Remove Up Row"))
             {
                 gridSection.RemoveUpRow();
+                EditorUtility.SetDirty(target);
             }
 
             if (GUILayout.Button("Remove Down Row"))
             {
                 gridSection.RemoveDownRow();
+                EditorUtility.SetDirty(target);
             }
             
             if (GUILayout.Button("Remove Left Column"))
             {
                 gridSection.RemoveLeftCol();
+                EditorUtility.SetDirty(target);
             }
 
             if (GUILayout.Button("Remove Right Column"))
             {
                 gridSection.RemoveRightCol();
+                EditorUtility.SetDirty(target);
             }
         }
     }

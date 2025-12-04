@@ -23,7 +23,7 @@ namespace ProphetAR
         
         public void CreateNewSection(Vector2 gridDimensions)
         {
-            if (_cellsParent != null)
+            if (_cellsParent != null && _cellsParent.childCount > 0)
             {
                 Debug.LogError($"The grid already exists, please clear before creating a new one");
                 return;
@@ -40,11 +40,14 @@ namespace ProphetAR
                 Debug.LogError("Cannot create a grid with zero or negative dimensions");
                 return;
             }
-            
-            _cellsParent = new GameObject("CellsParent").GetComponent<Transform>();
-            _cellsParent.SetParent(transform);
-            _cellsParent.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-            _cellsParent.localScale = Vector3.one;
+
+            if (_cellsParent == null)
+            {
+                _cellsParent = new GameObject("CellsParent").GetComponent<Transform>();
+                _cellsParent.SetParent(transform);
+                _cellsParent.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                _cellsParent.localScale = Vector3.one;   
+            }
 
             for (int row = 0; row < gridDimensions.x; row++)
             {
@@ -131,7 +134,7 @@ namespace ProphetAR
                 GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform);
                 newCell.SetParentGridSection(this);
                 newCell.SetContent(_cellContentPrefab);
-                newCell.name = $"{currNumCols + 1}";
+                newCell.name = $"{currNumCols}";
                 newCell.transform.localPosition = newCell.transform.localPosition.AddX(_cellDimensions.x * currNumCols);
             }
             
@@ -229,7 +232,7 @@ namespace ProphetAR
             {
                 int row = int.Parse(rowTransform.name);
                 rowTransform.name = $"{row + 1}";
-                rowTransform.localPosition.AddZ(-_cellDimensions.y);
+                rowTransform.localPosition = rowTransform.localPosition.AddZ(-_cellDimensions.y);
             }
 
             Transform newRowTransform = new GameObject("0").transform;
@@ -245,6 +248,11 @@ namespace ProphetAR
                 newCell.SetParentGridSection(this);
                 newCell.SetContent(_cellContentPrefab);
                 newCell.name = $"{col}";
+
+                if (col > 0)
+                {
+                    newCell.transform.localPosition = newCell.transform.localPosition.AddX(_cellDimensions.x * col);
+                }
             }
             
             _sectionDimensions = _sectionDimensions.AddX(1);
@@ -254,7 +262,7 @@ namespace ProphetAR
         {
             if (_sectionDimensions.x <= 0 || _sectionDimensions.y <= 0)
             {
-                Debug.LogError("A grid does not exist to add to. Please create one");
+                Debug.LogError("A grid section does not exist to add to. Please create one");
                 return;
             }
             
@@ -262,9 +270,9 @@ namespace ProphetAR
 
             Transform newRowTransform = new GameObject($"{currNumRows}").transform;
             newRowTransform.SetParent(_cellsParent);
-            newRowTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            newRowTransform.SetLocalPositionAndRotation(-Vector3.forward * currNumRows, Quaternion.identity);
             newRowTransform.localScale = Vector3.one;
-            newRowTransform.name = $"{currNumRows}";
+            newRowTransform.SetAsLastSibling();
             
             for (int col = 0; col < currNumCols; col++)
             {
@@ -272,6 +280,11 @@ namespace ProphetAR
                 newCell.SetParentGridSection(this);
                 newCell.SetContent(_cellContentPrefab);
                 newCell.name = $"{col}";
+                
+                if (col > 0)
+                {
+                    newCell.transform.localPosition = newCell.transform.localPosition.AddX(_cellDimensions.x * col);
+                }
             }
 
             _sectionDimensions = _sectionDimensions.AddX(1);
@@ -310,9 +323,10 @@ namespace ProphetAR
                 return;
             }
             
-            int currNumRows = (int) _sectionDimensions.y;
+            int currNumRows = (int) _sectionDimensions.x;
             Transform lastRow = _cellsParent.GetChild(_cellsParent.childCount - 1);
             
+            Debug.Log(lastRow.name + " " + (currNumRows - 1));
             if (int.Parse(lastRow.name) == currNumRows - 1)
             {
                 EditorUtils.DestroyInEditMode(lastRow.gameObject);
