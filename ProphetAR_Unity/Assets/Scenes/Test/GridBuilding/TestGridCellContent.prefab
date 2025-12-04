@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 6411149020862629682}
   - component: {fileID: 3549696623761487564}
   m_Layer: 0
-  m_Name: TestGridCellContent_1
+  m_Name: TestGridCellContent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
