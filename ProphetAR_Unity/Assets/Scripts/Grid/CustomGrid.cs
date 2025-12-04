@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ProphetAR
 {
-    public partial class Grid : MonoBehaviour, ISerializationCallbackReceiver
+    public partial class CustomGrid : MonoBehaviour, ISerializationCallbackReceiver
     {
         [Tooltip("(rows, columns)")]
         [SerializeField]

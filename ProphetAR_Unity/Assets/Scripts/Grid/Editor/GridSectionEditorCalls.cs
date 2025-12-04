@@ -8,7 +8,7 @@ namespace ProphetAR
 {
     public partial class GridSection
     {
-        public void SetParentGrid(Grid grid)
+        public void SetParentGrid(CustomGrid grid)
         {
             _parentGrid = grid;
         }

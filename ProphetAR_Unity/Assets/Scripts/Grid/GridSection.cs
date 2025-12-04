@@ -6,7 +6,7 @@ namespace ProphetAR
     {
         [SerializeField]
         [ReadOnly]
-        private Grid _parentGrid = null;
+        private CustomGrid _parentGrid = null;
         
         [SerializeField]
         [ReadOnly]
@@ -26,7 +26,7 @@ namespace ProphetAR
         [SerializeField]
         private GridCellContent _cellContentPrefab = null;
 
-        public Grid ParentGrid => _parentGrid;
+        public CustomGrid ParentGrid => _parentGrid;
 
         public Vector2 SectionDimensions => _sectionDimensions;
 

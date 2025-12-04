@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ProphetAR
 {
-    public partial class Grid
+    public partial class CustomGrid
     {
         private bool DoGridSectionsAlign()
         {

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ProphetAR
 {
-    [CustomEditor(typeof(Grid))]
+    [CustomEditor(typeof(CustomGrid))]
     public class GridCustomEditor : UnityEditor.Editor
     {
         private GridCell _snapGridCell;
@@ -13,7 +13,7 @@ namespace ProphetAR
         {
             DrawDefaultInspector();
 
-            Grid grid = (Grid) target;
+            CustomGrid grid = (CustomGrid) target;
             
             if (GUILayout.Button("Save Grid"))
             {
