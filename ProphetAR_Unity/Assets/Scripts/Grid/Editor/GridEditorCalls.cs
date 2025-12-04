@@ -45,13 +45,13 @@ namespace ProphetAR
 
         public void SnapGridCellsTogether(GridCell snap, GridCell snapTo, GridDirection snapDirection)
         {
-            if (snap.ParentGridSection.CellDimensions != snapTo.ParentGridSection.CellDimensions)
+            if (snap.GridSection.CellDimensions != snapTo.GridSection.CellDimensions)
             {
                 Debug.LogError("Cannot snap two cells of different dimensions together");
                 return;
             }
 
-            Vector2 cellDimensions = snapTo.ParentGridSection.CellDimensions;
+            Vector2 cellDimensions = snapTo.GridSection.CellDimensions;
             Vector3 snapToPosition = default;
             Vector3 offset = default;
             
@@ -75,7 +75,7 @@ namespace ProphetAR
             }
             
             offset = snapToPosition - snap.transform.position;
-            snap.ParentGridSection.transform.position += offset;
+            snap.GridSection.transform.position += offset;
         }
         
         public void SaveGrid()

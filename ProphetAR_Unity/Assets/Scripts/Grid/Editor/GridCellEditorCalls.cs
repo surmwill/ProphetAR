@@ -34,9 +34,9 @@ namespace ProphetAR
             LeftCell = cell;
         }
 
-        public void SetParentGridSection(GridSection gridSection)
+        public void SetGridSection(GridSection gridSection)
         {
-            _parentGridSection = gridSection;
+            _gridSection = gridSection;
         }
 
         public void SetCoordinates(Vector2 coordinates)

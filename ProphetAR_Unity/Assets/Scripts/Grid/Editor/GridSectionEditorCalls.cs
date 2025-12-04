@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ProphetAR.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -61,7 +62,7 @@ namespace ProphetAR
                 for (int col = 0; col < gridDimensions.y; col++)
                 {
                     GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform);
-                    newCell.SetParentGridSection(this);
+                    newCell.SetGridSection(this);
                     newCell.SetContent(_cellContentPrefab);
                     newCell.name = $"{col}";
                     
@@ -77,6 +78,12 @@ namespace ProphetAR
 
         public void SetCellDimensions(Vector2 newCellDimensions)
         {
+            SetCellDimensionsRecursive(newCellDimensions);
+            SnapSectionsRecursive(this, new HashSet<GridSection>());
+        }
+
+        private void SetCellDimensionsRecursive(Vector2 newCellDimensions)
+        {
             if (newCellDimensions.x <= 0 || newCellDimensions.y <= 0)
             {
                 Debug.LogError($"Cells cannot have zero or negative dimensions");
@@ -89,6 +96,7 @@ namespace ProphetAR
                 return;
             }
             
+            // Resize this grid section
             float widthDiff = newCellDimensions.x - _cellDimensions.x;
             float heightDiff = newCellDimensions.y - _cellDimensions.y;
             
@@ -112,6 +120,26 @@ namespace ProphetAR
             {
                 gridCell.EditorNotifyCellDimensionsChanged(newCellDimensions);
             }
+
+            // Resize snapped grid sections
+            foreach (GridSnap gridSnap in _gridSnaps.Where(gridSnap => gridSnap.IsValid && gridSnap.Snap.GridSection.CellDimensions != newCellDimensions))
+            {
+                gridSnap.Snap.GridSection.SetCellDimensions(newCellDimensions);   
+            }
+        }
+
+        private void SnapSectionsRecursive(GridSection currSection, HashSet<GridSection> handledSections)
+        {
+            if (!handledSections.Add(currSection))
+            {
+                return;
+            }
+            
+            // Snap the other grid sections to this one (this one does not move)
+            _gridSnaps.ForEach(gridSnap => gridSnap.SnapTogether());
+            
+            // Then do the same for the other grid sections
+            _gridSnaps.ForEach(gridSnap => SnapSectionsRecursive(gridSnap.Snap.GridSection, handledSections));
         }
         
         public void AddRightCol()
@@ -127,7 +155,7 @@ namespace ProphetAR
             foreach (Transform rowTransform in _cellsParent)
             {
                 GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform);
-                newCell.SetParentGridSection(this);
+                newCell.SetGridSection(this);
                 newCell.SetContent(_cellContentPrefab);
                 newCell.name = $"{currNumCols}";
                 newCell.transform.localPosition = newCell.transform.localPosition.AddX(_cellDimensions.x * currNumCols);
@@ -154,7 +182,7 @@ namespace ProphetAR
                 }
                 
                 GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform);
-                newCell.SetParentGridSection(this);
+                newCell.SetGridSection(this);
                 newCell.SetContent(_cellContentPrefab);
                 newCell.name = "0";
                 newCell.transform.SetAsFirstSibling();
@@ -240,7 +268,7 @@ namespace ProphetAR
             for (int col = 0; col < currNumCols; col++)
             {
                 GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, newRowTransform);
-                newCell.SetParentGridSection(this);
+                newCell.SetGridSection(this);
                 newCell.SetContent(_cellContentPrefab);
                 newCell.name = $"{col}";
 
@@ -272,7 +300,7 @@ namespace ProphetAR
             for (int col = 0; col < currNumCols; col++)
             {
                 GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, newRowTransform);
-                newCell.SetParentGridSection(this);
+                newCell.SetGridSection(this);
                 newCell.SetContent(_cellContentPrefab);
                 newCell.name = $"{col}";
                 
@@ -355,25 +383,25 @@ namespace ProphetAR
         {
             foreach (GridSnap gridSnap in _gridSnaps)
             {
-                if (gridSnap.Snap.ParentGridSection != this)
+                if (gridSnap.Origin.GridSection != this)
                 {
-                    Debug.LogWarning("Cannot snap a cell that's in another grid section");
+                    Debug.LogWarning("The origin cell must be in this grid section");
                     gridSnap.SetSnap(null);
                 }
 
-                if (gridSnap.SnapTo != null && gridSnap.SnapTo.ParentGridSection == this)
+                if (gridSnap.Snap != null && gridSnap.Snap.GridSection == this)
                 {
-                    Debug.LogWarning("Cannot snap to a cell on the same grid");
-                    gridSnap.SetSnapTo(null);
+                    Debug.LogWarning("Cannot snap a cell to its own grid");
+                    gridSnap.SetOrigin(null);
                 }
 
-                if (gridSnap.SnapTo != null)
+                if (gridSnap.Snap != null)
                 {
-                    gridSnap.SetSnapToSection(gridSnap.SnapTo.ParentGridSection);
+                    gridSnap.SetSnapSection(gridSnap.Snap.GridSection);
                 }
                 else
                 {
-                    gridSnap.SetSnapToSection(null);
+                    gridSnap.SetSnapSection(null);
                 }
             }
         }

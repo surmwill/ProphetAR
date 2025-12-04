@@ -30,6 +30,8 @@ namespace ProphetAR
         [SerializeField]
         private List<GridSnap> _gridSnaps = null;
 
+        public List<GridSnap> GridSnaps => _gridSnaps;
+
         public CustomGrid ParentGrid => _parentGrid;
 
         public Vector2 SectionDimensions => _sectionDimensions;

@@ -14,7 +14,7 @@ namespace ProphetAR
     {
         [SerializeField]
         [ReadOnly]
-        private GridSection _parentGridSection = null;
+        private GridSection _gridSection = null;
 
         [SerializeField]
         [ReadOnly]
@@ -27,13 +27,13 @@ namespace ProphetAR
         [ReadOnly]
         private GridCellContent _cellContent;
 
-        public GridSection ParentGridSection => _parentGridSection;
+        public GridSection GridSection => _gridSection;
 
         public GridCellContent Content => _cellContent;
 
         public Vector2 Coordinates => _coordinates;
 
-        public Vector2 Dimensions => _parentGridSection.CellDimensions;
+        public Vector2 Dimensions => _gridSection.CellDimensions;
 
         public Vector3 BotLeft => transform.position;
 

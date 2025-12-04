@@ -24,7 +24,7 @@ namespace ProphetAR
             _snapGridCell = (GridCell) EditorGUILayout.ObjectField("Snap", _snapGridCell, typeof(GridCell), true);
             _snapGridCellTo = (GridCell) EditorGUILayout.ObjectField("Snap To", _snapGridCellTo, typeof(GridCell), true);
 
-            bool canSnap = _snapGridCell != null && _snapGridCellTo !=null && _snapGridCell.ParentGridSection != _snapGridCellTo.ParentGridSection; 
+            bool canSnap = _snapGridCell != null && _snapGridCellTo !=null && _snapGridCell.GridSection != _snapGridCellTo.GridSection; 
             
             if (GUILayout.Button("Right") && canSnap)
             {
