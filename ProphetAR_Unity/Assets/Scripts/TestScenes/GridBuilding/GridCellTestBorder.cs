@@ -12,16 +12,26 @@ namespace ProphetAR
 
         private void Start()
         {
-            _gridCellContent.Cell.OnCellDimensionsChanged += OnCellDimensionsChanged;
-            OnCellDimensionsChanged(_gridCellContent.Cell.Dimensions);
+            #if UNITY_EDITOR
+            if (ApplicationUtils.IsEditMode)
+            {
+                _gridCellContent.Cell.EditorOnCellDimensionsChanged += EditorContentOnCellDimensionsChanged;  
+                EditorContentOnCellDimensionsChanged(_gridCellContent.Cell.Dimensions);
+            }
+            #endif
         }
 
         private void OnDestroy()
         {
-            _gridCellContent.Cell.OnCellDimensionsChanged -= OnCellDimensionsChanged;
+            #if UNITY_EDITOR
+            if (ApplicationUtils.IsEditMode)
+            {
+                _gridCellContent.Cell.EditorOnCellDimensionsChanged -= EditorContentOnCellDimensionsChanged;   
+            }
+            #endif
         }
 
-        private void OnCellDimensionsChanged(Vector2 dimensions)
+        private void EditorContentOnCellDimensionsChanged(Vector2 dimensions)
         {
             transform.localScale = new Vector3(ScaleDownForMargin * dimensions.x, ScaleDownForMargin * dimensions.y, 1f);
         }

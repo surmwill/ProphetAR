@@ -12,7 +12,7 @@ namespace ProphetAR
         private GridCellContent _lastCellContentPrefab;
         private bool _checkedLastCellContentPrefab;
 
-        public event Action<Vector2> OnCellDimensionsChanged; 
+        public event Action<Vector2> EditorOnCellDimensionsChanged; 
         
         public void SetLeftCell(GridCell cell)
         {
@@ -44,9 +44,9 @@ namespace ProphetAR
             _coordinates = coordinates;
         }
 
-        public void NotifyCellDimensionsChanged(Vector2 newDimensions)
+        public void EditorNotifyCellDimensionsChanged(Vector2 newDimensions)
         {
-            OnCellDimensionsChanged?.Invoke(newDimensions);
+            EditorOnCellDimensionsChanged?.Invoke(newDimensions);
         }
 
         private void OnValidate()

@@ -19,6 +19,7 @@ namespace ProphetAR
             {
                 EditorUtils.DestroyInEditMode(_cellsParent.gameObject);
             }
+            _sectionDimensions = Vector2.zero;
         }
         
         public void CreateNewSection(Vector2 gridDimensions)
@@ -53,13 +54,8 @@ namespace ProphetAR
             {
                 Transform rowTransform = new GameObject($"{row}").transform;
                 rowTransform.SetParent(_cellsParent);
-                rowTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                rowTransform.SetLocalPositionAndRotation(-Vector3.forward * _cellDimensions.y * (row + 1), Quaternion.identity);
                 rowTransform.localScale = Vector3.one;
-
-                if (row > 0)
-                {
-                    rowTransform.localPosition = rowTransform.localPosition.AddZ(-_cellDimensions.y * row);
-                }
                 
                 for (int col = 0; col < gridDimensions.y; col++)
                 {
@@ -85,9 +81,10 @@ namespace ProphetAR
                 Debug.LogError($"Cells cannot have zero or negative dimensions");
                 return;
             }
-
+            
             if (_sectionDimensions.x <= 0 || _sectionDimensions.y <= 0)
             {
+                _cellDimensions = newCellDimensions;
                 return;
             }
             
@@ -97,25 +94,22 @@ namespace ProphetAR
             foreach (Transform rowTransform in _cellsParent)
             {
                 int row = int.Parse(rowTransform.name);
-                if (row > 0)
-                {
-                    rowTransform.localPosition = rowTransform.localPosition.AddZ(-heightDiff);
-                }
-
+                rowTransform.localPosition = rowTransform.localPosition.AddZ(-heightDiff * (row + 1));
+                
                 foreach (Transform colTransform in rowTransform)
                 {
                     int col = int.Parse(colTransform.name);
                     if (col > 0)
                     {
-                        colTransform.localPosition = colTransform.localPosition.AddX(widthDiff);
+                        colTransform.localPosition = colTransform.localPosition.AddX(widthDiff * col);
                     }
                 }
             }
-
+            
             _cellDimensions = newCellDimensions;
             foreach (GridCell gridCell in GetCells())
             {
-                gridCell.NotifyCellDimensionsChanged(newCellDimensions);
+                gridCell.EditorNotifyCellDimensionsChanged(newCellDimensions);
             }
         }
         
@@ -237,7 +231,7 @@ namespace ProphetAR
 
             Transform newRowTransform = new GameObject("0").transform;
             newRowTransform.SetParent(_cellsParent);
-            newRowTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            newRowTransform.SetLocalPositionAndRotation(-Vector3.forward * _cellDimensions.y, Quaternion.identity);
             newRowTransform.localScale = Vector3.one;
             newRowTransform.SetAsFirstSibling();
 
@@ -270,7 +264,7 @@ namespace ProphetAR
 
             Transform newRowTransform = new GameObject($"{currNumRows}").transform;
             newRowTransform.SetParent(_cellsParent);
-            newRowTransform.SetLocalPositionAndRotation(-Vector3.forward * currNumRows, Quaternion.identity);
+            newRowTransform.SetLocalPositionAndRotation(-Vector3.forward * (currNumRows + 1) * _cellDimensions.y, Quaternion.identity);
             newRowTransform.localScale = Vector3.one;
             newRowTransform.SetAsLastSibling();
             

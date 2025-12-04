@@ -12,7 +12,7 @@ namespace ProphetAR
 
         private void OnEnable()
         {
-            _createNewSectionDimensions = new Vector2(1f, 1f);
+            _createNewSectionDimensions = new Vector2(2f, 2f);
             _setCellDimensions = serializedObject.FindProperty("_cellDimensions").vector2Value;
         }
 

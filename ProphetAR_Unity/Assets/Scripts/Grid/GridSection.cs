@@ -10,7 +10,7 @@ namespace ProphetAR
         
         [SerializeField]
         [ReadOnly]
-        private Vector2 _sectionDimensions = new(1, 1);
+        private Vector2 _sectionDimensions = new(2, 2);
 
         [SerializeField]
         [ReadOnly]
