@@ -23,9 +23,9 @@ namespace ProphetAR
             GridSection gridSection = (GridSection) target;
             
             EditorGUILayout.LabelField("Snap", EditorStyles.boldLabel);
-            if (GUILayout.Button("Snap Sections Together"))
+            if (GUILayout.Button("Snap Sections To Self"))
             {
-                gridSection.SetCellDimensions(_setCellDimensions);
+                gridSection.SnapSectionsToSelf();
                 EditorUtility.SetDirty(target);
             }
 

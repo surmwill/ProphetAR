@@ -16,14 +16,13 @@ namespace ProphetAR
         [ReadOnly]
         private GridSection _snapSection = null;
 
+        [Tooltip("Standing on the origin, what direction will the snap cell be?")]
         [SerializeField]
         private GridDirection _snapDirection = default;
 
         public GridCell Origin => _origin;
 
         public GridCell Snap => _snap;
-
-        public bool IsValid => Origin != null && Snap != null;
 
         public void SetOrigin(GridCell origin)
         {
@@ -41,17 +40,23 @@ namespace ProphetAR
         }
 
         // Snaps the snap cells to the origin cells. Origin cells do not move
-        public void SnapTogether()
+        public void SnapTogether(GridSection debugCallingGridSection)
         {
+            if (_origin == null || _snap == null)
+            {
+                Debug.LogWarning($"Missing snap cells ({debugCallingGridSection.name})");
+                return;
+            }
+            
             if (_origin.GridSection == _snap.GridSection)
             {
-                Debug.LogError("Cannot snap a grid section to itself");
+                Debug.LogError($"Cannot snap a grid section to itself ({debugCallingGridSection.name})");
                 return;
             }
 
             if (_origin.GridSection.CellDimensions != _snap.GridSection.CellDimensions)
             {
-                Debug.LogError("Grid sections must have the same dimensions to snap together");
+                Debug.LogError($"Grid sections must have the same dimensions to snap together ({debugCallingGridSection.name})");
                 return;
             }
             

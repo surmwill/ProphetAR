@@ -12,19 +12,11 @@ namespace ProphetAR
         private Vector2 _gridDimensions = default;
         
         [SerializeField]
-        [ReadOnly]
-        private Vector2 _cellDimensions = default;
-        
-        [SerializeField]
-        [ReadOnly]
-        private GridCell _origin = null;
+        private GridSection _originGridSection = null;
         
         [SerializeField]
         [ReadOnly]
         private List<SavedGridCell> _savedGrid = null;
-
-        [SerializeField]
-        private List<GridSection> _gridSections = null;
         
         private readonly Dictionary<Vector2, GridCell> _grid = new();
 

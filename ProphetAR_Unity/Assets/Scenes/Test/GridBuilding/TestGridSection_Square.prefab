@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3351581783145768523}
   - component: {fileID: 4004848353636238424}
   m_Layer: 0
-  m_Name: TestGridSection_1
+  m_Name: TestGridSection_Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

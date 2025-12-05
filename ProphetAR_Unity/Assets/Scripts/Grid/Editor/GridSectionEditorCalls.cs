@@ -76,9 +76,13 @@ namespace ProphetAR
             _sectionDimensions = gridDimensions;
         }
 
+        public void SnapSectionsToSelf()
+        {
+            SetCellDimensions(_cellDimensions);
+        }
+
         public void SetCellDimensions(Vector2 newCellDimensions)
         {
-            Debug.Log("Setting cell dimensions " + name);
             SetCellDimensionsRecursive(newCellDimensions);
             SnapSectionsRecursive(this, new HashSet<GridSection>());
         }
@@ -98,32 +102,35 @@ namespace ProphetAR
             }
             
             // Resize this grid section
-            float widthDiff = newCellDimensions.x - _cellDimensions.x;
-            float heightDiff = newCellDimensions.y - _cellDimensions.y;
-            
-            foreach (Transform rowTransform in _cellsParent)
+            if (_cellDimensions != newCellDimensions)
             {
-                int row = int.Parse(rowTransform.name);
-                rowTransform.localPosition = rowTransform.localPosition.AddZ(-heightDiff * (row + 1));
-                
-                foreach (Transform colTransform in rowTransform)
+                float widthDiff = newCellDimensions.x - _cellDimensions.x;
+                float heightDiff = newCellDimensions.y - _cellDimensions.y;
+
+                foreach (Transform rowTransform in _cellsParent)
                 {
-                    int col = ExtractColFromCellName(colTransform.name);;
-                    if (col > 0)
+                    int row = int.Parse(rowTransform.name);
+                    rowTransform.localPosition = rowTransform.localPosition.AddZ(-heightDiff * (row + 1));
+
+                    foreach (Transform colTransform in rowTransform)
                     {
-                        colTransform.localPosition = colTransform.localPosition.AddX(widthDiff * col);
+                        int col = ExtractColFromCellName(colTransform.name);
+                        if (col > 0)
+                        {
+                            colTransform.localPosition = colTransform.localPosition.AddX(widthDiff * col);
+                        }
                     }
                 }
-            }
-            
-            _cellDimensions = newCellDimensions;
-            foreach (GridCell gridCell in GetCells())
-            {
-                gridCell.EditorNotifyCellDimensionsChanged(newCellDimensions);
+
+                _cellDimensions = newCellDimensions;
+                foreach (GridCell gridCell in GetCells())
+                {
+                    gridCell.EditorNotifyCellDimensionsChanged(newCellDimensions);
+                }
             }
 
             // Resize snapped grid sections
-            foreach (GridSnap gridSnap in _gridSnaps.Where(gridSnap => gridSnap.IsValid && gridSnap.Snap.GridSection.CellDimensions != newCellDimensions))
+            foreach (GridSnap gridSnap in _gridSnaps.Where(gridSnap => gridSnap.Snap != null))
             {
                 gridSnap.Snap.GridSection.SetCellDimensionsRecursive(newCellDimensions);   
             } 
@@ -131,14 +138,13 @@ namespace ProphetAR
 
         private void SnapSectionsRecursive(GridSection currSection, HashSet<GridSection> handledSections)
         {
-            Debug.Log("Attempting to snap " + gameObject.name);
             if (!handledSections.Add(currSection))
             {
                 return;
             }
             
             // Snap the other grid sections to this one (this one does not move)
-            _gridSnaps.ForEach(gridSnap => gridSnap.SnapTogether());
+            _gridSnaps.ForEach(gridSnap => gridSnap.SnapTogether(this));
             
             // Then do the same for the other grid sections
             _gridSnaps.ForEach(gridSnap =>
