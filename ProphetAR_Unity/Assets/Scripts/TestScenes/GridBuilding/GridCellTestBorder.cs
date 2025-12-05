@@ -65,7 +65,6 @@ namespace ProphetAR
         private void EditorContentOnCellDimensionsChanged(Vector2 dimensions)
         {
             transform.localScale = new Vector3(ScaleDownForMargin * dimensions.x, ScaleDownForMargin * dimensions.y, 1f);
-            Debug.Log("NEW DIMENSIONS " + new Vector3(ScaleDownForMargin * dimensions.x, ScaleDownForMargin * dimensions.y, 1f));
         }
     }
 }

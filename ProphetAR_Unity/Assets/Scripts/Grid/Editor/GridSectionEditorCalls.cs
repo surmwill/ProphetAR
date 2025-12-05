@@ -78,14 +78,13 @@ namespace ProphetAR
 
         public void SetCellDimensions(Vector2 newCellDimensions)
         {
+            Debug.Log("Setting cell dimensions " + name);
             SetCellDimensionsRecursive(newCellDimensions);
-            // SnapSectionsRecursive(this, new HashSet<GridSection>());
+            SnapSectionsRecursive(this, new HashSet<GridSection>());
         }
 
         private void SetCellDimensionsRecursive(Vector2 newCellDimensions)
         {
-            Debug.Log("Setting cell dimensions " + newCellDimensions);
-            
             if (newCellDimensions.x <= 0 || newCellDimensions.y <= 0)
             {
                 Debug.LogError($"Cells cannot have zero or negative dimensions");
@@ -126,22 +125,26 @@ namespace ProphetAR
             // Resize snapped grid sections
             foreach (GridSnap gridSnap in _gridSnaps.Where(gridSnap => gridSnap.IsValid && gridSnap.Snap.GridSection.CellDimensions != newCellDimensions))
             {
-                gridSnap.Snap.GridSection.SetCellDimensions(newCellDimensions);   
+                gridSnap.Snap.GridSection.SetCellDimensionsRecursive(newCellDimensions);   
             } 
         }
 
         private void SnapSectionsRecursive(GridSection currSection, HashSet<GridSection> handledSections)
         {
+            Debug.Log("Attempting to snap " + gameObject.name);
             if (!handledSections.Add(currSection))
             {
                 return;
             }
             
             // Snap the other grid sections to this one (this one does not move)
-            _gridSnaps.ForEach(gridSnap => gridSnap.SnapTogether());
+            SnapSectionsTogether();
             
             // Then do the same for the other grid sections
-            _gridSnaps.ForEach(gridSnap => SnapSectionsRecursive(gridSnap.Snap.GridSection, handledSections));
+            _gridSnaps.ForEach(gridSnap =>
+            {
+                gridSnap.Snap.GridSection.SnapSectionsRecursive(gridSnap.Snap.GridSection, handledSections);
+            });
         }
         
         public void AddRightCol()
