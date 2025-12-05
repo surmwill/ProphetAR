@@ -21,6 +21,13 @@ namespace ProphetAR
             DrawDefaultInspector();
             
             GridSection gridSection = (GridSection) target;
+            
+            EditorGUILayout.LabelField("Snap", EditorStyles.boldLabel);
+            if (GUILayout.Button("Snap Sections Together"))
+            {
+                gridSection.SetCellDimensions(_setCellDimensions);
+                EditorUtility.SetDirty(target);
+            }
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Clear Section", EditorStyles.boldLabel);
@@ -97,14 +104,6 @@ namespace ProphetAR
             if (GUILayout.Button("Remove Right Column"))
             {
                 gridSection.RemoveRightCol();
-                EditorUtility.SetDirty(target);
-            }
-            
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Snap", EditorStyles.boldLabel);
-            if (GUILayout.Button("Snap Sections Together"))
-            {
-                gridSection.SnapSectionsTogether();
                 EditorUtility.SetDirty(target);
             }
         }

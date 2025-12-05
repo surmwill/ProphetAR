@@ -64,7 +64,7 @@ namespace ProphetAR
                     GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform);
                     newCell.SetGridSection(this);
                     newCell.SetContent(_cellContentPrefab);
-                    newCell.name = $"{col}";
+                    newCell.name = CellNameForCoordinates(row, col);
                     
                     if (col > 0)
                     {
@@ -108,7 +108,7 @@ namespace ProphetAR
                 
                 foreach (Transform colTransform in rowTransform)
                 {
-                    int col = int.Parse(colTransform.name);
+                    int col = ExtractColFromCellName(colTransform.name);;
                     if (col > 0)
                     {
                         colTransform.localPosition = colTransform.localPosition.AddX(widthDiff * col);
@@ -138,7 +138,7 @@ namespace ProphetAR
             }
             
             // Snap the other grid sections to this one (this one does not move)
-            SnapSectionsTogether();
+            _gridSnaps.ForEach(gridSnap => gridSnap.SnapTogether());
             
             // Then do the same for the other grid sections
             _gridSnaps.ForEach(gridSnap =>
@@ -162,7 +162,7 @@ namespace ProphetAR
                 GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform);
                 newCell.SetGridSection(this);
                 newCell.SetContent(_cellContentPrefab);
-                newCell.name = $"{currNumCols}";
+                newCell.name = CellNameForCoordinates(int.Parse(rowTransform.name), currNumCols);
                 newCell.transform.localPosition = newCell.transform.localPosition.AddX(_cellDimensions.x * currNumCols);
             }
             
@@ -179,17 +179,19 @@ namespace ProphetAR
             
             foreach (Transform rowTransform in _cellsParent)
             {
+                int row = int.Parse(rowTransform.name);
+                
                 foreach (Transform cellTransform in rowTransform)
                 {
-                    int col = int.Parse(cellTransform.name);
-                    cellTransform.name = $"{col + 1}";
+                    int col = ExtractColFromCellName(cellTransform.name);
+                    cellTransform.name = CellNameForCoordinates(row, col + 1);
                     cellTransform.localPosition = cellTransform.localPosition.AddX(_cellDimensions.x);
                 }
                 
                 GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, rowTransform);
                 newCell.SetGridSection(this);
                 newCell.SetContent(_cellContentPrefab);
-                newCell.name = "0";
+                newCell.name = CellNameForCoordinates(row, 0);
                 newCell.transform.SetAsFirstSibling();
             }
 
@@ -209,7 +211,7 @@ namespace ProphetAR
             foreach (Transform rowTransform in _cellsParent)
             {
                 Transform lastCellTransform = rowTransform.GetChild(rowTransform.childCount - 1);
-                int col = int.Parse(lastCellTransform.name);
+                int col = ExtractColFromCellName(lastCellTransform.name);
                 
                 if (col == currNumCols - 1)
                 {
@@ -232,10 +234,10 @@ namespace ProphetAR
             {
                 foreach (Transform cellTransform in rowTransform)
                 {
-                    int col = int.Parse(cellTransform.name);
+                    int col = ExtractColFromCellName(cellTransform.name);
                     if (col > 0)
                     {
-                        cellTransform.name = $"{col - 1}";
+                        cellTransform.name = CellNameForCoordinates(int.Parse(rowTransform.name), col - 1);
                         cellTransform.localPosition = cellTransform.localPosition.AddX(-_cellDimensions.x);
                     }
                     else
@@ -275,7 +277,7 @@ namespace ProphetAR
                 GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, newRowTransform);
                 newCell.SetGridSection(this);
                 newCell.SetContent(_cellContentPrefab);
-                newCell.name = $"{col}";
+                newCell.name = CellNameForCoordinates(0, col);
 
                 if (col > 0)
                 {
@@ -307,7 +309,7 @@ namespace ProphetAR
                 GridCell newCell = (GridCell) PrefabUtility.InstantiatePrefab(_cellPrefab, newRowTransform);
                 newCell.SetGridSection(this);
                 newCell.SetContent(_cellContentPrefab);
-                newCell.name = $"{col}";
+                newCell.name = CellNameForCoordinates(currNumRows, col);
                 
                 if (col > 0)
                 {
@@ -354,13 +356,26 @@ namespace ProphetAR
             int currNumRows = (int) _sectionDimensions.x;
             Transform lastRow = _cellsParent.GetChild(_cellsParent.childCount - 1);
             
-            Debug.Log(lastRow.name + " " + (currNumRows - 1));
             if (int.Parse(lastRow.name) == currNumRows - 1)
             {
                 EditorUtils.DestroyInEditMode(lastRow.gameObject);
             }
 
             _sectionDimensions = _sectionDimensions.AddX(-1);
+        }
+        
+        // The cell name is expected to be the coordinates of the cell (x, y)
+        private int ExtractColFromCellName(string cellName)
+        {
+            int indexComma = cellName.IndexOf(',');
+            
+            // (cellName.length - 1) - indexComma - 1
+            return int.Parse(cellName.Substring(indexComma + 1, cellName.Length - indexComma - 2));
+        }
+
+        private static string CellNameForCoordinates(int row, int col)
+        {
+            return $"({row},{col})";
         }
         
         public IEnumerable<GridCell> GetCells()
@@ -379,13 +394,13 @@ namespace ProphetAR
             }
         }
 
-        public void SnapSectionsTogether()
-        {
-            _gridSnaps.ForEach(gridSnap => gridSnap.SnapTogether());
-        }
-
         private void OnValidate()
         {
+            if (_gridSnaps == null)
+            {
+                return;
+            }
+            
             foreach (GridSnap gridSnap in _gridSnaps)
             {
                 if (gridSnap.Origin != null && gridSnap.Origin.GridSection != this)
