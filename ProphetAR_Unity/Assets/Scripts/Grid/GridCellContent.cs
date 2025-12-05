@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ProphetAR
 {
@@ -11,28 +12,60 @@ namespace ProphetAR
         
         public GridCell Cell => _cell;
 
-        // Note that the grid cell reference will be assigned sometime in between Awake and Start. We cannot access in Awake
+        private void OnEnable()
+        {
+            #if UNITY_EDITOR
+            if (ApplicationUtils.IsEditMode)
+            {
+                BindDimensionsChangedListenerIfNeeded();
+            }
+            #endif
+        }
+
+        // Note that the grid cell reference will be assigned sometime in between Awake and Start.
+        // We cannot access in Awake
         private void Start()
         {
             #if UNITY_EDITOR
-            EditorStart();
+            if (ApplicationUtils.IsEditMode)
+            {
+                BindDimensionsChangedListenerIfNeeded();
+            }
             #endif
         }
 
         public void SetGridCell(GridCell cell)
         {
             #if UNITY_EDITOR
-            EditorSetGridCell(_cell, cell);
+            if (ApplicationUtils.IsEditMode)
+            {
+                UnbindDimensionsChangedListener();
+            }
             #endif
             
             _cell = cell;
-            transform.position = cell.Middle;
+            CenterTransform();
+            
+            #if UNITY_EDITOR
+            if (ApplicationUtils.IsEditMode)
+            {
+                BindDimensionsChangedListenerIfNeeded();
+            }
+            #endif
         }
 
-        private void OnDestroy()
+        private void CenterTransform()
+        {
+            transform.position = _cell.Middle;
+        }
+
+        private void OnDisable()
         {
             #if UNITY_EDITOR
-            EditorOnDestroy();
+            if (ApplicationUtils.IsEditMode)
+            {
+                UnbindDimensionsChangedListener();   
+            }
             #endif
         }
     }

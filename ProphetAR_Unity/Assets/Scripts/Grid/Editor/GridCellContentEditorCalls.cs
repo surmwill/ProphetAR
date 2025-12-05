@@ -5,38 +5,29 @@ namespace ProphetAR
 {
     public partial class GridCellContent
     {
-        private void EditorStart()
-        {   
-            if (_cell != null && ApplicationUtils.IsEditMode)
+        private bool _isListeningToDimensionsChanged;
+
+        private void BindDimensionsChangedListenerIfNeeded()
+        {
+            if (!_isListeningToDimensionsChanged && _cell != null)
             {
                 _cell.EditorOnCellDimensionsChanged += EditorOnCellDimensionsChanged;
+                _isListeningToDimensionsChanged = true;
             }
         }
 
-        private void EditorOnDestroy()
+        private void UnbindDimensionsChangedListener()
         {
-            if (_cell != null)
+            if (_isListeningToDimensionsChanged)
             {
                 _cell.EditorOnCellDimensionsChanged -= EditorOnCellDimensionsChanged;
-            }
-        }
-
-        private void EditorSetGridCell(GridCell currCell, GridCell newCell)
-        {
-            if (currCell != null)
-            {
-                currCell.EditorOnCellDimensionsChanged -= EditorOnCellDimensionsChanged;   
-            }
-            
-            if (newCell != null && ApplicationUtils.IsEditMode)
-            {
-                newCell.EditorOnCellDimensionsChanged += EditorOnCellDimensionsChanged;
+                _isListeningToDimensionsChanged = false;
             }
         }
         
         private void EditorOnCellDimensionsChanged(Vector2 newDimensions)
         {
-            transform.position = _cell.Middle;
+            CenterTransform();
         }
     }
 }

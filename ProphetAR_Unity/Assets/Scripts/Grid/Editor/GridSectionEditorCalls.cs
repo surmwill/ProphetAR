@@ -79,11 +79,13 @@ namespace ProphetAR
         public void SetCellDimensions(Vector2 newCellDimensions)
         {
             SetCellDimensionsRecursive(newCellDimensions);
-            SnapSectionsRecursive(this, new HashSet<GridSection>());
+            // SnapSectionsRecursive(this, new HashSet<GridSection>());
         }
 
         private void SetCellDimensionsRecursive(Vector2 newCellDimensions)
         {
+            Debug.Log("Setting cell dimensions " + newCellDimensions);
+            
             if (newCellDimensions.x <= 0 || newCellDimensions.y <= 0)
             {
                 Debug.LogError($"Cells cannot have zero or negative dimensions");
@@ -125,7 +127,7 @@ namespace ProphetAR
             foreach (GridSnap gridSnap in _gridSnaps.Where(gridSnap => gridSnap.IsValid && gridSnap.Snap.GridSection.CellDimensions != newCellDimensions))
             {
                 gridSnap.Snap.GridSection.SetCellDimensions(newCellDimensions);   
-            }
+            } 
         }
 
         private void SnapSectionsRecursive(GridSection currSection, HashSet<GridSection> handledSections)
@@ -383,7 +385,7 @@ namespace ProphetAR
         {
             foreach (GridSnap gridSnap in _gridSnaps)
             {
-                if (gridSnap.Origin.GridSection != this)
+                if (gridSnap.Origin != null && gridSnap.Origin.GridSection != this)
                 {
                     Debug.LogWarning("The origin cell must be in this grid section");
                     gridSnap.SetSnap(null);
