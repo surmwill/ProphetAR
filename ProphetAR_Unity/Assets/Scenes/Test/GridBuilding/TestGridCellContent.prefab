@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gridCellContent: {fileID: 3549696623761487564}
+  _spriteBorderRenderer: {fileID: 8128841419937775866}
 --- !u!1 &9087120979018016324
 GameObject:
   m_ObjectHideFlags: 0

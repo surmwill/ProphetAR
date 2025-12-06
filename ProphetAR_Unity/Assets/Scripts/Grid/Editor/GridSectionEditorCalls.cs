@@ -104,22 +104,17 @@ namespace ProphetAR
             // Resize this grid section
             if (_cellDimensions != newCellDimensions)
             {
-                float widthDiff = newCellDimensions.x - _cellDimensions.x;
-                float heightDiff = newCellDimensions.y - _cellDimensions.y;
-
                 foreach (Transform rowTransform in _cellsParent)
                 {
                     int row = int.Parse(rowTransform.name);
-                    rowTransform.localPosition = rowTransform.localPosition.AddZ(-heightDiff * (row + 1));
-
+                    rowTransform.localPosition = -Vector3.forward * (newCellDimensions.y * (row + 1));
+                    
                     foreach (Transform colTransform in rowTransform)
                     {
                         int col = ExtractColFromCellName(colTransform.name);
-                        if (col > 0)
-                        {
-                            colTransform.localPosition = colTransform.localPosition.AddX(widthDiff * col);
-                        }
+                        colTransform.localPosition = Vector3.right * (newCellDimensions.x * col);
                     }
+                    
                 }
 
                 _cellDimensions = newCellDimensions;

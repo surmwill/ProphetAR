@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace ProphetAR
@@ -9,17 +8,24 @@ namespace ProphetAR
         [SerializeField]
         private GridCellContent _gridCellContent = null;
 
+        [SerializeField]
+        private SpriteRenderer _spriteBorderRenderer = null;
+
         private const float ScaleDownForMargin = 0.95f;
 
-        private bool _isListenerBound;
+        private bool _areEditModeListenersBound;
 
         private void Start()
         {
             #if UNITY_EDITOR
             if (ApplicationUtils.IsEditMode)
             {
-                BindCellDimensionsChangedListenerIfNeeded();
-                EditorContentOnCellDimensionsChanged(_gridCellContent.Cell.Dimensions);
+                if (!_areEditModeListenersBound)
+                {
+                    BindEditModeListeners();
+                    EditorOnCellDimensionsChanged(_gridCellContent.Cell.Dimensions);
+                    EditorOnCellCoordinatesChanged(_gridCellContent.Cell.Coordinates);   
+                }
             }
             #endif
         }
@@ -29,7 +35,12 @@ namespace ProphetAR
             #if UNITY_EDITOR
             if (ApplicationUtils.IsEditMode)
             {
-                BindCellDimensionsChangedListenerIfNeeded();   
+                if (!_areEditModeListenersBound)
+                {
+                    BindEditModeListeners();   
+                    EditorOnCellDimensionsChanged(_gridCellContent.Cell.Dimensions);
+                    EditorOnCellCoordinatesChanged(_gridCellContent.Cell.Coordinates);   
+                }
             }
             #endif
         }
@@ -39,32 +50,39 @@ namespace ProphetAR
             #if UNITY_EDITOR
             if (ApplicationUtils.IsEditMode)
             {
-                UnbindCellDimensionsChangedListener();   
+                UnbindEditorListeners();   
             }
             #endif
         }
 
-        private void BindCellDimensionsChangedListenerIfNeeded()
+        private void BindEditModeListeners()
         {
-            if (!_isListenerBound && _gridCellContent.Cell != null)
+            if (!_areEditModeListenersBound && _gridCellContent.Cell != null)
             {
-                _gridCellContent.Cell.EditorOnCellDimensionsChanged += EditorContentOnCellDimensionsChanged;
-                _isListenerBound = true;
+                _gridCellContent.Cell.EditorOnCellDimensionsChanged += EditorOnCellDimensionsChanged;
+                _gridCellContent.Cell.EditorOnCellCoordinatesChanged += EditorOnCellCoordinatesChanged;
+                _areEditModeListenersBound = true;
             }
         }
 
-        private void UnbindCellDimensionsChangedListener()
+        private void UnbindEditorListeners()
         {
-            if (_isListenerBound)
+            if (_areEditModeListenersBound)
             {
-                _gridCellContent.Cell.EditorOnCellDimensionsChanged -= EditorContentOnCellDimensionsChanged;
-                _isListenerBound = false;
+                _gridCellContent.Cell.EditorOnCellDimensionsChanged -= EditorOnCellDimensionsChanged;
+                _gridCellContent.Cell.EditorOnCellCoordinatesChanged -= EditorOnCellCoordinatesChanged;
+                _areEditModeListenersBound = false;
             }
         }
 
-        private void EditorContentOnCellDimensionsChanged(Vector2 dimensions)
+        private void EditorOnCellDimensionsChanged(Vector2 dimensions)
         {
             transform.localScale = new Vector3(ScaleDownForMargin * dimensions.x, ScaleDownForMargin * dimensions.y, 1f);
+        }
+
+        private void EditorOnCellCoordinatesChanged(Vector2 newCoordinates)
+        {
+            _spriteBorderRenderer.color = newCoordinates == Vector2.zero ? Color.green : Color.white;
         }
     }
 }

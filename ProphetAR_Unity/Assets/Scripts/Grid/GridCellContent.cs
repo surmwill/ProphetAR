@@ -11,13 +11,18 @@ namespace ProphetAR
         private GridCell _cell = null;
         
         public GridCell Cell => _cell;
+        
+        private bool _areEditModeListenersBound;
 
         private void OnEnable()
         {
             #if UNITY_EDITOR
             if (ApplicationUtils.IsEditMode)
             {
-                BindDimensionsChangedListenerIfNeeded();
+                if (!_areEditModeListenersBound)
+                {
+                    BindEditModeListeners();   
+                }
             }
             #endif
         }
@@ -29,7 +34,10 @@ namespace ProphetAR
             #if UNITY_EDITOR
             if (ApplicationUtils.IsEditMode)
             {
-                BindDimensionsChangedListenerIfNeeded();
+                if (!_areEditModeListenersBound)
+                {
+                    BindEditModeListeners();   
+                }
             }
             #endif
         }
@@ -39,22 +47,22 @@ namespace ProphetAR
             #if UNITY_EDITOR
             if (ApplicationUtils.IsEditMode)
             {
-                UnbindDimensionsChangedListener();
+                UnbindEditModeListeners();
             }
             #endif
             
             _cell = cell;
-            CenterTransform();
+            OnCellDimensionsChanged(_cell.Dimensions);
             
             #if UNITY_EDITOR
             if (ApplicationUtils.IsEditMode)
             {
-                BindDimensionsChangedListenerIfNeeded();
+                BindEditModeListeners();
             }
             #endif
         }
-
-        private void CenterTransform()
+        
+        private void OnCellDimensionsChanged(Vector2 newDimensions)
         {
             transform.position = _cell.Middle;
         }
@@ -64,7 +72,7 @@ namespace ProphetAR
             #if UNITY_EDITOR
             if (ApplicationUtils.IsEditMode)
             {
-                UnbindDimensionsChangedListener();   
+                UnbindEditModeListeners();   
             }
             #endif
         }

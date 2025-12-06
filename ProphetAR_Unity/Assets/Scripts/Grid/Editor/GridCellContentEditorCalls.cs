@@ -1,33 +1,25 @@
 ﻿#if UNITY_EDITOR
-using UnityEngine;
 
 namespace ProphetAR
 {
     public partial class GridCellContent
     {
-        private bool _isListeningToDimensionsChanged;
-
-        private void BindDimensionsChangedListenerIfNeeded()
+        private void BindEditModeListeners()
         {
-            if (!_isListeningToDimensionsChanged && _cell != null)
+            if (!_areEditModeListenersBound && _cell != null)
             {
-                _cell.EditorOnCellDimensionsChanged += EditorOnCellDimensionsChanged;
-                _isListeningToDimensionsChanged = true;
+                _cell.EditorOnCellDimensionsChanged += OnCellDimensionsChanged;
+                _areEditModeListenersBound = true;
             }
         }
 
-        private void UnbindDimensionsChangedListener()
+        private void UnbindEditModeListeners()
         {
-            if (_isListeningToDimensionsChanged)
+            if (_areEditModeListenersBound)
             {
-                _cell.EditorOnCellDimensionsChanged -= EditorOnCellDimensionsChanged;
-                _isListeningToDimensionsChanged = false;
+                _cell.EditorOnCellDimensionsChanged -= OnCellDimensionsChanged;
+                _areEditModeListenersBound = false;
             }
-        }
-        
-        private void EditorOnCellDimensionsChanged(Vector2 newDimensions)
-        {
-            CenterTransform();
         }
     }
 }
