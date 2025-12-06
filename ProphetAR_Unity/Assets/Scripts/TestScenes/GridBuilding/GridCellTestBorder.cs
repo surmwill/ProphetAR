@@ -20,6 +20,7 @@ namespace ProphetAR
             #if UNITY_EDITOR
             if (ApplicationUtils.IsEditMode)
             {
+                // Guaranteed that the grid cell has been hooked up by Start()
                 if (!_areEditModeListenersBound)
                 {
                     BindEditModeListeners();
@@ -37,9 +38,14 @@ namespace ProphetAR
             {
                 if (!_areEditModeListenersBound)
                 {
-                    BindEditModeListeners();   
-                    EditorOnCellDimensionsChanged(_gridCellContent.Cell.Dimensions);
-                    EditorOnCellCoordinatesChanged(_gridCellContent.Cell.Coordinates);   
+                    BindEditModeListeners();
+                    
+                    // Not guaranteed that the grid cell has been hooked up by OnEnable()
+                    if (_areEditModeListenersBound)
+                    {
+                        EditorOnCellDimensionsChanged(_gridCellContent.Cell.Dimensions);
+                        EditorOnCellCoordinatesChanged(_gridCellContent.Cell.Coordinates);      
+                    }
                 }
             }
             #endif
