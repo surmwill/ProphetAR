@@ -58,6 +58,8 @@ namespace ProphetAR
             }
 
             _gridDimensions = new Vector2(maxX.Value - minX.Value + 1, maxY.Value - minY.Value + 1);
+            _minCoordinate = new Vector2(minX.Value, minY.Value);
+            _maxCoordinate = new Vector2(maxX.Value, maxY.Value);
             _savedGrid = savedGrid;
         }
 

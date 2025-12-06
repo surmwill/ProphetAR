@@ -10,6 +10,14 @@ namespace ProphetAR
         [SerializeField]
         [ReadOnly]
         private Vector2 _gridDimensions = default;
+
+        [SerializeField]
+        [ReadOnly]
+        private Vector2 _minCoordinate = default;
+        
+        [SerializeField]
+        [ReadOnly]
+        private Vector2 _maxCoordinate = default;
         
         [SerializeField]
         private GridSection _originGridSection = null;
