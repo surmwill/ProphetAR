@@ -26,12 +26,38 @@ namespace ProphetAR
                 return;
             }
 
+            int? minX = null;
+            int? maxX = null;
+            int? minY = null;
+            int? maxY = null;
+
             foreach (SavedGridCell savedGridCell in savedGrid)
             {
+                if (!minX.HasValue || savedGridCell.Coordinates.x < minX.Value)
+                {
+                    minX = (int) savedGridCell.Coordinates.x;
+                }
+                
+                if (!maxX.HasValue || savedGridCell.Coordinates.x > maxX.Value)
+                {
+                    maxX = (int) savedGridCell.Coordinates.x;
+                }
+                
+                if (!minY.HasValue || savedGridCell.Coordinates.y < minY.Value)
+                {
+                    minY = (int) savedGridCell.Coordinates.y;
+                }
+                
+                if (!maxY.HasValue || savedGridCell.Coordinates.y > maxY.Value)
+                {
+                    maxY = (int) savedGridCell.Coordinates.y;
+                }
+                
                 savedGridCell.GridCell.SetCoordinates(savedGridCell.Coordinates);
                 savedGridCell.GridCell.GridSection.SetParentGrid(this);
             }
-            
+
+            _gridDimensions = new Vector2(maxX.Value - minX.Value + 1, maxY.Value - minY.Value + 1);
             _savedGrid = savedGrid;
         }
 
