@@ -302,7 +302,7 @@ namespace ProphetAR.Tests.GameEvents
         /// This tests that. 
         /// </summary>
         [Test]
-        public void TestRaiseThroughVariableGameEventProcessor()
+        public void TestGridEventInterceptionAndReRaise()
         {
             // The main level event processor receives a grid event and extracts the data. This is sent to the grid
             TestGridEventDataBase gridEventData = new TestGridEventDataSpecific();
