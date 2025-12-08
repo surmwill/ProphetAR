@@ -271,6 +271,42 @@ namespace ProphetAR.Tests.GameEvents
             }
         }
 
+        [Test]
+        public void TestSendingDerivedDataUnderParent()
+        {
+            GameEventProcessor gameEventProcessor = new GameEventProcessor();
+            SampleListener sampleListener = new SampleListener();
+            
+            // Test that we can send derived data under its parent class, and that it goes to any listeners attached to that parent class
+            gameEventProcessor.AddListenerWithData<ITestGameEventObjectListener, TestObject>(sampleListener);
+
+            TestObjectDerived testObjectDerived = new TestObjectDerived(1);
+            gameEventProcessor.RaiseEventWithData(new TestGameEventObject(testObjectDerived));
+            
+            Assert.IsTrue(sampleListener.LastTestObjectData == testObjectDerived);
+            Assert.IsTrue(sampleListener.LastTestObjectData.TestData == 1);
+            Assert.IsTrue(sampleListener.NumTestObjectEvents == 1);
+            Assert.IsTrue(sampleListener.LastTestObjectData is TestObjectDerived);
+            
+            gameEventProcessor.RemoveListenerWithData<ITestGameEventObjectListener>(sampleListener);
+        }
+
+        [Test]
+        public void TestRaiseThroughVariableGameEventProcessor()
+        {
+            GameEventProcessor gameEventProcessor = new GameEventProcessor();
+            SampleListener sampleListener = new SampleListener();
+            
+            gameEventProcessor.AddListenerWithData<ITestGameEventObjectListener, TestObject>(sampleListener);
+
+            // 
+            TestGameEventObject testData = new TestGameEventObject(new TestObject(1));
+            Action<GameEventProcessor> raiseEvent = variableProcessor => variableProcessor.RaiseEventWithData(testData);
+            
+            
+
+        }
+
         private class SampleListener : 
             ITestGameEventIntListener, 
             ITestGameEventObjectListener, 
