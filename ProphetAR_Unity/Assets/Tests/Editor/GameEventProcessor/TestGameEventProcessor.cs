@@ -291,20 +291,36 @@ namespace ProphetAR.Tests.GameEvents
             gameEventProcessor.RemoveListenerWithData<ITestGameEventObjectListener>(sampleListener);
         }
 
+        /// <summary>
+        /// Grid events will be sent to main level event processor.
+        /// The level event processor will detect that it is a grid event and forward it to the grid.
+        /// The grid will determine what cells need the event and possibly in what order.
+        /// The grid will then re-raise the event on each of the cell's event processors.
+        /// The children of the cell will listen to these cell events.
+        ///
+        /// For this to work, we need to ensure the grid can re-raise the event on the grid cell, only being passed its data.
+        /// This tests that. 
+        /// </summary>
         [Test]
         public void TestRaiseThroughVariableGameEventProcessor()
         {
-            GameEventProcessor gameEventProcessor = new GameEventProcessor();
-            SampleListener sampleListener = new SampleListener();
+            // The main level event processor receives a grid event and extracts the data. This is sent to the grid
+            TestGridEventDataBase gridEventData = new TestGridEventDataSpecific();
             
-            gameEventProcessor.AddListenerWithData<ITestGameEventObjectListener, TestObject>(sampleListener);
-
-            // 
-            TestGameEventObject testData = new TestGameEventObject(new TestObject(1));
-            Action<GameEventProcessor> raiseEvent = variableProcessor => variableProcessor.RaiseEventWithData(testData);
+            // The grid determines what cells receive the event
+            GameEventProcessor cellGridEventProcessor = new GameEventProcessor();
             
+            // The cells are listening to the events
+            GridEventSpecificListener cellGridEventListener = new GridEventSpecificListener();
+            cellGridEventProcessor.AddListenerWithData<ITestGridEventSpecificListener, TestGridEventDataSpecific>(cellGridEventListener);
             
-
+            // The grid re-raises the event for the cells
+            gridEventData.Raise(cellGridEventProcessor);
+            
+            // The cell has received the data
+            Assert.IsTrue(cellGridEventListener.Data == gridEventData);
+            
+            cellGridEventProcessor.RemoveListenerWithData<ITestGridEventSpecificListener>(cellGridEventListener);
         }
 
         private class SampleListener : 
@@ -378,10 +394,10 @@ namespace ProphetAR.Tests.GameEvents
                 }
             }
         }
-
+        
         private class DerivedSampleListener : SampleListener
         {
-            
+            // Empty
         }
 
         private class ListenerWithCallback : ITestGameEventNoDataListener
@@ -396,6 +412,16 @@ namespace ProphetAR.Tests.GameEvents
             public void OnEvent()
             {
                 _callback.Invoke();
+            }
+        }
+
+        private class GridEventSpecificListener : ITestGridEventSpecificListener
+        {
+            public TestGridEventDataSpecific Data { get; private set; }
+            
+            public void OnEvent(TestGridEventDataSpecific data)
+            {
+                Data = data;
             }
         }
     }
