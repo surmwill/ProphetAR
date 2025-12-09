@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 
 namespace ProphetAR
 {
@@ -8,6 +8,10 @@ namespace ProphetAR
         
         public int? Priority { get; }
         
-        public IEnumerator ExecuteNextTurn();
+        public IEnumerator<bool> ExecuteNextTurn { get; }
+
+        public void OnComplete();
+
+        public void OnCancelled();
     }
 }

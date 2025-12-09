@@ -20,14 +20,14 @@ namespace ProphetAR
                 new GameEventMultiGameTurnActionsModifiedData(multiTurnAction, GameEventMultiGameTurnActionsModifiedData.ModificationType.Added)));
         }
         
-        public void RemoveActionRequestWithoutCompletion(IMultiGameTurnAction multiTurnAction)
+        public void RemoveMultiTurnAction(IMultiGameTurnAction multiTurnAction)
         {
             _multiTurnActions.Remove(multiTurnAction, multiTurnAction.Priority ?? IMultiGameTurnAction.DefaultPriority);
             _player.EventProcessor.RaiseEventWithData(new GameEventMultiGameTurnActionsModified(
                 new GameEventMultiGameTurnActionsModifiedData(multiTurnAction, GameEventMultiGameTurnActionsModifiedData.ModificationType.Removed)));
         }
 
-        public void ChangeActionRequestPriority(IMultiGameTurnAction multiTurnAction, int? newPriority)
+        public void ChangeMultiTurnActionPriority(IMultiGameTurnAction multiTurnAction, int? newPriority)
         {
             int prevPrio = multiTurnAction.Priority ?? IGameTurnActionRequest.DefaultPriority;
             int newPrio = newPriority ?? IGameTurnActionRequest.DefaultPriority; 

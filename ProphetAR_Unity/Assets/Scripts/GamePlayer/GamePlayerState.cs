@@ -2,15 +2,14 @@
 {
     public class GamePlayerState
     {
+        public GamePlayerMultiTurnActions MultiTurnActions { get; }
+        
         private readonly GamePlayer _player;
-        private readonly GamePlayerMultiTurnActions _multiTurnActions;
         
         public GamePlayerState(GamePlayer player)
         {
             _player = player;
-            _multiTurnActions = new GamePlayerMultiTurnActions(_player);
+            MultiTurnActions = new GamePlayerMultiTurnActions(_player);
         }
-
-
     }
 }
