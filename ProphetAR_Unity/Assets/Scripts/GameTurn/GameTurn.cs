@@ -2,31 +2,37 @@
 
 namespace ProphetAR
 {
-    public abstract class GameTurn
+    public class GameTurn
     {
-        public int TurnNumber { get; }
+        public GameTurnManager TurnManager { get; }
         
-        public string Owner { get; }
+        public int TurnNumber { get; }
+
+        public bool HasActionRequests => _actionRequests.Any();
+        
+        public string PlayerUid { get; }
 
         public List<Dictionary<string, object>> SerializedTurnActionsForServer { get; } = new();
 
         private const int DefaultPriority = int.MaxValue;
-        
+
         private readonly SmallPriorityQueue<IGameTurnActionRequest, int> _actionRequests = new();
 
         private bool _initialBuildComplete;
         
-        public GameTurn(int turnNumber, string owner)
+        public GameTurn(GameTurnManager turnManager, int turnNumber, string playerUid)
         {
+            TurnManager = turnManager;
             TurnNumber = turnNumber;
-            Owner = owner;
+            PlayerUid = playerUid;
         }
 
-        public virtual void OnInitialBuild()
+        public void InitialBuild()
         {
-            // Game event which fills up the priority queue with initially know actions we need to take.
-            // Other actions might arise as side effects of these.
-
+            if (TurnManager.Level.LevelState.TurnActionRequestProvidersPerPlayer.TryGetValue(PlayerUid, out List<IGameTurnActionRequestProvider> requestProviders))
+            {
+                requestProviders.ForEach(requestProvider => AddActionRequest(requestProvider.GetActionRequest()));
+            }
             _initialBuildComplete = true;
         }
 
@@ -62,10 +68,15 @@ namespace ProphetAR
                 // Event for dynamically changed priority
             }
         }
-
-        public void OnTurnComplete()
+        
+        public void ExecuteAutomatically()
         {
-            // Event for turn completing
+            while (_actionRequests.Any())
+            {
+                IGameTurnActionRequest action = _actionRequests.Peek();
+                action.ExecuteAutomatically();
+                CompleteActionRequest(action);
+            }
         }
     }
 }

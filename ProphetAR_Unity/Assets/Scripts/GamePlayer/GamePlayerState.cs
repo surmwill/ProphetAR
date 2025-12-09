@@ -1,6 +1,6 @@
 ﻿namespace ProphetAR
 {
-    public class TurnManager
+    public class GamePlayerState
     {
         
     }

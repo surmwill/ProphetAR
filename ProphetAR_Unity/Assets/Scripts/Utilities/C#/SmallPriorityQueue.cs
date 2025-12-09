@@ -6,13 +6,42 @@ using System.Linq;
 namespace ProphetAR
 {
     /// <summary>
-    /// Priority queue backed using a SortDictionary as we don't yet have .net 6.0
+    /// Priority queue using a SortDictionary as we don't have the built-in priority queue in this c# version.
     /// Not as performant, but suitable for small collections (< 50 elements)
     /// </summary>
     public class SmallPriorityQueue<TElement, TPriority> : IEnumerable<TElement> where TPriority : IComparable<TPriority>
     {
         private readonly SortedDictionary<TPriority, LinkedList<TElement>> _data = new();
 
+        public bool Any()
+        {
+            return _data.Count > 0;
+        }
+
+        public int Count()
+        {
+            int count = 0;
+            foreach (TElement element in this)
+            {
+                count++;
+            }
+            return count;
+        }
+
+        public TElement Peek()
+        {
+            if (_data.Count == 0)
+            {
+                throw new InvalidOperationException("Empty queue");
+            }
+            
+            TPriority highestPriority = _data.Keys.First();
+            LinkedList<TElement> elementQueue = _data[highestPriority];
+            TElement element = elementQueue.First.Value;
+
+            return element;
+        }
+        
         public TElement Dequeue()
         {
             if (_data.Count == 0)
