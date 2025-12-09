@@ -1,8 +1,8 @@
 ﻿namespace ProphetAR
 {
-    public class GameEventTurnActionsModified : GameEventWithTypedData<GameEventTurnActionsModifiedData>
+    public class GameEventTurnActionsModified : GameEventWithTypedData<GameEventGameTurnActionsModifiedData>
     {
-        public GameEventTurnActionsModified(GameEventTurnActionsModifiedData data) : base(data)
+        public GameEventTurnActionsModified(GameEventGameTurnActionsModifiedData data) : base(data)
         {
             
         }

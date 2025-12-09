@@ -1,8 +1,7 @@
-﻿using System;
-
+﻿
 namespace ProphetAR
 {
-    public class GameEventTurnActionsModifiedData
+    public class GameEventGameTurnActionsModifiedData
     {
         public IGameTurnActionRequest ModifiedRequest { get; }
         
@@ -12,7 +11,7 @@ namespace ProphetAR
         
         public int CurrPriority { get; }
         
-        public GameEventTurnActionsModifiedData(IGameTurnActionRequest modifiedRequest, ModificationType modificationType, int? prevPriority = null, int? currPriority = null)
+        public GameEventGameTurnActionsModifiedData(IGameTurnActionRequest modifiedRequest, ModificationType modificationType, int? prevPriority = null, int? currPriority = null)
         {
             Modified = modificationType;
             ModifiedRequest = modifiedRequest;

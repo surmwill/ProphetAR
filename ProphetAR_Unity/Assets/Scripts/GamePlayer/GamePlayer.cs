@@ -4,7 +4,7 @@
     {
         public string Uid => Config.PlayerUid;
 
-        public GamePlayerState State { get; } = new();
+        public GamePlayerState State { get; }
         
         public GamePlayerConfig Config { get; }
 
@@ -12,6 +12,8 @@
         
         public GamePlayer(GamePlayerConfig config)
         {
+            State = new GamePlayerState(this);
+            
             Config = config;
             config.InitializePlayerState(State);
         }

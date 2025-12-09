@@ -35,18 +35,24 @@ namespace ProphetAR
             if (_initialBuildComplete)
             {
                 Player.EventProcessor.RaiseEventWithData(new GameEventTurnActionsModified(
-                    new GameEventTurnActionsModifiedData(actionRequest, GameEventTurnActionsModifiedData.ModificationType.Added)));
+                    new GameEventGameTurnActionsModifiedData(actionRequest, GameEventGameTurnActionsModifiedData.ModificationType.Added)));
             }
         }
         
-        public void RemoveActionRequestWithoutCompletion(IGameTurnActionRequest actionRequest)
+        public void RemoveActionRequest(IGameTurnActionRequest actionRequest)
         {
             _actionRequests.Remove(actionRequest, actionRequest.Priority ?? IGameTurnActionRequest.DefaultPriority);
             if (_initialBuildComplete)
             {
                 Player.EventProcessor.RaiseEventWithData(new GameEventTurnActionsModified(
-                    new GameEventTurnActionsModifiedData(actionRequest, GameEventTurnActionsModifiedData.ModificationType.Removed)));
+                    new GameEventGameTurnActionsModifiedData(actionRequest, GameEventGameTurnActionsModifiedData.ModificationType.Removed)));
             }
+        }
+        
+        public void CompleteActionRequest(IGameTurnActionRequest actionRequest)
+        {
+            RemoveActionRequest(actionRequest);
+            SerializedTurnActionsForServer.Add(actionRequest.SerializeForServer());
         }
 
         public void ChangeActionRequestPriority(IGameTurnActionRequest actionRequest, int? newPriority)
@@ -58,14 +64,8 @@ namespace ProphetAR
             if (_initialBuildComplete)
             {
                 Player.EventProcessor.RaiseEventWithData(new GameEventTurnActionsModified(
-                    new GameEventTurnActionsModifiedData(actionRequest, GameEventTurnActionsModifiedData.ModificationType.PriorityChanged, prevPrio, newPriority)));
+                    new GameEventGameTurnActionsModifiedData(actionRequest, GameEventGameTurnActionsModifiedData.ModificationType.PriorityChanged, prevPrio, newPriority)));
             }
-        }
-        
-        public void CompleteActionRequest(IGameTurnActionRequest actionRequest)
-        {
-            _actionRequests.Remove(actionRequest, actionRequest.Priority ?? IGameTurnActionRequest.DefaultPriority);
-            SerializedTurnActionsForServer.Add(actionRequest.SerializeForServer());
         }
         
         // Used by AI to complete its turn
