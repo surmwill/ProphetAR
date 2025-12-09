@@ -7,6 +7,8 @@
         public GamePlayerState State { get; } = new();
         
         public GamePlayerConfig Config { get; }
+
+        public GameEventProcessor EventProcessor { get; } = new();
         
         public GamePlayer(GamePlayerConfig config)
         {

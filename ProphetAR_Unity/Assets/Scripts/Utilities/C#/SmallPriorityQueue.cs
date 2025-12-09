@@ -94,9 +94,9 @@ namespace ProphetAR
             }
         }
 
-        public void ChangePriority(TElement element, TPriority currPriority, TPriority newPriority)
+        public void ChangePriority(TElement element, TPriority prevPriority, TPriority newPriority)
         {
-            Remove(element, currPriority);
+            Remove(element, prevPriority);
             Enqueue(element, newPriority);
         }
 

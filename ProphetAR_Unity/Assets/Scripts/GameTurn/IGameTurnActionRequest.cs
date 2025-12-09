@@ -5,6 +5,8 @@ namespace ProphetAR
 {
     public interface IGameTurnActionRequest
     {
+        public const int DefaultPriority = int.MaxValue;
+        
         public int? Priority { get; }
         
         public Transform FocusTransform { get; }

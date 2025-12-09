@@ -4,71 +4,71 @@ namespace ProphetAR
 {
     public class GameTurn
     {
-        public GameTurnManager TurnManager { get; }
-        
         public int TurnNumber { get; }
 
         public bool HasActionRequests => _actionRequests.Any();
         
-        public string PlayerUid { get; }
+        public GamePlayer Player { get; }
 
         public List<Dictionary<string, object>> SerializedTurnActionsForServer { get; } = new();
-
-        private const int DefaultPriority = int.MaxValue;
 
         private readonly SmallPriorityQueue<IGameTurnActionRequest, int> _actionRequests = new();
 
         private bool _initialBuildComplete;
         
-        public GameTurn(GameTurnManager turnManager, int turnNumber, string playerUid)
+        public GameTurn(int turnNumber, GamePlayer player)
         {
-            TurnManager = turnManager;
             TurnNumber = turnNumber;
-            PlayerUid = playerUid;
+            Player = player;
         }
 
         public void InitialBuild()
         {
-            if (TurnManager.Level.LevelState.TurnActionRequestProvidersPerPlayer.TryGetValue(PlayerUid, out List<IGameTurnActionRequestProvider> requestProviders))
-            {
-                requestProviders.ForEach(requestProvider => AddActionRequest(requestProvider.GetActionRequest()));
-            }
+            // Listeners will add action requests to the queue. These initial action request might propagate further action requests
+            Player.EventProcessor.RaiseEventWithoutData(new GameEventBuildInitialTurn());
             _initialBuildComplete = true;
         }
 
         public void AddActionRequest(IGameTurnActionRequest actionRequest)
         {
-            _actionRequests.Enqueue(actionRequest, actionRequest.Priority ?? DefaultPriority);
+            _actionRequests.Enqueue(actionRequest, actionRequest.Priority ?? IGameTurnActionRequest.DefaultPriority);
             if (_initialBuildComplete)
             {
-                // Event for dynamically added/remove action
+                Player.EventProcessor.RaiseEventWithData(new GameEventTurnActionsModified(
+                    new GameEventTurnActionsModifiedData(actionRequest, GameEventTurnActionsModifiedData.ModificationType.Added)));
             }
         }
         
-        public void CompleteActionRequest(IGameTurnActionRequest actionRequest)
-        {
-            _actionRequests.Remove(actionRequest, actionRequest.Priority ?? DefaultPriority);
-            SerializedTurnActionsForServer.Add(actionRequest.SerializeForServer());
-        }
-
         public void RemoveActionRequestWithoutCompletion(IGameTurnActionRequest actionRequest)
         {
-            _actionRequests.Remove(actionRequest, actionRequest.Priority ?? DefaultPriority);
+            _actionRequests.Remove(actionRequest, actionRequest.Priority ?? IGameTurnActionRequest.DefaultPriority);
             if (_initialBuildComplete)
             {
-                // Event for dynamically added/remove action
+                Player.EventProcessor.RaiseEventWithData(new GameEventTurnActionsModified(
+                    new GameEventTurnActionsModifiedData(actionRequest, GameEventTurnActionsModifiedData.ModificationType.Removed)));
             }
         }
 
         public void ChangeActionRequestPriority(IGameTurnActionRequest actionRequest, int? newPriority)
         {
-            _actionRequests.ChangePriority(actionRequest, actionRequest.Priority ?? DefaultPriority, newPriority ?? DefaultPriority);
+            int prevPrio = actionRequest.Priority ?? IGameTurnActionRequest.DefaultPriority;
+            int newPrio = newPriority ?? IGameTurnActionRequest.DefaultPriority; 
+            
+            _actionRequests.ChangePriority(actionRequest, prevPrio, newPrio);
             if (_initialBuildComplete)
             {
-                // Event for dynamically changed priority
+                Player.EventProcessor.RaiseEventWithData(new GameEventTurnActionsModified(
+                    new GameEventTurnActionsModifiedData(actionRequest, GameEventTurnActionsModifiedData.ModificationType.PriorityChanged, prevPrio, newPriority)));
             }
         }
         
+        public void CompleteActionRequest(IGameTurnActionRequest actionRequest)
+        {
+            _actionRequests.Remove(actionRequest, actionRequest.Priority ?? IGameTurnActionRequest.DefaultPriority);
+            SerializedTurnActionsForServer.Add(actionRequest.SerializeForServer());
+        }
+        
+        // Used by AI to complete its turn
         public void ExecuteAutomatically()
         {
             while (_actionRequests.Any())
