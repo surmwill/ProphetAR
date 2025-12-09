@@ -6,7 +6,7 @@ namespace ProphetAR
     {
         public Level Level { get; private set; }
         
-        public List<GamePlayer> Players { get; }
+        public List<GamePlayer> TurnOrder { get; }
         
         public GameTurn CurrTurn { get; private set; }
         
@@ -16,18 +16,18 @@ namespace ProphetAR
 
         private int _currIndexTurnOrder = -1;
 
-        public GameTurnManager(Level level, List<GamePlayer> players)
+        public GameTurnManager(Level level, GamePlayer[] turnOrder)
         {
             Level = level;
-            Players = players;
+            TurnOrder = new List<GamePlayer>(turnOrder);
         }
 
         public void NextTurn()
         {
             TurnNum++;
-            _currIndexTurnOrder = (_currIndexTurnOrder + 1) % Players.Count;
+            _currIndexTurnOrder = (_currIndexTurnOrder + 1) % TurnOrder.Count;
 
-            CurrPlayer = Players[_currIndexTurnOrder];
+            CurrPlayer = TurnOrder[_currIndexTurnOrder];
             CurrTurn = new GameTurn(this, TurnNum, CurrPlayer.Uid);
             OnPreTurn();
             
@@ -36,8 +36,10 @@ namespace ProphetAR
             
             if (CurrPlayer.Config.IsAI)
             {
-                ExecuteAutomaticPartOfTurn();
+                CurrTurn.ExecuteAutomatically();
+                OnTurnCompleted();
             }
+            // Else user completes the manual part of their turn, 
         }
         
         public void OnPreTurn()
@@ -50,12 +52,12 @@ namespace ProphetAR
             // Raise event    
         }
         
-        public void OnManualPartOfTurnCompleted()
+        public void OnUserManualPartOfTurnCompleted()
         {
-            ExecuteAutomaticPartOfTurn();
+            UserExecuteAutomaticPartOfTurn();
         }
 
-        public void ExecuteAutomaticPartOfTurn()
+        public void UserExecuteAutomaticPartOfTurn()
         {
             // Raise event for automatic events
             
@@ -70,7 +72,7 @@ namespace ProphetAR
         {
             // Raise event
             
-            // Something needs to listen, wait a couple seconds, and then call next turn
+            // Something needs to listen (maybe level itself), wait a couple seconds, and then call next turn
             // NextTurn();
         }
     }

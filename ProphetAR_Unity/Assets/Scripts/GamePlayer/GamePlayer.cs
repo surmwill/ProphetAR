@@ -6,9 +6,9 @@
 
         public GamePlayerState State { get; } = new();
         
-        public GamePlayerConfiguration Config { get; }
+        public GamePlayerConfig Config { get; }
         
-        public GamePlayer(GamePlayerConfiguration config)
+        public GamePlayer(GamePlayerConfig config)
         {
             Config = config;
             config.InitializePlayerState(State);

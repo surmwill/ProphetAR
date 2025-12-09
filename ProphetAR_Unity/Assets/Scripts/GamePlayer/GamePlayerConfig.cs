@@ -1,13 +1,13 @@
 ﻿
 namespace ProphetAR
 {
-    public class GamePlayerConfiguration
+    public class GamePlayerConfig
     {
         public string PlayerUid { get; }
         
         public bool IsAI { get; }
         
-        public GamePlayerConfiguration(string playerUid, bool isAI)
+        public GamePlayerConfig(string playerUid, bool isAI)
         {
             PlayerUid = playerUid;
             IsAI = isAI;
