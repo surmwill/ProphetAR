@@ -5,7 +5,7 @@ namespace ProphetAR
 {
     public class GamePlayerMultiTurnActions : IEnumerable<IMultiGameTurnAction>
     {
-        private readonly SmallPriorityQueue<IMultiGameTurnAction, int> _multiTurnActions = new();
+        private readonly CustomPriorityQueue<IMultiGameTurnAction, int> _multiTurnActions = new();
         private readonly GamePlayer _player;
         
         public GamePlayerMultiTurnActions(GamePlayer player)

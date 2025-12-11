@@ -14,7 +14,9 @@ namespace ProphetAR
         
         public Transform FocusTransform { get; }
 
-        public virtual void OnFocus()
+        public abstract void OnFocusUI();
+
+        public virtual void OnFocusCamera()
         {
             if (FocusTransform == null)
             {

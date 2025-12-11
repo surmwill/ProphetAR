@@ -11,7 +11,7 @@ namespace ProphetAR
 
         public List<Dictionary<string, object>> SerializedTurnActionsForServer { get; } = new();
 
-        private readonly SmallPriorityQueue<GameTurnActionRequest, int> _actionRequests = new();
+        private readonly CustomPriorityQueue<GameTurnActionRequest, int> _actionRequests = new();
         private readonly HashSet<IMultiGameTurnAction> _processedMultiGameTurnActions = new(); 
 
         private bool _initialBuildComplete;
