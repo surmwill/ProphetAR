@@ -91,7 +91,7 @@ namespace ProphetAR
                 
             foreach (MultiGameTurnAction multiGameTurnAction in Player.State.MultiTurnActions
                          .Select(multiGameTurnActionItem => multiGameTurnActionItem.Data)
-                         .Where(multiGameTurnAction => _processedMultiGameTurnActions.Add(multiGameTurnAction)))
+                         .Where(multiGameTurnAction => multiGameTurnAction.StartAtTurnNum >= TurnNumber && _processedMultiGameTurnActions.Add(multiGameTurnAction)))
             {
                 if (!multiGameTurnAction.ExecuteNextTurn.MoveNext())
                 {
