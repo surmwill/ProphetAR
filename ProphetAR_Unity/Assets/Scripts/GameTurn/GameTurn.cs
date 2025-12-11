@@ -60,7 +60,7 @@ namespace ProphetAR
         }
         
         /// <summary>
-        /// The first part of the player's turn is dealing with any new turn actions
+        /// Called by the player once they've completed all turn actions that require manual input
         /// </summary>
         public void UserSetManualPartOfTurnComplete()
         {
@@ -96,6 +96,7 @@ namespace ProphetAR
                 if (!multiGameTurnAction.ExecuteNextTurn.MoveNext())
                 {
                     completedActions.Add(multiGameTurnAction);
+                    continue;
                 }
 
                 GameTurnActionRequest manualActionRequired = multiGameTurnAction.ExecuteNextTurn.Current;
