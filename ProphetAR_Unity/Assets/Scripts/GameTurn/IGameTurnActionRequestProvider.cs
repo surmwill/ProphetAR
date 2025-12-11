@@ -2,6 +2,6 @@
 {
     public interface IGameTurnActionRequestProvider
     {
-        public IGameTurnActionRequest GetActionRequest();
+        public GameTurnActionRequest GetActionRequest();
     }
 }

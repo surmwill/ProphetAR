@@ -16,8 +16,8 @@ namespace ProphetAR
             Modified = modificationType;
             ModifiedMultiAction = modifiedMultiAction;
             
-            PrevPriority = prevPriority ?? IGameTurnActionRequest.DefaultPriority;
-            CurrPriority = currPriority ?? IGameTurnActionRequest.DefaultPriority;
+            PrevPriority = prevPriority ?? GameTurnActionRequest.DefaultPriority;
+            CurrPriority = currPriority ?? GameTurnActionRequest.DefaultPriority;
         }
         
         public enum ModificationType

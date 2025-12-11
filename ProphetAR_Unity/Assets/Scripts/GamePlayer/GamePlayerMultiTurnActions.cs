@@ -29,8 +29,8 @@ namespace ProphetAR
 
         public void ChangeMultiTurnActionPriority(IMultiGameTurnAction multiTurnAction, int? newPriority)
         {
-            int prevPrio = multiTurnAction.Priority ?? IGameTurnActionRequest.DefaultPriority;
-            int newPrio = newPriority ?? IGameTurnActionRequest.DefaultPriority; 
+            int prevPrio = multiTurnAction.Priority ?? GameTurnActionRequest.DefaultPriority;
+            int newPrio = newPriority ?? GameTurnActionRequest.DefaultPriority; 
             
             _multiTurnActions.ChangePriority(multiTurnAction, prevPrio, newPrio);
             _player.EventProcessor.RaiseEventWithData(new GameEventMultiGameTurnActionsModified(

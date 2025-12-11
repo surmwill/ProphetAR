@@ -3,7 +3,7 @@ namespace ProphetAR
 {
     public class GameEventGameTurnActionsModifiedData
     {
-        public IGameTurnActionRequest ModifiedRequest { get; }
+        public GameTurnActionRequest ModifiedRequest { get; }
         
         public ModificationType Modified { get; }
         
@@ -11,13 +11,13 @@ namespace ProphetAR
         
         public int CurrPriority { get; }
         
-        public GameEventGameTurnActionsModifiedData(IGameTurnActionRequest modifiedRequest, ModificationType modificationType, int? prevPriority = null, int? currPriority = null)
+        public GameEventGameTurnActionsModifiedData(GameTurnActionRequest modifiedRequest, ModificationType modificationType, int? prevPriority = null, int? currPriority = null)
         {
             Modified = modificationType;
             ModifiedRequest = modifiedRequest;
             
-            PrevPriority = prevPriority ?? IGameTurnActionRequest.DefaultPriority;
-            CurrPriority = currPriority ?? IGameTurnActionRequest.DefaultPriority;
+            PrevPriority = prevPriority ?? GameTurnActionRequest.DefaultPriority;
+            CurrPriority = currPriority ?? GameTurnActionRequest.DefaultPriority;
         }
         
         public enum ModificationType

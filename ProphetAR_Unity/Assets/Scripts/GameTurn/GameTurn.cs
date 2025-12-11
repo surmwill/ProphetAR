@@ -11,7 +11,7 @@ namespace ProphetAR
 
         public List<Dictionary<string, object>> SerializedTurnActionsForServer { get; } = new();
 
-        private readonly SmallPriorityQueue<IGameTurnActionRequest, int> _actionRequests = new();
+        private readonly SmallPriorityQueue<GameTurnActionRequest, int> _actionRequests = new();
         private readonly HashSet<IMultiGameTurnAction> _processedMultiGameTurnActions = new(); 
 
         private bool _initialBuildComplete;
@@ -34,9 +34,9 @@ namespace ProphetAR
             _initialBuildComplete = true;
         }
 
-        public void AddActionRequest(IGameTurnActionRequest actionRequest)
+        public void AddActionRequest(GameTurnActionRequest actionRequest)
         {
-            _actionRequests.Enqueue(actionRequest, actionRequest.Priority ?? IGameTurnActionRequest.DefaultPriority);
+            _actionRequests.Enqueue(actionRequest, actionRequest.Priority ?? GameTurnActionRequest.DefaultPriority);
             if (_initialBuildComplete)
             {
                 Player.EventProcessor.RaiseEventWithData(new GameEventGameTurnActionsModified(
@@ -44,9 +44,9 @@ namespace ProphetAR
             }
         }
         
-        public void RemoveActionRequest(IGameTurnActionRequest actionRequest)
+        public void RemoveActionRequest(GameTurnActionRequest actionRequest)
         {
-            _actionRequests.Remove(actionRequest, actionRequest.Priority ?? IGameTurnActionRequest.DefaultPriority);
+            _actionRequests.Remove(actionRequest, actionRequest.Priority ?? GameTurnActionRequest.DefaultPriority);
             if (_initialBuildComplete)
             {
                 Player.EventProcessor.RaiseEventWithData(new GameEventGameTurnActionsModified(
@@ -54,16 +54,16 @@ namespace ProphetAR
             }
         }
         
-        public void CompleteActionRequest(IGameTurnActionRequest actionRequest)
+        public void CompleteActionRequest(GameTurnActionRequest actionRequest)
         {
             RemoveActionRequest(actionRequest);
             SerializedTurnActionsForServer.Add(actionRequest.SerializeForServer());
         }
 
-        public void ChangeActionRequestPriority(IGameTurnActionRequest actionRequest, int? newPriority)
+        public void ChangeActionRequestPriority(GameTurnActionRequest actionRequest, int? newPriority)
         {
-            int prevPrio = actionRequest.Priority ?? IGameTurnActionRequest.DefaultPriority;
-            int newPrio = newPriority ?? IGameTurnActionRequest.DefaultPriority; 
+            int prevPrio = actionRequest.Priority ?? GameTurnActionRequest.DefaultPriority;
+            int newPrio = newPriority ?? GameTurnActionRequest.DefaultPriority; 
             
             _actionRequests.ChangePriority(actionRequest, prevPrio, newPrio);
             if (_initialBuildComplete)
@@ -134,7 +134,7 @@ namespace ProphetAR
         {
             while (_actionRequests.Any())
             {
-                IGameTurnActionRequest action = _actionRequests.Peek();
+                GameTurnActionRequest action = _actionRequests.Peek();
                 action.ExecuteAutomatically();
                 CompleteActionRequest(action);
             }
