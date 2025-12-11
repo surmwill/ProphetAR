@@ -16,7 +16,7 @@ namespace ProphetAR
 
         private readonly Level _level;
         
-        private readonly HashSet<IMultiGameTurnAction> _processedMultiGameTurnActions = new();
+        private readonly HashSet<MultiGameTurnAction> _processedMultiGameTurnActions = new();
 
         // The key is the type of game event that fulfills the action request
         private readonly Dictionary<Type, List<GameTurnActionRequest>> _actionRequestsForFulfillment = new();
@@ -85,32 +85,35 @@ namespace ProphetAR
         /// </summary>
         private void UserExecuteAutomaticPartOfTurn()
         {
-            List<IMultiGameTurnAction> cancelledActions = new List<IMultiGameTurnAction>();
-            List<IMultiGameTurnAction> completedActions = new List<IMultiGameTurnAction>();
+            List<MultiGameTurnAction> cancelledActions = new List<MultiGameTurnAction>();
+            List<MultiGameTurnAction> completedActions = new List<MultiGameTurnAction>();
+            List<GameTurnActionRequest> manualActionsRequired = new List<GameTurnActionRequest>();
                 
-            foreach (IMultiGameTurnAction multiGameTurnAction in Player.State.MultiTurnActions.Where(multiGameTurnAction => _processedMultiGameTurnActions.Add(multiGameTurnAction)))
+            foreach (MultiGameTurnAction multiGameTurnAction in Player.State.MultiTurnActions
+                         .Select(multiGameTurnActionItem => multiGameTurnActionItem.Data)
+                         .Where(multiGameTurnAction => _processedMultiGameTurnActions.Add(multiGameTurnAction)))
             {
                 if (!multiGameTurnAction.ExecuteNextTurn.MoveNext())
                 {
                     completedActions.Add(multiGameTurnAction);
                 }
 
-                if (!multiGameTurnAction.ExecuteNextTurn.Current)
+                GameTurnActionRequest manualActionRequired = multiGameTurnAction.ExecuteNextTurn.Current;
+                if (manualActionRequired != null)
                 {
                     cancelledActions.Add(multiGameTurnAction);
+                    manualActionsRequired.Add(manualActionRequired);
                 }
             }
 
-            foreach (IMultiGameTurnAction multiGameTurnAction in cancelledActions)
+            foreach (MultiGameTurnAction completedAction in completedActions.Concat(cancelledActions))
             {
-                multiGameTurnAction.OnCancelled();
-                Player.State.MultiTurnActions.RemoveMultiTurnAction(multiGameTurnAction);
+                Player.State.MultiTurnActions.Remove(completedAction);
             }
 
-            foreach (IMultiGameTurnAction multiGameTurnAction in completedActions)
+            foreach (GameTurnActionRequest manualActionRequired in manualActionsRequired)
             {
-                multiGameTurnAction.OnComplete();
-                Player.State.MultiTurnActions.RemoveMultiTurnAction(multiGameTurnAction);
+                ActionRequests.Enqueue(manualActionRequired);
             }
         }
         

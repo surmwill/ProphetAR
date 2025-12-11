@@ -28,7 +28,7 @@ namespace ProphetAR
             _currIndexTurnOrder = (_currIndexTurnOrder + 1) % _turnOrder.Count;
 
             CurrPlayer = _turnOrder[_currIndexTurnOrder];
-            CurrTurn = new GameTurn(TurnNum, CurrPlayer);
+            CurrTurn = new GameTurn(_level, CurrPlayer, TurnNum);
             
             CurrTurn.PreTurn();
             CurrTurn.InitialBuild();

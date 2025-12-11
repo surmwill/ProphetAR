@@ -6,15 +6,9 @@ namespace ProphetAR
 {
     public abstract class GameTurnActionRequest : CustomPriorityQueueItem<GameTurnActionRequest>
     {
-        public const int DefaultPriority = int.MaxValue;
-        
         public abstract Type CompletedByGameEventType { get; }
         
-        public int? Priority { get; }
-        
-        public Transform FocusTransform { get; }
-
-        public abstract void OnFocusUI();
+        public virtual Transform FocusTransform { get; }
 
         public virtual void OnFocusCamera()
         {
@@ -25,6 +19,8 @@ namespace ProphetAR
             
             // Focus camera on FocusTransform
         }
+        
+        public abstract void OnFocusUI();
 
         public abstract void ExecuteAutomatically();
 

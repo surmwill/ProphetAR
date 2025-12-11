@@ -2,14 +2,13 @@
 {
     public class GamePlayerState
     {
-        public GamePlayerMultiTurnActions MultiTurnActions { get; }
+        public CustomPriorityQueue<MultiGameTurnAction> MultiTurnActions { get; } = new();
         
         private readonly GamePlayer _player;
         
         public GamePlayerState(GamePlayer player)
         {
             _player = player;
-            MultiTurnActions = new GamePlayerMultiTurnActions(_player);
         }
     }
 }
