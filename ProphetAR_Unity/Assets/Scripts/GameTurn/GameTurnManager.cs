@@ -24,6 +24,8 @@ namespace ProphetAR
 
         public void NextTurn()
         {
+            _level.EventProcessor.RaiseEventWithData(new GameEventOnGameTurnChanged(new GameEventOnGameTurnChangedData(TurnNum, TurnNum + 1)));
+            
             TurnNum++;
             _currIndexTurnOrder = (_currIndexTurnOrder + 1) % _turnOrder.Count;
 
@@ -36,7 +38,6 @@ namespace ProphetAR
             if (CurrPlayer.Config.IsAI)
             {
                 CurrTurn.AIExecuteActionRequestsAutomatically();
-                CurrPlayer.EventProcessor.RaiseEventWithoutData(new GameEventOnGameTurnCompleted());
             }
         }
     }

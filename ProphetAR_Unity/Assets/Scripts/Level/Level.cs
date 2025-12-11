@@ -32,7 +32,7 @@ namespace ProphetAR
                 Players[i] = new GamePlayer(playerConfigs[i]);
             }
 
-            TurnManager = new GameTurnManager(Players);
+            TurnManager = new GameTurnManager(this, Players);
         }
 
         public void StartFirstTurn()

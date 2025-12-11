@@ -146,6 +146,8 @@ namespace ProphetAR
                 action.ExecuteAutomatically();
                 CompleteActionRequest(action);
             }
+            
+            OnComplete();
         }
         
         private void OnAddedActionRequest(CustomPriorityQueueItem<GameTurnActionRequest> addedActionRequestItem)
