@@ -18,7 +18,8 @@ namespace ProphetAR
         
         private readonly HashSet<IMultiGameTurnAction> _processedMultiGameTurnActions = new();
 
-        private readonly Dictionary<Type, GameTurnActionRequest> _actionRequestsForFulfillment = new();
+        // The key is the type of game event that fulfills the action request
+        private readonly Dictionary<Type, List<GameTurnActionRequest>> _actionRequestsForFulfillment = new();
         
         private bool _initialBuildComplete;
         
@@ -29,16 +30,11 @@ namespace ProphetAR
             TurnNumber = turnNumber;
         }
 
-        public void OnGameEvent(GameEvent gameEvent)
-        {
-            
-        }
-
         // Initialization
         public void PreTurn()
         {
-            _level.EventProcessor.OnGameEventRaised += OnGameEvent;
-            Player.EventProcessor.OnGameEventRaised += OnGameEvent;
+            _level.EventProcessor.OnGameEventRaised += OnAllGameEvents;
+            Player.EventProcessor.OnGameEventRaised += OnAllGameEvents;
             
             Player.EventProcessor.RaiseEventWithoutData(new GameEventOnPreGameTurn());
         }
@@ -46,7 +42,7 @@ namespace ProphetAR
         // Query what actions the player will need to take this turn. These actions might propagate into further actions
         public void InitialBuild()
         {
-            // Query standard actions for player
+            // Query standard actions for player. Add
             
             // Anyone else can also add actions to the player through this event
             Player.EventProcessor.RaiseEventWithoutData(new GameEventBuildInitialGameTurn());
@@ -128,8 +124,8 @@ namespace ProphetAR
         // Cleanup
         private void OnPostTurn()
         {
-            _level.EventProcessor.OnGameEventRaised -= OnGameEvent;
-            Player.EventProcessor.OnGameEventRaised -= OnGameEvent;
+            _level.EventProcessor.OnGameEventRaised -= OnAllGameEvents;
+            Player.EventProcessor.OnGameEventRaised -= OnAllGameEvents;
             
             ActionRequests.OnAdded -= OnAddedActionRequest;
             ActionRequests.OnRemoved -= OnRemovedActionRequest;
@@ -143,7 +139,7 @@ namespace ProphetAR
         {
             while (ActionRequests.Any())
             {
-                GameTurnActionRequest action = ActionRequests.Peek();
+                GameTurnActionRequest action = ActionRequests.Peek().Data;
                 action.ExecuteAutomatically();
                 CompleteActionRequest(action);
             }
@@ -151,20 +147,65 @@ namespace ProphetAR
         
         private void OnAddedActionRequest(CustomPriorityQueueItem<GameTurnActionRequest> addedActionRequestItem)
         {
-            Player.EventProcessor.RaiseEventWithData(new GameEventGameTurnActionsModified(
-                new GameEventGameTurnActionsModifiedData(addedActionRequestItem.Data, GameEventGameTurnActionsModifiedData.ModificationType.Added)));
+            GameTurnActionRequest addedActionRequest = addedActionRequestItem.Data;
+            if (!_actionRequestsForFulfillment.TryGetValue(addedActionRequest.CompletedByGameEventType, out List<GameTurnActionRequest> requestsToFufill))
+            {
+                requestsToFufill = new List<GameTurnActionRequest>();
+                _actionRequestsForFulfillment[addedActionRequest.CompletedByGameEventType] = requestsToFufill;
+            }
+            
+            requestsToFufill.Add(addedActionRequest);
+            
+            if (_initialBuildComplete)
+            {
+                Player.EventProcessor.RaiseEventWithData(
+                    new GameEventGameTurnActionsModified(new GameEventGameTurnActionsModifiedData(addedActionRequest, GameEventGameTurnActionsModifiedData.ModificationType.Added)));   
+            }
         }
         
-        private void OnRemovedActionRequest(CustomPriorityQueueItem<GameTurnActionRequest> removeActionRequestItem)
+        private void OnRemovedActionRequest(CustomPriorityQueueItem<GameTurnActionRequest> removedActionRequestItem)
         {
-            Player.EventProcessor.RaiseEventWithData(new GameEventGameTurnActionsModified(
-                new GameEventGameTurnActionsModifiedData(removeActionRequestItem.Data, GameEventGameTurnActionsModifiedData.ModificationType.Removed)));
+            GameTurnActionRequest removedActionRequest = removedActionRequestItem.Data;
+            if (_actionRequestsForFulfillment.TryGetValue(removedActionRequest.CompletedByGameEventType, out List<GameTurnActionRequest> requestsToFufill))
+            {
+                requestsToFufill.Remove(removedActionRequest);
+                if (requestsToFufill.Count == 0)
+                {
+                    _actionRequestsForFulfillment.Remove(removedActionRequest.CompletedByGameEventType);
+                }
+            }
+            
+            if (_initialBuildComplete)
+            {
+                Player.EventProcessor.RaiseEventWithData(new GameEventGameTurnActionsModified(
+                    new GameEventGameTurnActionsModifiedData(removedActionRequest, GameEventGameTurnActionsModifiedData.ModificationType.Removed)));   
+            }
         }
 
         private void OnChangedActionRequestPriority(CustomPriorityQueueItem<GameTurnActionRequest> changedActionRequestItem, int prevPriority, int newPriority)
         {
-            Player.EventProcessor.RaiseEventWithData(new GameEventGameTurnActionsModified(
-                new GameEventGameTurnActionsModifiedData(changedActionRequestItem.Data, GameEventGameTurnActionsModifiedData.ModificationType.PriorityChanged, prevPriority, newPriority)));
+            if (_initialBuildComplete)
+            {
+                Player.EventProcessor.RaiseEventWithData(new GameEventGameTurnActionsModified(
+                    new GameEventGameTurnActionsModifiedData(changedActionRequestItem.Data, GameEventGameTurnActionsModifiedData.ModificationType.PriorityChanged, prevPriority, newPriority)));   
+            }
+        }
+        
+        private void OnAllGameEvents(GameEvent gameEvent)
+        {
+            Type gameEventType = gameEvent.GetType();
+            if (_actionRequestsForFulfillment.TryGetValue(gameEventType, out List<GameTurnActionRequest> actionRequestsFulfilledByGameEventType))
+            {
+                for (int i = actionRequestsFulfilledByGameEventType.Count - 1; i >= 0; i--)
+                {
+                    GameTurnActionRequest actionRequest = actionRequestsFulfilledByGameEventType[i];
+                    if (actionRequest.IsCompletedByGameEvent(gameEvent))
+                    {
+                        actionRequestsFulfilledByGameEventType.RemoveAt(i);
+                        ActionRequests.Remove(actionRequest);
+                    }
+                }
+            }
         }
     }
 }
