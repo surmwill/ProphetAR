@@ -14,8 +14,11 @@ namespace ProphetAR
         
         private readonly List<GamePlayer> _turnOrder;
 
-        public GameTurnManager(GamePlayer[] turnOrder)
+        private readonly Level _level;
+
+        public GameTurnManager(Level level, GamePlayer[] turnOrder)
         {
+            _level = level;
             _turnOrder = new List<GamePlayer>(turnOrder);
         }
 

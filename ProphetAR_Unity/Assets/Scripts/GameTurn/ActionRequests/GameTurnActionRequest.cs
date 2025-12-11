@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ProphetAR
 {
-    public abstract class GameTurnActionRequest
+    public abstract class GameTurnActionRequest : CustomPriorityQueueItem<GameTurnActionRequest>
     {
         public const int DefaultPriority = int.MaxValue;
         

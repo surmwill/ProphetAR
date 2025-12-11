@@ -8,6 +8,8 @@ namespace ProphetAR
 {
     public class GameEventProcessor
     {
+        public Action<GameEvent> OnGameEventRaised;
+        
         // These two interfaces are what each listener should derive from
         private const string InterfaceNameTypedGameEventListener = "IGameEventWithTypedDataListener";
         private const string InterfaceNameGameEventWithoutDataListener = "IGameEventWithoutDataListenerExplicit";
@@ -185,6 +187,8 @@ namespace ProphetAR
 
         public void RaiseEventWithData<T>(T gameEventWithData) where T : GameEventWithData
         {
+            OnGameEventRaised?.Invoke(gameEventWithData);
+            
             Type gameEventWithDataType = typeof(T);  
             if (!_gameEventWithDataListeners.TryGetValue(gameEventWithDataType, out List<IGameEventWithDataListener> listenersWithData))
             {
@@ -210,6 +214,8 @@ namespace ProphetAR
 
         public void RaiseEventWithoutData<T>(T gameEventWithoutData) where T : GameEventWithoutData
         {
+            OnGameEventRaised?.Invoke(gameEventWithoutData);
+            
             Type gameEventWithoutDataType = typeof(T);  
             if (!_gameEventWithoutDataListeners.TryGetValue(gameEventWithoutDataType, out List<IGameEventWithoutDataListener> listenersWithoutData))
             {

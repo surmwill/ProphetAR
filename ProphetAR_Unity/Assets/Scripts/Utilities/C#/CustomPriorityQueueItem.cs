@@ -4,7 +4,9 @@ namespace ProphetAR
 {
     public abstract class CustomPriorityQueueItem<TData>
     {
-        private HashSet<CustomPriorityQueue<TData>> _partOfPriorityQueues = new();
+        private const int DefaultPriority = 1000;
+        
+        private readonly HashSet<CustomPriorityQueue<TData>> _partOfPriorityQueues = new();
         
         public TData Data { get; }
         
@@ -17,31 +19,31 @@ namespace ProphetAR
                 {
                     return;
                 }
-
-                HashSet<CustomPriorityQueue<TData>> partOfQueues = _partOfPriorityQueues;
-                foreach (CustomPriorityQueue<TData> priorityQueue in partOfQueues)
+                
+                foreach (CustomPriorityQueue<TData> priorityQueue in _partOfPriorityQueues)
                 {
-                    priorityQueue.Remove(this);
+                    priorityQueue.Remove(this, true);
+                    priorityQueue.Enqueue(this, true);
                 }
 
+                int prevPriority = _priority;
                 _priority = value;
-                foreach (CustomPriorityQueue<TData> priorityQueue in partOfQueues)
+                
+                foreach (CustomPriorityQueue<TData> priorityQueue in _partOfPriorityQueues)
                 {
-                    priorityQueue.Enqueue(this);
+                    priorityQueue.OnItemNotifiedPriorityChanged(this, prevPriority, _priority);
                 }
-
-                _partOfPriorityQueues = partOfQueues;
             }
         }
         
-        private int _priority;
+        private int _priority = DefaultPriority;
 
-        public void OnRemovedFromPriorityQueue(CustomPriorityQueue<TData> removedFromQueue)
+        public void NotifyNotInPriorityQueue(CustomPriorityQueue<TData> removedFromQueue)
         {
             _partOfPriorityQueues.Remove(removedFromQueue);
         }
 
-        public void OnAddedToPriorityQueue(CustomPriorityQueue<TData> addToQueue)
+        public void NotifyInPriorityQueue(CustomPriorityQueue<TData> addToQueue)
         {
             _partOfPriorityQueues.Add(addToQueue);
         }
