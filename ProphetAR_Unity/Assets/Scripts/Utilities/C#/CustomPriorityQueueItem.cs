@@ -4,10 +4,6 @@ namespace ProphetAR
 {
     public abstract class CustomPriorityQueueItem<TData>
     {
-        private const int DefaultPriority = 1000;
-        
-        private readonly HashSet<CustomPriorityQueue<TData>> _partOfPriorityQueues = new();
-        
         public TData Data { get; }
         
         public int Priority
@@ -20,7 +16,7 @@ namespace ProphetAR
                     return;
                 }
                 
-                foreach (CustomPriorityQueue<TData> priorityQueue in _partOfPriorityQueues)
+                foreach (ICustomPriorityQueue<TData> priorityQueue in _partOfPriorityQueues)
                 {
                     priorityQueue.Remove(this, true);
                     priorityQueue.Enqueue(this, true);
@@ -29,21 +25,25 @@ namespace ProphetAR
                 int prevPriority = _priority;
                 _priority = value;
                 
-                foreach (CustomPriorityQueue<TData> priorityQueue in _partOfPriorityQueues)
+                foreach (ICustomPriorityQueue<TData> priorityQueue in _partOfPriorityQueues)
                 {
                     priorityQueue.OnItemNotifiedPriorityChanged(this, prevPriority, _priority);
                 }
             }
         }
         
+        private const int DefaultPriority = 1000;
+        
+        private readonly HashSet<ICustomPriorityQueue<TData>> _partOfPriorityQueues = new();
+        
         private int _priority = DefaultPriority;
 
-        public void NotifyNotInPriorityQueue(CustomPriorityQueue<TData> removedFromQueue)
+        public void NotifyNotInPriorityQueue(ICustomPriorityQueue<TData> removedFromQueue)
         {
             _partOfPriorityQueues.Remove(removedFromQueue);
         }
 
-        public void NotifyInPriorityQueue(CustomPriorityQueue<TData> addToQueue)
+        public void NotifyInPriorityQueue(ICustomPriorityQueue<TData> addToQueue)
         {
             _partOfPriorityQueues.Add(addToQueue);
         }

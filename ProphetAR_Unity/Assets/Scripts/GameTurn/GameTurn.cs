@@ -88,7 +88,7 @@ namespace ProphetAR
             List<MultiGameTurnAction> cancelledActions = new List<MultiGameTurnAction>();
             List<MultiGameTurnAction> completedActions = new List<MultiGameTurnAction>();
             List<GameTurnActionRequest> manualActionsRequired = new List<GameTurnActionRequest>();
-                
+            
             foreach (MultiGameTurnAction multiGameTurnAction in Player.State.MultiTurnActions
                          .Select(multiGameTurnActionItem => multiGameTurnActionItem.Data)
                          .Where(multiGameTurnAction => multiGameTurnAction.StartAtTurnNum >= TurnNumber && _processedMultiGameTurnActions.Add(multiGameTurnAction)))
