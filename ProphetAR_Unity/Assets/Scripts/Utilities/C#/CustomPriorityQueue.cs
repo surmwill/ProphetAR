@@ -14,7 +14,7 @@ namespace ProphetAR
         private readonly SortedDictionary<int, LinkedList<CustomPriorityQueueItem<TItem>>> _data = new();
 
         public event Action<TItem> OnAdded;
-        public event Action<TItem> OnRemoved;
+        public event Action<TItem, bool> OnRemoved;
         public event Action<TItem, int, int> OnPriorityChanged;
 
         public bool Any()
@@ -43,7 +43,9 @@ namespace ProphetAR
         
         public TItem Dequeue()
         {
-            return (TItem) ((ICustomPriorityQueue<TItem>) this).Dequeue();
+            TItem item = (TItem) ((ICustomPriorityQueue<TItem>) this).Dequeue();
+            OnItemRemoved(item, true);
+            return item;
         }
         
         CustomPriorityQueueItem<TItem> ICustomPriorityQueue<TItem>.Dequeue()
@@ -62,9 +64,10 @@ namespace ProphetAR
             return item;
         }
 
-        public void Enqueue(TItem item, bool isPriorityChange = false)
+        public void Enqueue(TItem item)
         {
-            ((ICustomPriorityQueue<TItem>) this).Enqueue(item, isPriorityChange);
+            ((ICustomPriorityQueue<TItem>) this).Enqueue(item);
+            item.OnPriorityChanged += OnItemPriorityChanged;
             OnAdded?.Invoke(item);
         }
         
@@ -79,14 +82,14 @@ namespace ProphetAR
             itemQueue.AddLast(item);
             if (!isPriorityChange)
             {
-                item.NotifyInPriorityQueue(this);   
+                item.OnAddedToPriorityQueue(this);
             }
         }
 
-        public void Remove(TItem item, bool isPriorityChange = false)
+        public void Remove(TItem item)
         {
-            ((ICustomPriorityQueue<TItem>) this).Remove(item, isPriorityChange);
-            OnRemoved?.Invoke(item);
+            ((ICustomPriorityQueue<TItem>) this).Remove(item);
+            OnItemRemoved(item, false);
         }
         
         void ICustomPriorityQueue<TItem>.Remove(CustomPriorityQueueItem<TItem> item, bool isPriorityChange)
@@ -110,28 +113,19 @@ namespace ProphetAR
             
             if (!isPriorityChange)
             {
-                item.NotifyNotInPriorityQueue(this);
+                item.OnRemovedFromPriorityQueue(this);
             }
         }
 
-        public void OnItemNotifiedPriorityChanged(TItem item, int prevPriority, int newPriority)
+        private void OnItemRemoved(TItem item, bool fromDequeue)
         {
-            ((ICustomPriorityQueue<TItem>) this).OnItemNotifiedPriorityChanged(item, prevPriority, newPriority);
-            OnPriorityChanged?.Invoke(item, prevPriority, newPriority);
+            item.OnPriorityChanged -= OnItemPriorityChanged; 
+            OnRemoved?.Invoke(item, fromDequeue);
         }
-
-        void ICustomPriorityQueue<TItem>.OnItemNotifiedPriorityChanged(CustomPriorityQueueItem<TItem> item, int prevPriority, int newPriority)
+        
+        private void OnItemPriorityChanged(CustomPriorityQueueItem<TItem> item, int prevPriority, int newPriority)
         {
-            if (!_data.TryGetValue(item.Priority, out LinkedList<CustomPriorityQueueItem<TItem>> itemQueue))
-            {
-                throw new InvalidOperationException("The item's priority does not exist in this priority queue");
-            }
-            
-            LinkedListNode<CustomPriorityQueueItem<TItem>> itemNode = itemQueue.Find(item);
-            if (itemNode == null)
-            {
-                throw new InvalidOperationException("Item was not found");
-            }
+            OnPriorityChanged?.Invoke((TItem) item, prevPriority, newPriority);
         }
 
         public IEnumerator<TItem> GetEnumerator()

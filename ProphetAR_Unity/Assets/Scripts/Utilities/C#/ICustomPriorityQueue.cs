@@ -13,7 +13,5 @@ namespace ProphetAR
         public void Enqueue(CustomPriorityQueueItem<TItemData> item, bool isPriorityChange = false);
 
         public void Remove(CustomPriorityQueueItem<TItemData> item, bool isPriorityChange = false);
-
-        public void OnItemNotifiedPriorityChanged(CustomPriorityQueueItem<TItemData> item, int prevPriority, int newPriority);
     }
 }

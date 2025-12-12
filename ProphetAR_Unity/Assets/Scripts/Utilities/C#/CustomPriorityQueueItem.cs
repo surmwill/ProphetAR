@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ProphetAR
 {
     public abstract class CustomPriorityQueueItem<TData>
     {
+        public const int DefaultPriority = 1000;
+        
         public TData Data { get; }
+
+        public event Action<CustomPriorityQueueItem<TData>, int, int> OnPriorityChanged; 
         
         public int Priority
         {
@@ -19,31 +24,38 @@ namespace ProphetAR
                 foreach (ICustomPriorityQueue<TData> priorityQueue in _partOfPriorityQueues)
                 {
                     priorityQueue.Remove(this, true);
-                    priorityQueue.Enqueue(this, true);
                 }
-
+                
                 int prevPriority = _priority;
                 _priority = value;
                 
                 foreach (ICustomPriorityQueue<TData> priorityQueue in _partOfPriorityQueues)
                 {
-                    priorityQueue.OnItemNotifiedPriorityChanged(this, prevPriority, _priority);
+                    priorityQueue.Enqueue(this, true);
                 }
+                
+                OnPriorityChanged?.Invoke(this, prevPriority, _priority);
             }
         }
-        
-        private const int DefaultPriority = 1000;
         
         private readonly HashSet<ICustomPriorityQueue<TData>> _partOfPriorityQueues = new();
         
         private int _priority = DefaultPriority;
 
-        public void NotifyNotInPriorityQueue(ICustomPriorityQueue<TData> removedFromQueue)
+        /// <summary>
+        /// Called by the internals of the custom priority queue. The user shouldn't worry about calling this
+        /// </summary>
+        [CalledByCustomPriorityQueue]
+        public void OnRemovedFromPriorityQueue(ICustomPriorityQueue<TData> removedFromQueue)
         {
             _partOfPriorityQueues.Remove(removedFromQueue);
         }
 
-        public void NotifyInPriorityQueue(ICustomPriorityQueue<TData> addToQueue)
+        /// <summary>
+        /// Called by the internals of the custom priority queue. The user shouldn't worry about calling this
+        /// </summary>
+        [CalledByCustomPriorityQueue]
+        public void OnAddedToPriorityQueue(ICustomPriorityQueue<TData> addToQueue)
         {
             _partOfPriorityQueues.Add(addToQueue);
         }

@@ -169,7 +169,7 @@ namespace ProphetAR
             }
         }
         
-        private void OnRemovedActionRequest(CustomPriorityQueueItem<GameTurnActionRequest> removedActionRequestItem)
+        private void OnRemovedActionRequest(CustomPriorityQueueItem<GameTurnActionRequest> removedActionRequestItem, bool fromDequeue)
         {
             GameTurnActionRequest removedActionRequest = removedActionRequestItem.Data;
             if (_actionRequestsForFulfillment.TryGetValue(removedActionRequest.CompletedByGameEventType, out List<GameTurnActionRequest> requestsToFufill))
@@ -184,7 +184,7 @@ namespace ProphetAR
             if (_initialBuildComplete)
             {
                 Player.EventProcessor.RaiseEventWithData(new GameEventGameTurnActionsModified(
-                    new GameEventGameTurnActionsModifiedData(removedActionRequest, GameEventGameTurnActionsModifiedData.ModificationType.Removed)));   
+                    new GameEventGameTurnActionsModifiedData(removedActionRequest, GameEventGameTurnActionsModifiedData.ModificationType.Removed, removedByDequeue:fromDequeue)));   
             }
         }
 
@@ -193,7 +193,7 @@ namespace ProphetAR
             if (_initialBuildComplete)
             {
                 Player.EventProcessor.RaiseEventWithData(new GameEventGameTurnActionsModified(
-                    new GameEventGameTurnActionsModifiedData(changedActionRequestItem.Data, GameEventGameTurnActionsModifiedData.ModificationType.PriorityChanged, prevPriority, newPriority)));   
+                    new GameEventGameTurnActionsModifiedData(changedActionRequestItem.Data, GameEventGameTurnActionsModifiedData.ModificationType.PriorityChanged, priorityChanged:(prevPriority, newPriority))));   
             }
         }
         

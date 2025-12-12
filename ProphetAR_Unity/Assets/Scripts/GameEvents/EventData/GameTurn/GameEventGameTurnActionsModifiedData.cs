@@ -7,17 +7,22 @@ namespace ProphetAR
         
         public ModificationType Modified { get; }
         
-        public int PrevPriority { get; }
+        public (int prevPriority, int newPriority)? PriorityChanged { get; }
         
-        public int CurrPriority { get; }
+        public bool? RemovedByDequeue { get; }
         
-        public GameEventGameTurnActionsModifiedData(GameTurnActionRequest modifiedRequest, ModificationType modificationType, int? prevPriority = null, int? currPriority = null)
+        public GameEventGameTurnActionsModifiedData(
+            GameTurnActionRequest modifiedRequest, 
+            ModificationType modificationType, 
+            (int prevPriority, int newPriority)? priorityChanged = null,
+            bool? removedByDequeue = null)
         {
             Modified = modificationType;
             ModifiedRequest = modifiedRequest;
-            
-            PrevPriority = prevPriority ?? modifiedRequest.Priority;
-            CurrPriority = currPriority ?? modifiedRequest.Priority;
+
+            PriorityChanged = priorityChanged;
+
+            RemovedByDequeue = removedByDequeue;
         }
         
         public enum ModificationType
