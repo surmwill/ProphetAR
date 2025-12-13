@@ -20,10 +20,10 @@ namespace GridPathFinding
 
         public SerializedGrid(
             (int numRows, int numCols) dimensions, 
-            (int row, int col)? origin, 
-            (int row, int col)? target, 
-            List<(int x, int y)> obstacles, 
-            List<ModificationStep> modificationSteps)
+            (int row, int col)? origin = null, 
+            (int row, int col)? target = null, 
+            List<(int x, int y)> obstacles = null, 
+            List<ModificationStep> modificationSteps = null)
         {
             Dimensions = dimensions;
 
@@ -68,6 +68,18 @@ namespace GridPathFinding
                     }
                 }
             }
+        }
+
+        public SerializedGrid WithOrigin((int row, int col) origin)
+        {
+            Origin = origin;
+            return this;
+        }
+
+        public SerializedGrid WithTarget((int row, int col) target)
+        {
+            Target = target;
+            return this;
         }
     }
 }

@@ -18,6 +18,7 @@ namespace ProphetAR
         [ReadOnly]
         private Vector2Int _maxCoordinate = default;
         
+        // Used for building the grid (positioning the actual GameObjects)
         [SerializeField]
         private GridSection _originGridSection = null;
         
@@ -25,23 +26,30 @@ namespace ProphetAR
         [ReadOnly]
         private List<SavedGridCell> _savedGrid = null;
         
-        private readonly Dictionary<Vector2Int, GridCell> _grid = new();
+        public Dictionary<Vector2Int, GridCell> Cells { get; } = new();
+        
+        public GridCell this[Vector2Int coordinates] => Cells.GetValueOrDefault(coordinates);
         
         public void OnAfterDeserialize()
         {
             BuildGrid();
         }
-        
+
+        public GridSlice GetSlice(Vector2Int botLeft, Vector2Int dimensions)
+        {
+            return new GridSlice(this, botLeft, dimensions);
+        }
+
         private void BuildGrid()
         {
-            _grid.Clear();
+            Cells.Clear();
 
             foreach (SavedGridCell savedGridCell in _savedGrid)
             {
-                _grid[savedGridCell.Coordinates] = savedGridCell.GridCell;
+                Cells[savedGridCell.Coordinates] = savedGridCell.GridCell;
             }
             
-            foreach (GridCell cell in _grid.Values)
+            foreach (GridCell cell in Cells.Values)
             {
                 RecalculateCellNeighbours(cell);
             }
@@ -49,22 +57,22 @@ namespace ProphetAR
 
         private void RecalculateCellNeighbours(GridCell cell)
         {
-            if (_grid.TryGetValue(cell.Coordinates + Vector2Int.right, out GridCell right))
+            if (Cells.TryGetValue(cell.Coordinates + Vector2Int.right, out GridCell right))
             {
                 cell.SetRightCell(right);
             }
             
-            if (_grid.TryGetValue(cell.Coordinates - Vector2Int.right, out GridCell left))
+            if (Cells.TryGetValue(cell.Coordinates - Vector2Int.right, out GridCell left))
             {
                 cell.SetLeftCell(left);
             }
 
-            if (_grid.TryGetValue(cell.Coordinates + Vector2Int.up, out GridCell down))
+            if (Cells.TryGetValue(cell.Coordinates + Vector2Int.up, out GridCell down))
             {
                 cell.SetDownCell(down);
             }
 
-            if (_grid.TryGetValue(cell.Coordinates - Vector2Int.up, out GridCell up))
+            if (Cells.TryGetValue(cell.Coordinates - Vector2Int.up, out GridCell up))
             {
                 cell.SetUpCell(up);
             }

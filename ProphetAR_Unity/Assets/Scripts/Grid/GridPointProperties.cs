@@ -21,7 +21,11 @@ namespace ProphetAR
         [SerializeField]
         private int _modificationStep = 1;
 
+        public GridPointType GridPointType => _gridPointType;
+
         public char GridPoint => _gridPoint;
+        
+        public int ModificationStep => _modificationStep;
 
         public void OnValidate()
         {
