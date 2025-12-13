@@ -21,6 +21,11 @@ namespace ProphetAR
                 _areEditModeListenersBound = false;
             }
         }
+
+        private void OnValidate()
+        {
+            _gridPointProperties.OnValidate();
+        }
     }
 }
 #endif

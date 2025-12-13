@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ProphetAR
 {
@@ -9,9 +8,22 @@ namespace ProphetAR
         [SerializeField]
         [ReadOnly]
         private GridCell _cell = null;
+
+        [SerializeField]
+        private GridPointProperties _gridPointProperties = new();
         
+        /// <summary>
+        /// Note that this will assigned sometime in-between Awake/OnEnable and Start.
+        /// Subsequently, a reference to the Grid is first available in Start
+        /// </summary>
         public GridCell Cell => _cell;
-        
+
+        /// <summary>
+        /// Logically these would make more sense in GridCell, but I think realistically you would want to set this along with the cell's content.
+        /// (Ex: setting this to an obstacle while you're adding in the 3D model of a tree)
+        /// </summary>
+        public GridPointProperties GridPointProperties => _gridPointProperties;
+
         private bool _areEditModeListenersBound;
 
         private void OnEnable()
@@ -26,9 +38,7 @@ namespace ProphetAR
             }
             #endif
         }
-
-        // Note that the grid cell reference will be assigned sometime in between Awake and Start.
-        // We cannot access in Awake
+        
         private void Start()
         {
             #if UNITY_EDITOR

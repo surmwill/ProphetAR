@@ -14,7 +14,7 @@
 
         public const char DEBUG_PRINT_PATH = '.';
     
-        // Null doesn't print
+        // Because null doesn't print (note: O and not zero. Zero (0) is a number and a modification step)
         public const char DEBUG_PRINT_CLEAR = 'O';
 
         public static bool IsDirectionBackToOrigin(char gridPoint)

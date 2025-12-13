@@ -31,6 +31,8 @@ namespace ProphetAR
 
         public GridCellContent Content => _cellContent;
 
+        public GridPointProperties Properties => Content.GridPointProperties;
+
         public Vector2 Coordinates => _coordinates;
 
         public Vector2 Dimensions => _gridSection.CellDimensions;
