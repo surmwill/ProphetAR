@@ -3,6 +3,11 @@ using UnityEngine;
 
 namespace ProphetAR
 {
+    /// <summary>
+    /// Represents a rectangular piece of the grid (used for building).
+    /// These grid sections are glued together to construct the entire level.
+    /// This way for example, we can change one room of the map without requiring new assets for the entire level.
+    /// </summary>
     public partial class GridSection : MonoBehaviour
     {
         [SerializeField]

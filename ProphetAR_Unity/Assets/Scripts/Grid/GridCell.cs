@@ -8,7 +8,9 @@ using UnityEditor;
 namespace ProphetAR
 {
     /// <summary>
-    /// A transform representing the bottom left corner of the grid cell
+    /// Base container for everything in a grid cell. Defines the bottom left corner of it.
+    /// Other than very basic information like coordinates, most things will be found under GridCellContent.
+    /// Its primary purpose is to be a stable parent for GridCellContent that can be dynamically swapped.
     /// </summary>
     public partial class GridCell : MonoBehaviour
     {

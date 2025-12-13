@@ -2,6 +2,10 @@
 
 namespace ProphetAR
 {
+    /// <summary>
+    /// Parent component for the content of a grid cells.
+    /// Represents the middle of the cell and provides useful references to the grid cell for everything that references it
+    /// </summary>
     [ExecuteAlways]
     public partial class GridCellContent : MonoBehaviour
     {
@@ -13,14 +17,13 @@ namespace ProphetAR
         private GridPointProperties _gridPointProperties = new();
         
         /// <summary>
-        /// Note that this will assigned sometime in-between Awake/OnEnable and Start.
-        /// Subsequently, a reference to the Grid is first available in Start
+        /// The GridCell this content falls under.
+        /// Note that during content instantiation, this will assigned sometime in-between Awake/OnEnable and Start
         /// </summary>
         public GridCell Cell => _cell;
 
         /// <summary>
-        /// Logically these would make more sense in GridCell, but I think realistically you would want to set this along with the cell's content.
-        /// (Ex: setting this to an obstacle while you're adding in the 3D model of a tree)
+        /// At the lowest level our grid is just a 2D char array. This defines what char this cell is in that array (an obstacle, a free space, etc...)
         /// </summary>
         public GridPointProperties GridPointProperties => _gridPointProperties;
 
