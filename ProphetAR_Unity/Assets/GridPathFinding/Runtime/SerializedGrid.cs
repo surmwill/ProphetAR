@@ -5,26 +5,18 @@ namespace GridPathFinding
     public struct SerializedGrid
     {
         public (int numRows, int numCols) Dimensions { get; }
+        
+        public (int row, int col)? Origin { get; set; }
 
-        public (int row, int col) Origin => _origin ?? (0, 0);
+        public (int row, int col)? Target { get; set; }
 
-        public (int row, int col) Target => _target ?? (0, 0);
+        public List<(int x, int y)> Obstacles { get; set; }
     
-        public List<(int x, int y)> Obstacles { get; }
-    
-        public List<ModificationStep> ModificationSteps { get;  }
-
-        public bool HasOrigin => _origin.HasValue;
-
-        public bool HasTarget => _target.HasValue;
+        public List<ModificationStep> ModificationSteps { get; set; }
 
         public bool HasObstacles => Obstacles != null;
     
         public bool HasModificationSteps => ModificationSteps != null;
-
-        private readonly (int row, int col)? _origin;
-
-        private readonly (int row, int col)? _target;
 
         public SerializedGrid(
             (int numRows, int numCols) dimensions, 
@@ -35,8 +27,8 @@ namespace GridPathFinding
         {
             Dimensions = dimensions;
 
-            _origin = origin;
-            _target = target;
+            Origin = origin;
+            Target = target;
         
             Obstacles = obstacles;
             ModificationSteps = modificationSteps;
@@ -49,8 +41,8 @@ namespace GridPathFinding
             Obstacles = null;
             ModificationSteps = null;
 
-            _origin = null;
-            _target = null;
+            Origin = null;
+            Target = null;
         
             for (int row = 0; row < grid.GetLength(0); row++)
             {
@@ -60,11 +52,11 @@ namespace GridPathFinding
                     
                     if (point == GridPoints.Origin)
                     {
-                        _origin = (row, col);
+                        Origin = (row, col);
                     }
                     else if (point == GridPoints.Target)
                     {
-                        _target = (row, col);
+                        Target = (row, col);
                     }
                     else if (point == GridPoints.Obstacle)
                     {
