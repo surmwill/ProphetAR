@@ -30,7 +30,7 @@ namespace ProphetAR
         private GridCellContent _cellContent;
 
         public GridSection GridSection => _gridSection;
-
+        
         public GridCellContent Content => _cellContent;
 
         public GridPointProperties GridPointProperties => Content.GridPointProperties;
@@ -39,6 +39,7 @@ namespace ProphetAR
 
         public Vector2 Dimensions => _gridSection.CellDimensions;
 
+        // World corners
         public Vector3 BotLeft => transform.position;
 
         public Vector3 BotRight => transform.parent.TransformPoint(transform.localPosition + Vector3.right * Dimensions.x);
@@ -49,6 +50,7 @@ namespace ProphetAR
 
         public Vector3 TopRight => transform.parent.TransformPoint(transform.localPosition + Vector3.right * Dimensions.x + Vector3.forward * Dimensions.y);
         
+        // Adjacent cells
         public GridCell LeftCell { get; private set; }
         
         public GridCell RightCell { get; private set; }

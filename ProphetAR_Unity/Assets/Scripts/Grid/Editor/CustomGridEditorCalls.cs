@@ -53,8 +53,8 @@ namespace ProphetAR
                     maxY = savedGridCell.Coordinates.y;
                 }
                 
-                savedGridCell.GridCell.SetCoordinates(savedGridCell.Coordinates);
                 savedGridCell.GridCell.GridSection.SetParentGrid(this);
+                savedGridCell.GridCell.SetCoordinates(savedGridCell.Coordinates);
             }
 
             _gridDimensions = new Vector2Int(maxX.Value - minX.Value + 1, maxY.Value - minY.Value + 1);

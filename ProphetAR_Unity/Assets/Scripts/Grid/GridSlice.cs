@@ -30,6 +30,17 @@ namespace ProphetAR
 
             Dimensions = dimensions;
         }
+
+        public string SliceDescription()
+        {
+            return $"Top left: {TopLeft}, Bot right: {BotRight}, Dimensions: {Dimensions}";
+        }
+
+        public bool ContainsPoint(Vector2Int coordinates)
+        {
+            return coordinates.x >= TopLeft.x && coordinates.x <= BotRight.x &&
+                   coordinates.y >= TopLeft.y && coordinates.y <= BotRight.y;
+        }
         
         public SerializedGrid GetSerializedGrid()
         {
