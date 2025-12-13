@@ -27,6 +27,26 @@ namespace ProphetAR
         private List<SavedGridCell> _savedGrid = null;
         
         private readonly Dictionary<Vector2, GridCell> _grid = new();
+        
+        public void OnAfterDeserialize()
+        {
+            BuildGrid();
+        }
+        
+        private void BuildGrid()
+        {
+            _grid.Clear();
+
+            foreach (SavedGridCell savedGridCell in _savedGrid)
+            {
+                _grid[savedGridCell.Coordinates] = savedGridCell.GridCell;
+            }
+            
+            foreach (GridCell cell in _grid.Values)
+            {
+                RecalculateCellNeighbours(cell);
+            }
+        }
 
         private void RecalculateCellNeighbours(GridCell cell)
         {
@@ -50,50 +70,10 @@ namespace ProphetAR
                 cell.SetUpCell(up);
             }
         }
-
-        public void BuildGrid()
-        {
-            _grid.Clear();
-
-            foreach (SavedGridCell savedGridCell in _savedGrid)
-            {
-                _grid[savedGridCell.Coordinates] = savedGridCell.GridCell;
-            }
-            
-            foreach (GridCell cell in _grid.Values)
-            {
-                RecalculateCellNeighbours(cell);
-            }
-        }
         
         public void OnBeforeSerialize()
         {
             // Empty
-        }
-
-        public void OnAfterDeserialize()
-        {
-            BuildGrid();
-        }
-
-        [Serializable]
-        private class SavedGridCell
-        {
-            [SerializeField]
-            private GridCell _gridCell = null;
-
-            [SerializeField]
-            private Vector2 _coordinates = default;
-
-            public GridCell GridCell => _gridCell;
-
-            public Vector2 Coordinates => _coordinates;
-            
-            public SavedGridCell(GridCell gridCell, Vector2 coordinates)
-            {
-                _gridCell = gridCell;
-                _coordinates = coordinates;
-            }
         }
     }
 }
