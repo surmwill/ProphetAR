@@ -43,15 +43,14 @@ namespace GridPathFinding.Editor
 
                 Debug.Log($"------------ Path From - Max Steps ({maxNumSteps}) - Test Grid {i} ------------");
 
-                NavigationDestinationSet navigationDestinationSet =
-                    GridPathFinder.GetPathsFrom(serializedGrid, maxNumSteps);
+                NavigationDestinationSet navigationDestinationSet = GridPathFinder.GetPathsFrom(serializedGrid, maxNumSteps);
                 if (navigationDestinationSet.CanMove)
                 {
+                    Debug.Log("Original grid");
+                    Debug.Log(GridParser.ShowGrid(grid));
+                    
                     Debug.Log("Drawing all paths");
                     Debug.Log(GridParser.ShowGrid(DrawDestinationsOnGrid(navigationDestinationSet, grid)));
-
-                    Debug.Log("Verifying data...");
-                    ValidateDestinationSet(navigationDestinationSet);
 
                     Debug.Log("Drawing furthest path");
                     Debug.Log(GridParser.ShowGrid(DrawFurthestDestinationOnGrid(navigationDestinationSet, grid)));
@@ -65,8 +64,8 @@ namespace GridPathFinding.Editor
 
         private static char[,] DrawFurthestDestinationOnGrid(NavigationDestinationSet navigationDestinationSet, char[,] grid)
         {
-            NavigationDestination furthestDestination = navigationDestinationSet.ValidDestinations[0];
-            foreach (NavigationDestination navigationDestination in navigationDestinationSet.ValidDestinations.Skip(1))
+            NavigationDestination furthestDestination = navigationDestinationSet.Destinations.Values.First();
+            foreach (NavigationDestination navigationDestination in navigationDestinationSet.Destinations.Values.Skip(1))
             {
                 if (navigationDestination.PathTo.Magnitude > furthestDestination.PathTo.Magnitude)
                 {
@@ -81,29 +80,13 @@ namespace GridPathFinding.Editor
         private static char[,] DrawDestinationsOnGrid(NavigationDestinationSet navigationDestinationSet, char[,] grid)
         {
             char[,] gridCopy = GridParser.CopyGrid(grid);
-            foreach (NavigationDestination navigationDestination in navigationDestinationSet.ValidDestinations)
+            foreach (NavigationDestination navigationDestination in navigationDestinationSet.Destinations.Values)
             {
                 gridCopy[navigationDestination.Position.row, navigationDestination.Position.col] = GridPoints.DEBUG_PRINT_PATH;
             }
 
             gridCopy[navigationDestinationSet.Origin.row, navigationDestinationSet.Origin.col] = GridPoints.Origin;
             return gridCopy;
-        }
-
-        private static void ValidateDestinationSet(NavigationDestinationSet navigationDestinationSet)
-        {
-            HashSet<NavigationDestination> validNavigationDestinations = new HashSet<NavigationDestination>(navigationDestinationSet.ValidDestinations);
-
-            for (int row = 0; row < navigationDestinationSet.DestinationMap.GetLength(0); row++)
-            {
-                for (int col = 0; col < navigationDestinationSet.DestinationMap.GetLength(1); col++)
-                {
-                    NavigationDestination? destination = navigationDestinationSet.DestinationMap[row, col];
-                    Assert.IsTrue(!destination.HasValue || validNavigationDestinations.Remove(destination.Value), "A valid destination in the map is not also contained in the list");
-                }
-            }
-        
-            Assert.IsFalse(validNavigationDestinations.Any(), "A valid destination in the list is not also contained in the map");
         }
     }
 }

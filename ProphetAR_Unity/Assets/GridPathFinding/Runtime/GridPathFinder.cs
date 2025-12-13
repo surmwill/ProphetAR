@@ -80,13 +80,11 @@ namespace GridPathFinding
 
             maxNumSteps = Math.Max(maxNumSteps, 0);
             char[,] solvedGrid = DeserializeGrid(serializedGrid);
-        
-            NavigationDestination?[,] navigationDestinations = new NavigationDestination?[serializedGrid.Dimensions.numRows, serializedGrid.Dimensions.numCols];
-            List<NavigationDestination> validNavigationDestinations = new List<NavigationDestination>();
+            
+            Dictionary<(int row, int col), NavigationDestination> navigationDestinations = new Dictionary<(int row, int col), NavigationDestination>();
         
             NavigationDestination navigationDestination = new NavigationDestination(serializedGrid.Origin, serializedGrid.Origin, 0, solvedGrid);
-            navigationDestinations[serializedGrid.Origin.row, serializedGrid.Origin.col] = navigationDestination;
-            validNavigationDestinations.Add(navigationDestination);
+            navigationDestinations[(serializedGrid.Origin.row, serializedGrid.Origin.col)] = navigationDestination;
         
             Queue<(int row, int col, int numSteps)> nextPositions = new Queue<(int row, int col, int numSteps)>();
             nextPositions.Enqueue((serializedGrid.Origin.row, serializedGrid.Origin.col, 0));
@@ -106,9 +104,8 @@ namespace GridPathFinding
                     {
                         solvedGrid[currentPosition.row, currentPosition.col - 1] = GridPoints.DIR_BACK_TO_ORIGIN_RIGHT;
                         navigationDestination = new NavigationDestination((currentPosition.row, currentPosition.col - 1), serializedGrid.Origin, currentPosition.numSteps + modifiedNumSteps, solvedGrid);
-                        navigationDestinations[currentPosition.row, currentPosition.col - 1] = navigationDestination;
+                        navigationDestinations[(currentPosition.row, currentPosition.col - 1)] = navigationDestination;
                         nextPositions.Enqueue((currentPosition.row, currentPosition.col - 1, currentPosition.numSteps + modifiedNumSteps));  
-                        validNavigationDestinations.Add(navigationDestination);
                     }
                 }
 
@@ -123,9 +120,8 @@ namespace GridPathFinding
                     {
                         solvedGrid[currentPosition.row + 1, currentPosition.col] = GridPoints.DIR_BACK_TO_ORIGIN_UP;
                         navigationDestination = new NavigationDestination((currentPosition.row + 1, currentPosition.col), serializedGrid.Origin, currentPosition.numSteps + modifiedNumSteps, solvedGrid);
-                        navigationDestinations[currentPosition.row + 1, currentPosition.col] = navigationDestination;
+                        navigationDestinations[(currentPosition.row + 1, currentPosition.col)] = navigationDestination;
                         nextPositions.Enqueue((currentPosition.row + 1, currentPosition.col, currentPosition.numSteps + modifiedNumSteps));  
-                        validNavigationDestinations.Add(navigationDestination);   
                     }
                 }
 
@@ -140,9 +136,8 @@ namespace GridPathFinding
                     {
                         solvedGrid[currentPosition.row, currentPosition.col + 1] = GridPoints.DIR_BACK_TO_ORIGIN_LEFT;
                         navigationDestination = new NavigationDestination((currentPosition.row, currentPosition.col + 1), serializedGrid.Origin, currentPosition.numSteps + modifiedNumSteps, solvedGrid);
-                        navigationDestinations[currentPosition.row, currentPosition.col + 1] = navigationDestination;
+                        navigationDestinations[(currentPosition.row, currentPosition.col + 1)] = navigationDestination;
                         nextPositions.Enqueue((currentPosition.row, currentPosition.col + 1, currentPosition.numSteps + modifiedNumSteps));
-                        validNavigationDestinations.Add(navigationDestination);
                     }
                 }
 
@@ -157,14 +152,13 @@ namespace GridPathFinding
                     {
                         solvedGrid[currentPosition.row - 1, currentPosition.col] = GridPoints.DIR_BACK_TO_ORIGIN_DOWN;
                         navigationDestination = new NavigationDestination((currentPosition.row - 1, currentPosition.col), serializedGrid.Origin, currentPosition.numSteps + modifiedNumSteps, solvedGrid);
-                        navigationDestinations[currentPosition.row - 1, currentPosition.col] = navigationDestination;
+                        navigationDestinations[(currentPosition.row - 1, currentPosition.col)] = navigationDestination;
                         nextPositions.Enqueue((currentPosition.row - 1, currentPosition.col, currentPosition.numSteps + modifiedNumSteps));
-                        validNavigationDestinations.Add(navigationDestination);
                     }
                 }
             }
 
-            return new NavigationDestinationSet(serializedGrid.Origin, maxNumSteps, navigationDestinations, validNavigationDestinations);
+            return new NavigationDestinationSet(serializedGrid.Origin, maxNumSteps, navigationDestinations);
         }
 
         public static NavigationInstructionSet GetPathTo(SerializedGrid serializedGrid)
