@@ -18,7 +18,7 @@ namespace ProphetAR
 
         [SerializeField]
         [ReadOnly]
-        private Vector2 _coordinates;
+        private Vector2Int _coordinates;
 
         [SerializeField]
         private GridCellContent _cellContentPrefab;
@@ -33,7 +33,7 @@ namespace ProphetAR
 
         public GridPointProperties Properties => Content.GridPointProperties;
 
-        public Vector2 Coordinates => _coordinates;
+        public Vector2Int Coordinates => _coordinates;
 
         public Vector2 Dimensions => _gridSection.CellDimensions;
 

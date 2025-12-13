@@ -40,7 +40,7 @@ namespace ProphetAR
             _gridSection = gridSection;
         }
 
-        public void SetCoordinates(Vector2 coordinates)
+        public void SetCoordinates(Vector2Int coordinates)
         {
             _coordinates = coordinates;
             EditorOnCellCoordinatesChanged?.Invoke(coordinates);

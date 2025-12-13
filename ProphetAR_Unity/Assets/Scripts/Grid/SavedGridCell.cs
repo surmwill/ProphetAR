@@ -10,13 +10,13 @@ namespace ProphetAR
         private GridCell _gridCell = null;
 
         [SerializeField]
-        private Vector2 _coordinates = default;
+        private Vector2Int _coordinates = default;
 
         public GridCell GridCell => _gridCell;
 
-        public Vector2 Coordinates => _coordinates;
+        public Vector2Int Coordinates => _coordinates;
             
-        public SavedGridCell(GridCell gridCell, Vector2 coordinates)
+        public SavedGridCell(GridCell gridCell, Vector2Int coordinates)
         {
             _gridCell = gridCell;
             _coordinates = coordinates;

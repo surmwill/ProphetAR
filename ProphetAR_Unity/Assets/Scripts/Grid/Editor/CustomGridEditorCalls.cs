@@ -35,31 +35,31 @@ namespace ProphetAR
             {
                 if (!minX.HasValue || savedGridCell.Coordinates.x < minX.Value)
                 {
-                    minX = (int) savedGridCell.Coordinates.x;
+                    minX = savedGridCell.Coordinates.x;
                 }
                 
                 if (!maxX.HasValue || savedGridCell.Coordinates.x > maxX.Value)
                 {
-                    maxX = (int) savedGridCell.Coordinates.x;
+                    maxX = savedGridCell.Coordinates.x;
                 }
                 
                 if (!minY.HasValue || savedGridCell.Coordinates.y < minY.Value)
                 {
-                    minY = (int) savedGridCell.Coordinates.y;
+                    minY = savedGridCell.Coordinates.y;
                 }
                 
                 if (!maxY.HasValue || savedGridCell.Coordinates.y > maxY.Value)
                 {
-                    maxY = (int) savedGridCell.Coordinates.y;
+                    maxY = savedGridCell.Coordinates.y;
                 }
                 
                 savedGridCell.GridCell.SetCoordinates(savedGridCell.Coordinates);
                 savedGridCell.GridCell.GridSection.SetParentGrid(this);
             }
 
-            _gridDimensions = new Vector2(maxX.Value - minX.Value + 1, maxY.Value - minY.Value + 1);
-            _minCoordinate = new Vector2(minX.Value, minY.Value);
-            _maxCoordinate = new Vector2(maxX.Value, maxY.Value);
+            _gridDimensions = new Vector2Int(maxX.Value - minX.Value + 1, maxY.Value - minY.Value + 1);
+            _minCoordinate = new Vector2Int(minX.Value, minY.Value);
+            _maxCoordinate = new Vector2Int(maxX.Value, maxY.Value);
             _savedGrid = savedGrid;
         }
 
@@ -79,7 +79,7 @@ namespace ProphetAR
             // Calculate the coordinates of each cell in this section
             foreach (GridCell gridCell in currentGridSection.GetCells())
             {
-                Vector2 coordinates = CalculateCellCoordinatesFromOrigin(gridCell, origin, cellDimensions);
+                Vector2Int coordinates = CalculateCellCoordinatesFromOrigin(gridCell, origin, cellDimensions);
                 if (alreadyFoundCoordinates.TryGetValue(coordinates, out GridSection fromGridSection))
                 {
                     Debug.LogError($"Duplicate coordinates {coordinates} found in sections `{currentGridSection.name}` and `{fromGridSection.name}`");
@@ -102,9 +102,9 @@ namespace ProphetAR
             return true;
         }
         
-        private Vector2 CalculateCellCoordinatesFromOrigin(GridCell cell, GridCell origin, Vector2 cellDimensions)
+        private Vector2Int CalculateCellCoordinatesFromOrigin(GridCell cell, GridCell origin, Vector2 cellDimensions)
         {
-            return new Vector2(
+            return new Vector2Int(
                 Mathf.RoundToInt(-(cell.transform.position.z - origin.transform.position.z) / cellDimensions.y),
                 Mathf.RoundToInt((cell.transform.position.x - origin.transform.position.x) / cellDimensions.x));
         }

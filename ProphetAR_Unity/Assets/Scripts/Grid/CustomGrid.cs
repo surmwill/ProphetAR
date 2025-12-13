@@ -9,15 +9,15 @@ namespace ProphetAR
         [Tooltip("(rows, columns)")]
         [SerializeField]
         [ReadOnly]
-        private Vector2 _gridDimensions = default;
+        private Vector2Int _gridDimensions = default;
 
         [SerializeField]
         [ReadOnly]
-        private Vector2 _minCoordinate = default;
+        private Vector2Int _minCoordinate = default;
         
         [SerializeField]
         [ReadOnly]
-        private Vector2 _maxCoordinate = default;
+        private Vector2Int _maxCoordinate = default;
         
         [SerializeField]
         private GridSection _originGridSection = null;
@@ -26,7 +26,7 @@ namespace ProphetAR
         [ReadOnly]
         private List<SavedGridCell> _savedGrid = null;
         
-        private readonly Dictionary<Vector2, GridCell> _grid = new();
+        private readonly Dictionary<Vector2Int, GridCell> _grid = new();
         
         public void OnAfterDeserialize()
         {
@@ -50,22 +50,22 @@ namespace ProphetAR
 
         private void RecalculateCellNeighbours(GridCell cell)
         {
-            if (_grid.TryGetValue(cell.Coordinates + Vector2.right, out GridCell right))
+            if (_grid.TryGetValue(cell.Coordinates + Vector2Int.right, out GridCell right))
             {
                 cell.SetRightCell(right);
             }
             
-            if (_grid.TryGetValue(cell.Coordinates - Vector2.right, out GridCell left))
+            if (_grid.TryGetValue(cell.Coordinates - Vector2Int.right, out GridCell left))
             {
                 cell.SetLeftCell(left);
             }
 
-            if (_grid.TryGetValue(cell.Coordinates + Vector2.up, out GridCell down))
+            if (_grid.TryGetValue(cell.Coordinates + Vector2Int.up, out GridCell down))
             {
                 cell.SetDownCell(down);
             }
 
-            if (_grid.TryGetValue(cell.Coordinates - Vector2.up, out GridCell up))
+            if (_grid.TryGetValue(cell.Coordinates - Vector2Int.up, out GridCell up))
             {
                 cell.SetUpCell(up);
             }
