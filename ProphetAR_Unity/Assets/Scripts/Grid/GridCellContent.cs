@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace ProphetAR
 {
@@ -26,8 +29,45 @@ namespace ProphetAR
         /// At the lowest level our grid is just a 2D char array. This defines what char this cell is in that array (an obstacle, a free space, etc...)
         /// </summary>
         public GridPointProperties GridPointProperties => _gridPointProperties;
+        
+        public IEnumerable<Character> Characters => _occupierTransforms
+            .Select(occupierTransform => occupierTransform.GridObject as Character)
+            .Where(character => character != null);
+        
+        /// The things currently occupying this cell but might move later
+        private readonly List<GridTransform> _occupierTransforms = new();
+
+        public event Action<GridTransform> OnOccupierAdded;
+        public event Action<GridTransform> OnOccupierRemoved; 
 
         private bool _areEditModeListenersBound;
+
+        public IEnumerable<GridTransform> GetOccupiers()
+        {
+            return _occupierTransforms;
+        }
+
+        public void AddOccupier(GridTransform addOccupier)
+        {
+            if (_occupierTransforms.Contains(addOccupier))
+            {
+                return;
+            }
+            
+            _occupierTransforms.Add(addOccupier);
+            OnOccupierAdded?.Invoke(addOccupier);
+        }
+
+        public void RemoveOccupier(GridTransform removeOccupier)
+        {
+            if (!_occupierTransforms.Contains(removeOccupier))
+            {
+                return;
+            }
+
+            _occupierTransforms.Remove(removeOccupier);
+            OnOccupierRemoved?.Invoke(removeOccupier);
+        }
 
         private void OnEnable()
         {

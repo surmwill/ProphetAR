@@ -5,18 +5,42 @@ using UnityEngine;
 namespace ProphetAR
 {
     /// <summary>
-    /// Anything that needs to be located on the grid has this
+    /// Contains a position on the grid and the ability to move around to other positions
     /// </summary>
-    public class GridTransform
+    public class GridTransform : MonoBehaviour
     {
+        public GridObject GridObject { get; private set; }
+        
         public CustomGrid Grid { get; private set; }
         
-        public Vector2Int Coordinates { get; private set; }
+        public Vector2Int Coordinates { get; set; }
 
-        public GridTransform(CustomGrid grid, Vector2Int coordinates)
+        public void Initialize(GridObject gridObject, CustomGrid grid)
         {
+            GridObject = gridObject;
             Grid = grid;
-            Coordinates = coordinates;
+        }
+
+        public void MoveTo(Vector2Int coordinates, Action<GridCellContent> onCustomPosition = null)
+        {
+            GridCell gridCell = Grid[coordinates];
+            if (gridCell == null)
+            {
+                throw new ArgumentException($"Coordinates not in grid {coordinates}");
+            }
+
+            GridCellContent gridCellContent = gridCell.Content;
+            if (onCustomPosition != null)
+            {
+                onCustomPosition.Invoke(gridCellContent);
+            }
+            else
+            {
+                transform.SetParent(gridCellContent.transform);
+                transform.position = gridCellContent.transform.position;
+            }
+            
+            gridCellContent.AddOccupier(this);
         }
 
         public NavigationDestinationSet GetPathsFrom(int maxNumSteps, GridSlice area)
