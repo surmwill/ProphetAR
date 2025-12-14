@@ -40,7 +40,7 @@ namespace ProphetAR
                 transform.position = gridCellContent.transform.position;
             }
             
-            gridCellContent.AddOccupier(this);
+            gridCellContent.Occupiers.Add(this);
         }
 
         public NavigationDestinationSet GetPathsFrom(int maxNumSteps, GridSlice area)

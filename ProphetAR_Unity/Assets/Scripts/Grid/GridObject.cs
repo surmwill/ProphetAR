@@ -4,11 +4,13 @@ using UnityEngine;
 namespace ProphetAR
 {
     [RequireComponent(typeof(GridTransform))]
-    public class GridObject : MonoBehaviour
+    public abstract class GridObject : MonoBehaviour
     {
         public CustomGrid Grid { get; private set; }
         
         public GridTransform GridTransform { get; private set; }
+        
+        public bool IsDestroying { get; private set; }
 
         private void Awake()
         {
@@ -19,6 +21,12 @@ namespace ProphetAR
         {
             Grid = grid;
             GridTransform.Initialize(this, grid);
+        }
+
+        private void OnDestroy()
+        {
+            IsDestroying = true;
+            Grid.DestroyGridObject(this);
         }
     }
 }
