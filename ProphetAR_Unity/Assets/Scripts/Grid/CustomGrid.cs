@@ -16,11 +16,11 @@ namespace ProphetAR
 
         [SerializeField]
         [ReadOnly]
-        private Vector2Int _minCoordinate = default;
+        private Vector2Int _topLeftCoordinate = default;
         
         [SerializeField]
         [ReadOnly]
-        private Vector2Int _maxCoordinate = default;
+        private Vector2Int _botRightCoordinate = default;
         
         // Used for building the grid
         [SerializeField]
@@ -52,7 +52,7 @@ namespace ProphetAR
         {
             if (_gridObjects.Add(gridObject))
             {
-                gridObject.GridTransform.MoveTo(coordinates, onCustomPosition);
+                gridObject.GridTransform.MoveToImmediate(coordinates, onCustomPosition);
                 OnAddedGridObject?.Invoke(gridObject);
             }
         }
@@ -89,19 +89,32 @@ namespace ProphetAR
         
         #endregion
 
-        // Build the grid
-        #region GridBuilding
+        // Query the structure of the built grid
+        #region GridQuerying
         
         public GridCell this[Vector2Int coordinates] => Cells.GetValueOrDefault(coordinates);
+        
+        public GridSlice GetSlice(Vector2Int botLeft, Vector2Int dimensions)
+        {
+            return new GridSlice(this, botLeft, dimensions);
+        }
+
+        /// <summary>
+        /// A grid slice containing entire level. This is likely very large, operating on it is inefficient, and should only be used for testing or specific thought-out cases
+        /// </summary>
+        public GridSlice GetGlobalSliceExpensive()
+        {
+            return new GridSlice(this, _topLeftCoordinate, _gridDimensions);
+        }
+        
+        #endregion
+
+        // Build the grid
+        #region GridBuilding
         
         public void OnAfterDeserialize()
         {
             BuildGrid();
-        }
-
-        public GridSlice GetSlice(Vector2Int botLeft, Vector2Int dimensions)
-        {
-            return new GridSlice(this, botLeft, dimensions);
         }
 
         private void BuildGrid()

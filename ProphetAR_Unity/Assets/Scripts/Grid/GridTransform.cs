@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using GridPathFinding;
 using UnityEngine;
 
@@ -21,7 +22,18 @@ namespace ProphetAR
             Grid = grid;
         }
 
-        public void MoveTo(Vector2Int coordinates, Action<GridCellContent> onCustomPosition = null)
+        public IGridCellCorners GetCellCorners(Vector2Int coordinates)
+        {
+            GridCell gridCell = Grid[coordinates];
+            if (gridCell == null)
+            {
+                throw new ArgumentException($"Coordinates not in grid {coordinates}");
+            }
+
+            return gridCell;
+        }
+        
+        public IEnumerator MoveToAnimated(Vector2Int coordinates, Func<Transform, IEnumerator> animateMovement, Func<GridCellContent, Transform> getCustomParentInCell = null)
         {
             GridCell gridCell = Grid[coordinates];
             if (gridCell == null)
@@ -30,15 +42,26 @@ namespace ProphetAR
             }
 
             GridCellContent gridCellContent = gridCell.Content;
-            if (onCustomPosition != null)
+            Transform parent = getCustomParentInCell == null ? gridCellContent.transform : getCustomParentInCell(gridCellContent);
+            
+            yield return animateMovement(parent);
+            
+            MoveToImmediate(coordinates, getCustomParentInCell);
+        }
+
+        public void MoveToImmediate(Vector2Int coordinates, Func<GridCellContent, Transform> getCustomParentInCell = null)
+        {
+            GridCell gridCell = Grid[coordinates];
+            if (gridCell == null)
             {
-                onCustomPosition.Invoke(gridCellContent);
+                throw new ArgumentException($"Coordinates not in grid {coordinates}");
             }
-            else
-            {
-                transform.SetParent(gridCellContent.transform);
-                transform.position = gridCellContent.transform.position;
-            }
+
+            GridCellContent gridCellContent = gridCell.Content;
+            Transform parent = getCustomParentInCell == null ? gridCellContent.transform : getCustomParentInCell(gridCellContent);
+            
+            transform.SetParent(parent);
+            transform.localPosition = Vector3.zero;
             
             gridCellContent.Occupiers.Add(this);
         }

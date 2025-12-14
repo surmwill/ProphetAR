@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace GridPathFinding
 {
-    public class NavigationInstructionSet
+    public class NavigationInstructionSet : IEnumerable<NavigationInstruction>
     {
         public (int row, int col) Origin { get; }
     
@@ -38,6 +39,16 @@ namespace GridPathFinding
             }
             
             return sb.ToString();
+        }
+
+        public IEnumerator<NavigationInstruction> GetEnumerator()
+        {
+            return PathToTarget.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
