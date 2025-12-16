@@ -185,11 +185,11 @@ namespace ProphetAR
             UpdateIterationsWithRemovedListener(gameEventWithDataType, removalIndex);
         }
 
-        public void RaiseEventWithData<T>(T gameEventWithData) where T : GameEventWithData
+        public void RaiseEventWithData(GameEventWithData gameEventWithData)
         {
             OnGameEventRaised?.Invoke(gameEventWithData);
             
-            Type gameEventWithDataType = typeof(T);  
+            Type gameEventWithDataType = gameEventWithData.GetType();  
             if (!_gameEventWithDataListeners.TryGetValue(gameEventWithDataType, out List<IGameEventWithDataListener> listenersWithData))
             {
                 Debug.LogWarning($"Raised event `{gameEventWithDataType}` with no listeners");
@@ -212,11 +212,11 @@ namespace ProphetAR
             iterations.Remove(iterationKey);
         }
 
-        public void RaiseEventWithoutData<T>(T gameEventWithoutData) where T : GameEventWithoutData
+        public void RaiseEventWithoutData(GameEventWithoutData gameEventWithoutData)
         {
             OnGameEventRaised?.Invoke(gameEventWithoutData);
             
-            Type gameEventWithoutDataType = typeof(T);  
+            Type gameEventWithoutDataType = gameEventWithoutData.GetType();  
             if (!_gameEventWithoutDataListeners.TryGetValue(gameEventWithoutDataType, out List<IGameEventWithoutDataListener> listenersWithoutData))
             {
                 Debug.LogWarning($"Raised event `{gameEventWithoutDataType}` with no listeners");
