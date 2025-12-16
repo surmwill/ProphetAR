@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using GridPathFinding;
 using GridPathFinding.Editor;
 using NUnit.Framework;
@@ -38,11 +39,16 @@ namespace GridPathPathFinding.Editor
                     if (instructionSet.Origin == instructionSet.Target)
                     {
                         Assert.IsTrue(instructionSet.PathToTarget.Count == 0, "Origin is the same as target. We don't need to move");
+                        Assert.IsTrue(instructionSet.PathCoordinates.Count == 1 && instructionSet.PathCoordinates[0] == instructionSet.Origin);
                     }
                     else
                     {
-                        Debug.Log(GridParser.ShowGrid(DrawPathOnGrid(instructionSet, grid)));
+                        char[,] gridWithPAth = DrawPathOnGrid(instructionSet, grid);
+                        
+                        Debug.Log(GridParser.ShowGrid(gridWithPAth));
                         Debug.Log(instructionSet.ShowInstructions());
+                        
+                        VerifyPathCoordinatesWithGrid(gridWithPAth, instructionSet);
                     }
                 }
                 else
@@ -52,11 +58,32 @@ namespace GridPathPathFinding.Editor
             }
         }
 
+        private static void VerifyPathCoordinatesWithGrid(char[,] gridWithPath, NavigationInstructionSet path)
+        {
+            foreach ((int row, int col) pathCoordinate in path.PathCoordinates)
+            {
+                if (pathCoordinate == path.Origin)
+                {
+                    Assert.IsTrue(gridWithPath[pathCoordinate.row, pathCoordinate.col] == GridPoints.Origin);
+                }
+                else if (pathCoordinate == path.Target)
+                {
+                    Assert.IsTrue(gridWithPath[pathCoordinate.row, pathCoordinate.col] == GridPoints.Target);
+                }
+                else
+                {
+                    Assert.IsTrue(gridWithPath[pathCoordinate.row, pathCoordinate.col] == GridPoints.DEBUG_PRINT_PATH);
+                }
+            }
+        }
+
         public static char[,] DrawPathOnGrid(NavigationInstructionSet instructionSet, char[,] grid)
         {
             char[,] gridCopy = GridParser.CopyGrid(grid);
         
             (int row, int col) currentPosition = instructionSet.Origin;
+            gridCopy[currentPosition.row, currentPosition.col] = GridPoints.Origin;
+            
             foreach (NavigationInstruction navigationInstruction in instructionSet.PathToTarget)
             {
                 (int moveCols, int moveRows) = (0, 0);

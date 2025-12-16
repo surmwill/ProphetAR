@@ -14,7 +14,7 @@
 
         public const char DEBUG_PRINT_PATH = '.';
     
-        // Because null doesn't print (note: O and not zero. Zero (0) is a number and a modification step)
+        // A clear point on the grid is usually the default null character, but this doesn't print well
         public const char DEBUG_PRINT_CLEAR = 'O';
 
         public static bool IsDirectionBackToOrigin(char gridPoint)
