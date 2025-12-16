@@ -14,7 +14,36 @@ namespace ProphetAR
         
         public CustomGrid Grid { get; private set; }
         
-        public Vector2Int Coordinates { get; set; }
+        public Vector2Int Coordinates {
+            get
+            {
+                if (!HasCoordinates)
+                {
+                    throw new InvalidOperationException($"No initial coordinates have been given. Please set them directly or with {nameof(MoveToImmediate)}");
+                }
+
+                return _coordinates.Value;
+
+            }
+            set
+            {
+                if (Grid == null)
+                {
+                    throw new InvalidOperationException("Uninitialized");
+                }
+                
+                if (Grid[value] == null)
+                {
+                    throw new InvalidOperationException($"Coordinates {value} are not contained within the grid");
+                }
+                
+                _coordinates = value;  
+            } 
+        }
+        
+        public bool HasCoordinates => _coordinates.HasValue;
+
+        private Vector2Int? _coordinates = null;
 
         public void Initialize(GridObject gridObject, CustomGrid grid)
         {
@@ -33,12 +62,17 @@ namespace ProphetAR
             return gridCell;
         }
         
-        public IEnumerator MoveToAnimated(Vector2Int coordinates, Func<Transform, IEnumerator> animateMovement, Func<GridCellContent, Transform> getCustomParentInCell = null)
+        public IEnumerator MoveToAnimated(Vector2Int moveToCoordinates, Func<Transform, IEnumerator> animateMovement, Func<GridCellContent, Transform> getCustomParentInCell = null)
         {
-            GridCell gridCell = Grid[coordinates];
+            if (!HasCoordinates)
+            {
+                throw new InvalidOperationException("GridTransform is missing coordinates to start the move from");
+            }
+            
+            GridCell gridCell = Grid[moveToCoordinates];
             if (gridCell == null)
             {
-                throw new ArgumentException($"Coordinates not in grid {coordinates}");
+                throw new ArgumentException($"Coordinates not in grid {moveToCoordinates}");
             }
 
             GridCellContent gridCellContent = gridCell.Content;
@@ -46,15 +80,20 @@ namespace ProphetAR
             
             yield return animateMovement(parent);
             
-            MoveToImmediate(coordinates, getCustomParentInCell);
+            MoveToImmediate(moveToCoordinates, getCustomParentInCell);
         }
 
-        public void MoveToImmediate(Vector2Int coordinates, Func<GridCellContent, Transform> getCustomParentInCell = null)
+        public void MoveToImmediate(Vector2Int moveToCoordinates, Func<GridCellContent, Transform> getCustomParentInCell = null)
         {
-            GridCell gridCell = Grid[coordinates];
+            if (HasCoordinates)
+            {
+                Grid[Coordinates].Content.RemoveOccupier(this);
+            }
+            
+            GridCell gridCell = Grid[moveToCoordinates];
             if (gridCell == null)
             {
-                throw new ArgumentException($"Coordinates not in grid {coordinates}");
+                throw new ArgumentException($"Coordinates not in grid {moveToCoordinates}");
             }
 
             GridCellContent gridCellContent = gridCell.Content;
@@ -62,8 +101,9 @@ namespace ProphetAR
             
             transform.SetParent(parent);
             transform.localPosition = Vector3.zero;
+            Coordinates = moveToCoordinates;
             
-            gridCellContent.Occupiers.Add(this);
+            gridCellContent.AddOccupier(this);
         }
 
         public NavigationDestinationSet GetPathsFrom(int maxNumSteps, GridSlice area)

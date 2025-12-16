@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace ProphetAR
 {
@@ -16,6 +20,10 @@ namespace ProphetAR
         [SerializeField]
         private GridPointProperties _gridPointProperties = new();
         
+        public event Action<GridTransform> OnOccupierAdded;
+        
+        public event Action<GridTransform> OnOccupierRemoved; 
+        
         /// <summary>
         /// The GridCell this content falls under.
         /// Note that during content instantiation, this will assigned sometime in-between Awake/OnEnable and Start
@@ -26,11 +34,18 @@ namespace ProphetAR
         /// At the lowest level our grid is just a 2D char array. This defines what char this cell is in that array (an obstacle, a free space, etc...)
         /// </summary>
         public GridPointProperties GridPointProperties => _gridPointProperties;
-
+        
         /// <summary>
-        /// A list of GridTransforms currently occupying the cell
+        /// Things currently occupying this cell, but could move elsewhere
         /// </summary>
-        public GridCellOccupiers Occupiers { get; } = new();
+        public List<GridTransform> OccupierTransforms { get; } = new();
+        
+        /// <summary>
+        /// The Characters currently occupying the cell
+        /// </summary>
+        public IEnumerable<Character> Characters => OccupierTransforms
+            .Select(occupierTransform => occupierTransform.GridObject as Character)
+            .Where(character => character != null);
 
         private bool _areEditModeListenersBound;
 
@@ -94,5 +109,31 @@ namespace ProphetAR
             }
             #endif
         }
+        
+        #region Occupiers
+        
+        public void AddOccupier(GridTransform addOccupier)
+        {
+            if (OccupierTransforms.Contains(addOccupier))
+            {
+                return;
+            }
+            
+            OccupierTransforms.Add(addOccupier);
+            OnOccupierAdded?.Invoke(addOccupier);
+        }
+
+        public void RemoveOccupier(GridTransform removeOccupier)
+        {
+            if (!OccupierTransforms.Contains(removeOccupier))
+            {
+                return;
+            }
+
+            OccupierTransforms.Remove(removeOccupier);
+            OnOccupierRemoved?.Invoke(removeOccupier);
+        }
+        
+        #endregion
     }
 }
