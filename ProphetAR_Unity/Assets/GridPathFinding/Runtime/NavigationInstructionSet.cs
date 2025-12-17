@@ -19,7 +19,7 @@ namespace GridPathFinding
         
         public int Magnitude { get; }
 
-        private readonly HashSet<(int row, int col)> _includesCoordinates;
+        private readonly Dictionary<(int row, int col), int> _coordinateToStepNumber = new();
 
         public NavigationInstructionSet((int row, int col) origin, (int row, int col) target, List<NavigationInstruction> pathToTarget) :
             this(origin, target, pathToTarget, pathToTarget.Sum(instruction => instruction.Magnitude)) { }
@@ -32,27 +32,38 @@ namespace GridPathFinding
             PathToTarget = pathToTarget;
             Magnitude = magnitude;
 
-            (int row, int col) path = origin;
-            PathCoordinates.Add(path);
-            
+            (int row, int col) pathCoordinate = origin;
+            PathCoordinates.Add(pathCoordinate);
+            _coordinateToStepNumber.Add(pathCoordinate, 0);
+
+            int stepNumber = 1;
             foreach (NavigationInstruction instruction in pathToTarget)
             {
                 for (int i = 0; i < instruction.Magnitude; i++)
                 {
-                    path = NavigationDirectionUtils.AddInstructionToTuple(path, instruction.Direction);
-                    PathCoordinates.Add(path);
+                    pathCoordinate = NavigationDirectionUtils.AddInstructionToTuple(pathCoordinate, instruction.Direction);
+                    PathCoordinates.Add(pathCoordinate);
+                    _coordinateToStepNumber.Add(pathCoordinate, stepNumber);
                 }
             }
-
-            _includesCoordinates = new HashSet<(int row, int col)>(PathCoordinates);
         }
 
-        public bool IncludesCoordinates((int row, int col) coordinates)
+        public int GetStepNumberForCoordinate((int row, int col) coordinate)
         {
-            return _includesCoordinates.Contains(coordinates);
+            if (!_coordinateToStepNumber.TryGetValue(coordinate, out int stepNumber))
+            {
+                throw new ArgumentException("Coordinate not contained in path");
+            }
+
+            return stepNumber;
+        }
+        
+        public bool ContainsCoordinate((int row, int col) coordinate)
+        {
+            return _coordinateToStepNumber.ContainsKey(coordinate);
         }
 
-        public string ShowInstructions()
+        public string ListInstructionsString()
         {
             StringBuilder sb = new StringBuilder();
             
@@ -63,6 +74,12 @@ namespace GridPathFinding
             }
             
             return sb.ToString();
+        }
+
+        public string ListPathCoordinatesString()
+        {
+            return PathCoordinates.Aggregate(string.Empty, (current, coordinates) 
+                => $"({coordinates.row},{coordinates.col})" + (current != string.Empty ? "," : string.Empty) + current);
         }
 
         public IEnumerator<NavigationInstruction> GetEnumerator()

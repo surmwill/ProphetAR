@@ -36,19 +36,23 @@ namespace GridPathPathFinding.Editor
                 NavigationInstructionSet instructionSet = GridPathFinder.GetPathTo(serializedGrid);
                 if (instructionSet != null)
                 {
+                    Assert.IsTrue(instructionSet.PathCoordinates.Count == instructionSet.PathToTarget.Count + 1, 
+                        "The number of coordinates to the target should be one more than the number of instructions, as it includes the origin");
+                    
                     if (instructionSet.Origin == instructionSet.Target)
                     {
                         Assert.IsTrue(instructionSet.PathToTarget.Count == 0, "Origin is the same as target. We don't need to move");
-                        Assert.IsTrue(instructionSet.PathCoordinates.Count == 1 && instructionSet.PathCoordinates[0] == instructionSet.Origin);
+                        Assert.IsTrue(instructionSet.PathCoordinates[0] == instructionSet.Origin);
                     }
                     else
                     {
-                        char[,] gridWithPAth = DrawPathOnGrid(instructionSet, grid);
+                        char[,] gridWithPath = DrawPathOnGrid(instructionSet, grid);
                         
-                        Debug.Log(GridParser.ShowGrid(gridWithPAth));
-                        Debug.Log(instructionSet.ShowInstructions());
+                        Debug.Log(GridParser.ShowGrid(gridWithPath));
+                        Debug.Log(instructionSet.ListInstructionsString());
+                        Debug.Log(instructionSet.ListPathCoordinatesString());
                         
-                        VerifyPathCoordinatesWithGrid(gridWithPAth, instructionSet);
+                        VerifyPathCoordinatesWithGrid(gridWithPath, instructionSet);
                     }
                 }
                 else
@@ -74,6 +78,11 @@ namespace GridPathPathFinding.Editor
                 {
                     Assert.IsTrue(gridWithPath[pathCoordinate.row, pathCoordinate.col] == GridPoints.DEBUG_PRINT_PATH);
                 }
+            }
+
+            for (int i = 0; i < path.PathCoordinates.Count; i++)
+            {
+                Assert.IsTrue(path.GetStepNumberForCoordinate(path.PathCoordinates[i]) == i);
             }
         }
 
