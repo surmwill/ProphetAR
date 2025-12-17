@@ -13,6 +13,8 @@ namespace ProphetAR
         public GridObject GridObject { get; private set; }
         
         public CustomGrid Grid { get; private set; }
+
+        public GridCellContent CurrentCell => Grid[Coordinates].Content;
         
         public Vector2Int Coordinates {
             get
@@ -49,17 +51,6 @@ namespace ProphetAR
         {
             GridObject = gridObject;
             Grid = grid;
-        }
-
-        public IGridCellCorners GetCellCorners(Vector2Int coordinates)
-        {
-            GridCell gridCell = Grid[coordinates];
-            if (gridCell == null)
-            {
-                throw new ArgumentException($"Coordinates not in grid {coordinates}");
-            }
-
-            return gridCell;
         }
         
         public IEnumerator MoveToAnimated(Vector2Int moveToCoordinates, Func<Transform, IEnumerator> animateMovement, Func<GridCellContent, Transform> getCustomParentInCell = null)

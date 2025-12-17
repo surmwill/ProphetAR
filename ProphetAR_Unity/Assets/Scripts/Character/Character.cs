@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using GridPathFinding;
 using UnityEngine;
@@ -10,28 +12,24 @@ namespace ProphetAR
     {
         public IEnumerator WalkToCoordinates(Vector2Int targetCoordinates)
         {
-            Vector2Int currCoordinates = GridTransform.Coordinates;
-
             NavigationInstructionSet instructionSet = GridTransform.GetPathTo(targetCoordinates, Grid.GetGlobalSliceExpensive());
             if (instructionSet == null)
             {
                 Debug.LogWarning($"Could not path to coordinates: {targetCoordinates}");
-                yield return null;
+                yield break;
             }
             
-            // Game event movement raised. List<NavigationInstructionSet> returned, and a list of Stops and callbacks
-            
-            // move on navigation instructions set, look for any callbacks on that coordinate. If so, run them . Or cell 
-            
-            // instruction set gets sliced into horizontal and vertical movements. Stops might be added
+            // Raise movement event. Other objects can modify the movement (ex: request stops along the way) before it is performed
+            GameEventCharacterMoveData characterMoveData = new GameEventCharacterMoveData(this, instructionSet);
+            Level.EventProcessor.RaiseEventWithData(new GameEventCharacterMove(characterMoveData));
 
-            // iterate over these and call on stop in between
-            yield return GridTransform.MoveToAnimated(targetCoordinates, AnimateMovementToParentInCell, GetParentInCell);
-        }
-
-        protected virtual void OnIntermediateStop(GridCellContent stoppedOnCellContent)
-        {
-            
+            List<NavigationInstructionSet> stops = instructionSet.SplitOnDirectionChanges(characterMoveData.IntermediateStops.Select(coord => coord.ToTuple()));
+            foreach (NavigationInstructionSet instructionsToNextStop in stops)
+            {
+                // Move to the stop, alert the cell when we're there
+                yield return GridTransform.MoveToAnimated(instructionsToNextStop.Target.ToVector2Int(), AnimateMovementToParentInCell, GetParentInCell);
+                yield return GridTransform.CurrentCell.OnCharacterStoppedHere();
+            }
         }
         
         protected virtual Transform GetParentInCell(GridCellContent cellContent)
@@ -41,7 +39,7 @@ namespace ProphetAR
 
         protected virtual IEnumerator AnimateMovementToParentInCell(Transform parent)
         {
-            Sequence sequence = DOTween.Sequence().Append(GridTransform.transform.DOMove(parent.position, 1f));
+            Sequence sequence = DOTween.Sequence().Append(GridTransform.transform.DOMove(parent.position, 2.5f));
             yield return sequence.WaitForCompletion();
         }
     }

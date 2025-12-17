@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GridPathFinding;
 
 namespace ProphetAR
@@ -8,28 +9,10 @@ namespace ProphetAR
     {
         /// <summary>
         /// Breaks the instruction set up into segments, each ending on (and including) the splitOn coordinates.
-        /// The splitOn coordinates must be ordered by their position along the path (first to last).
         /// </summary>
-        public static List<NavigationInstructionSet> SplitOnCoordinates(this NavigationInstructionSet instructionSet, List<(int, int)> splitOnFirstToLast)
+        public static List<NavigationInstructionSet> SplitOnCoordinates(this NavigationInstructionSet instructionSet, IEnumerable<(int row, int col)> splitOn)
         {
-            (int row, int col)? lastSplitOn = null;
-            int? numStepsLastSplit = null;
-
-            foreach ((int row, int col) splitOn in splitOnFirstToLast)
-            {
-                if (lastSplitOn == splitOn)
-                {
-                    throw new ArgumentException($"Expected distinct coordinates to split on. Duplicate: {splitOn}");
-                }
-                
-                int numStepsCurrSplit = instructionSet.GetStepNumberForCoordinate(splitOn);
-                if (numStepsLastSplit >= numStepsCurrSplit)
-                {
-                    throw new ArgumentException($"The coordinates to split on must be ordered by their position along the path: {instructionSet.ListPathCoordinatesString()}");
-                }
-
-                numStepsLastSplit = numStepsCurrSplit;
-            }
+            List<(int row, int col)> splitOnFirstToLast = splitOn.OrderBy(instructionSet.GetStepNumberForCoordinate).Distinct().ToList();
 
             // Nothing to split
             int splitIndex = GetNextSplitIndex(0);
@@ -105,7 +88,7 @@ namespace ProphetAR
             return splitInstructionSets;
         }
 
-        public static List<(int row, int col)> GetDirectionChangeCoordinates(this NavigationInstructionSet instructionSet)
+        public static List<NavigationInstructionSet> SplitOnDirectionChanges(this NavigationInstructionSet instructionSet, IEnumerable<(int row, int col)> alsoSplitOn = null)
         {
             List<(int row, int col)> lastCoordsBeforeDirectionChange = new List<(int row, int col)>();
 
@@ -116,12 +99,7 @@ namespace ProphetAR
                 lastCoordsBeforeDirectionChange.Add(instructionSet.PathCoordinates[totalSteps]);
             }
 
-            return lastCoordsBeforeDirectionChange;
-        }
-
-        public static List<NavigationInstructionSet> SplitOnDirectionChanges(this NavigationInstructionSet instructionSet)
-        {
-            return SplitOnCoordinates(instructionSet, GetDirectionChangeCoordinates(instructionSet));
+            return SplitOnCoordinates(instructionSet, lastCoordsBeforeDirectionChange.Concat(alsoSplitOn ?? Enumerable.Empty<(int row, int col)>()));
         }
     }
 }

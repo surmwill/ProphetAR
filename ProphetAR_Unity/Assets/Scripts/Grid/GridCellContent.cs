@@ -22,7 +22,7 @@ namespace ProphetAR
         
         public event Action<GridTransform> OnOccupierAdded;
         
-        public event Action<GridTransform> OnOccupierRemoved; 
+        public event Action<GridTransform> OnOccupierRemoved;
         
         /// <summary>
         /// The GridCell this content falls under.
@@ -111,6 +111,12 @@ namespace ProphetAR
         }
         
         #region Occupiers
+
+        public IEnumerator OnCharacterStoppedHere()
+        {
+            // Need an interface which tells children about character stopping with semaphore. WaitUntil semaphore is 0, then this completes
+            yield break;
+        }
         
         public void AddOccupier(GridTransform addOccupier)
         {

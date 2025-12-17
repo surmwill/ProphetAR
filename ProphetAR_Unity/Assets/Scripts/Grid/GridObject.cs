@@ -7,6 +7,8 @@ namespace ProphetAR
     public abstract class GridObject : MonoBehaviour
     {
         public CustomGrid Grid { get; private set; }
+
+        public Level Level => Grid.Level;
         
         public GridTransform GridTransform { get; private set; }
         

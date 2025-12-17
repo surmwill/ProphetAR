@@ -7,6 +7,7 @@ namespace ProphetAR
     [CustomEditor(typeof(CustomGrid))]
     public class CustomGridCustomEditor : UnityEditor.Editor
     {
+        private SerializedProperty _level;
         private SerializedProperty _gridDimensions;
         private SerializedProperty _originGridSection;
         private SerializedProperty _savedGrid;
@@ -15,6 +16,8 @@ namespace ProphetAR
         
         private void OnEnable()
         {
+            _level = serializedObject.FindProperty(nameof(_level));
+            
             _gridDimensions = serializedObject.FindProperty(nameof(_gridDimensions));
             _originGridSection = serializedObject.FindProperty(nameof(_originGridSection));
             _savedGrid = serializedObject.FindProperty(nameof(_savedGrid));
@@ -28,6 +31,8 @@ namespace ProphetAR
             CustomGrid grid = (CustomGrid) target;
 
             EditorGUILayout.Space();
+            EditorGUILayout.PropertyField(_level);
+            
             EditorGUILayout.PropertyField(_gridDimensions);
             EditorGUILayout.PropertyField(_originGridSection);
 

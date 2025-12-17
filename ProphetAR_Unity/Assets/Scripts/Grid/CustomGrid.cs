@@ -9,6 +9,9 @@ namespace ProphetAR
     /// </summary>
     public partial class CustomGrid : MonoBehaviour, ISerializationCallbackReceiver
     {
+        [SerializeField]
+        private Level _level = null;
+        
         [Tooltip("(rows, columns)")]
         [SerializeField]
         [ReadOnly]
@@ -29,6 +32,8 @@ namespace ProphetAR
         [SerializeField]
         [ReadOnly]
         private List<SavedGridCell> _savedGrid = null;
+
+        public Level Level => _level;
         
         public Dictionary<Vector2Int, GridCell> Cells { get; } = new();
 
