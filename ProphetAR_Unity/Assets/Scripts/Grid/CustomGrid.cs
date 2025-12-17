@@ -41,18 +41,18 @@ namespace ProphetAR
         // Keep track of what objects are on the grid
         #region GridObjectManagement
         
-        public void InstantiateGridObject(GridObject gridObjectPrefab, Vector2Int coordinates, Action<GridCellContent> onCustomPosition = null)
+        public void InstantiateGridObject(GridObject gridObjectPrefab, Vector2Int coordinates, Func<GridCellContent, Transform> getCustomParentInCell = null)
         {
             GridObject gridObject = Instantiate(gridObjectPrefab);
             gridObject.Initialize(this);
-            AddGridObject(gridObject, coordinates, onCustomPosition);
+            AddGridObject(gridObject, coordinates, getCustomParentInCell);
         }
 
-        public void AddGridObject(GridObject gridObject, Vector2Int coordinates, Action<GridCellContent> onCustomPosition = null)
+        public void AddGridObject(GridObject gridObject, Vector2Int coordinates, Func<GridCellContent, Transform> getCustomParentInCell = null)
         {
             if (_gridObjects.Add(gridObject))
             {
-                gridObject.GridTransform.MoveToImmediate(coordinates, onCustomPosition);
+                gridObject.GridTransform.MoveToImmediate(coordinates, getCustomParentInCell);
                 OnAddedGridObject?.Invoke(gridObject);
             }
         }
