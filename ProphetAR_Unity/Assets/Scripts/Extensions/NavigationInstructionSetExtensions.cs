@@ -10,7 +10,7 @@ namespace ProphetAR
         /// Breaks the instruction set up into segments, each ending on (and including) the splitOn coordinates.
         /// The splitOn coordinates must be ordered by their position along the path (first to last).
         /// </summary>
-        public static List<NavigationInstructionSet> SplitOnCoordinates(this NavigationInstructionSet instructionSet, List<(int row, int col)> splitOnFirstToLast)
+        public static List<NavigationInstructionSet> SplitOnCoordinates(this NavigationInstructionSet instructionSet, (int, int)[] splitOnFirstToLast)
         {
             (int row, int col)? lastSplitOn = null;
             int? numStepsLastSplit = null;
@@ -69,13 +69,13 @@ namespace ProphetAR
                         splitInstructionSets.Add(new NavigationInstructionSet(currSplitOrigin, currSplitOn, currSplitInstructions));
                         
                         // As we verified all split indices are along in the path and ordered by position, so long as there are some left, we know we can loop more 
-                        if (splitIndex + 1 == splitOnFirstToLast.Count)
+                        if (splitIndex + 1 == splitOnFirstToLast.Length)
                         {
                             break;
                         }
                         
                         splitIndex++;
-                        lastSplitMagnitude = currMagnitude;
+                        lastSplitMagnitude = currMagnitude + 1; // + 1 because we start on the next origin, we don't need to step there
                         
                         currSplitOn = splitOnFirstToLast[splitIndex];
                         currSplitOrigin = instructionSet.PathCoordinates[pathCoordinateIndex + 1];
