@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace ProphetAR
 {
@@ -9,15 +10,31 @@ namespace ProphetAR
         
         [SerializeField]
         private Vector2Int _targetCoordinates = default;
+        
+        private Coroutine _walkToCoordinatesCoroutine = null;
 
         public void MoveToCoordinates()
         {
+            if (_walkToCoordinatesCoroutine != null)
+            {
+                StopCoroutine(_walkToCoordinatesCoroutine);
+                _walkToCoordinatesCoroutine = null;
+            }
+            
             _character.GridTransform.MoveToImmediate(_targetCoordinates);
         }
 
-        public void PathToCoordinates()
+        public void WalkToCoordinates()
         {
-            
+            if (_walkToCoordinatesCoroutine == null)
+            {
+                _walkToCoordinatesCoroutine = StartCoroutine(WalkToCoordinatesInner());
+            }
+        }
+
+        private IEnumerator WalkToCoordinatesInner()
+        {
+            yield return _character.WalkToCoordinates(_targetCoordinates);
         }
     }
 }

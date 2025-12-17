@@ -60,6 +60,12 @@ namespace ProphetAR
                 throw new InvalidOperationException("GridTransform is missing coordinates to start the move from");
             }
             
+            if (Coordinates == moveToCoordinates)
+            {
+                Debug.LogWarning("Moving to the same coordinates we're already on");
+                yield break;
+            }
+            
             GridCell gridCell = Grid[moveToCoordinates];
             if (gridCell == null)
             {
@@ -78,6 +84,12 @@ namespace ProphetAR
         {
             if (HasCoordinates)
             {
+                if (Coordinates == moveToCoordinates)
+                {
+                    Debug.LogWarning("Moving to the same coordinates we're already on");
+                    return;
+                }
+                
                 Grid[Coordinates].Content.RemoveOccupier(this);
             }
             

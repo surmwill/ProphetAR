@@ -12,6 +12,12 @@ namespace ProphetAR
     {
         public IEnumerator WalkToCoordinates(Vector2Int targetCoordinates)
         {
+            if (targetCoordinates == GridTransform.Coordinates)
+            {
+                Debug.LogWarning("Walking to the same coordinates we're already on");
+                yield break;
+            }
+            
             NavigationInstructionSet instructionSet = GridTransform.GetPathTo(targetCoordinates, Grid.GetGlobalSliceExpensive());
             if (instructionSet == null)
             {
