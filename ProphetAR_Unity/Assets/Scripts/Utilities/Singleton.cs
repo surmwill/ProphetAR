@@ -31,6 +31,7 @@ namespace ProphetAR
                     GameObject singletonObject = new GameObject();
                     _instance = singletonObject.AddComponent<T>();
                     singletonObject.name = $"Singleton ({typeof(T)})";
+                    DontDestroyOnLoad(singletonObject);
                 }
 
                 return _instance;
