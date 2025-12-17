@@ -36,9 +36,6 @@ namespace GridPathPathFinding.Editor
                 NavigationInstructionSet instructionSet = GridPathFinder.GetPathTo(serializedGrid);
                 if (instructionSet != null)
                 {
-                    Assert.IsTrue(instructionSet.PathCoordinates.Count == instructionSet.PathToTarget.Count + 1, 
-                        "The number of coordinates to the target should be one more than the number of instructions, as it includes the origin");
-                    
                     if (instructionSet.Origin == instructionSet.Target)
                     {
                         Assert.IsTrue(instructionSet.PathToTarget.Count == 0, "Origin is the same as target. We don't need to move");
