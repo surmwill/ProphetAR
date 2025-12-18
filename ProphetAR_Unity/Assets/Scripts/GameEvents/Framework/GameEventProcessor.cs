@@ -242,9 +242,9 @@ namespace ProphetAR
         public bool TryGetListenersForNonDataEvent<TEventWithoutData>(out List<IGameEventWithoutDataListener> listeners) where TEventWithoutData : GameEventWithoutData
         {
             Type gameEventType = typeof(TEventWithoutData);
-            if (_currentEventRaiseIterations.ContainsKey(gameEventType))
+            if (_currentEventRaiseIterations.TryGetValue(gameEventType, out Dictionary<long, int> iterations) && iterations.Count > 0)
             {
-                Debug.LogWarning("Possibly modification of listener list during an active event");
+                Debug.LogWarning("Possible modification of listener list during an active event");
             }
             
             return _gameEventWithoutDataListeners.TryGetValue(gameEventType, out listeners);
@@ -253,9 +253,9 @@ namespace ProphetAR
         public bool TryGetListenersForDataEvent<TEventWithData>(out List<IGameEventWithDataListener> dataListeners) where TEventWithData : GameEventWithData
         {
             Type gameEventWithDataType = typeof(TEventWithData);
-            if (_currentEventRaiseIterations.ContainsKey(gameEventWithDataType))
+            if (_currentEventRaiseIterations.TryGetValue(gameEventWithDataType, out Dictionary<long, int> iterations) && iterations.Count > 0)
             {
-                Debug.LogWarning("Possibly modification of listener list during an active event");
+                Debug.LogWarning("Possible modification of listener list during an active event");
             }
             
             return _gameEventWithDataListeners.TryGetValue(gameEventWithDataType, out dataListeners);

@@ -33,15 +33,17 @@ namespace GridPathFinding
             Magnitude = magnitude;
 
             (int row, int col) pathCoordinate = origin;
+            
             PathCoordinates.Add(pathCoordinate);
             _coordinateToStepNumber.Add(pathCoordinate, 0);
 
             int stepNumber = 1;
             foreach (NavigationInstruction instruction in pathToTarget)
             {
-                for (int i = 0; i < instruction.Magnitude; i++)
+                for (int i = 0; i < instruction.Magnitude; i++, stepNumber++)
                 {
                     pathCoordinate = NavigationDirectionUtils.AddInstructionToTuple(pathCoordinate, instruction.Direction);
+                    
                     PathCoordinates.Add(pathCoordinate);
                     _coordinateToStepNumber.Add(pathCoordinate, stepNumber);
                 }
@@ -79,8 +81,8 @@ namespace GridPathFinding
         public string ListPathCoordinatesString()
         {
             return PathCoordinates.Aggregate(string.Empty, (current, coordinates) 
-                => $"({coordinates.row},{coordinates.col})" + (current != string.Empty ? "," : string.Empty) + current);
-        }
+                => $"({coordinates.row},{coordinates.col})" + (current != string.Empty ? " -> " : string.Empty) + current);
+        }   
 
         public IEnumerator<NavigationInstruction> GetEnumerator()
         {
