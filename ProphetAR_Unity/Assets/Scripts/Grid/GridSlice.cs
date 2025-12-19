@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GridPathFinding;
 using UnityEngine;
 
@@ -23,10 +24,15 @@ namespace ProphetAR
         /// </summary>
         public GridSlice(CustomGrid grid, Vector2Int topLeft, Vector2Int dimensions)
         {
+            if (dimensions.x < 1 || dimensions.y < 1)
+            {
+                throw new ArgumentException($"Dimensions must be >= 1 {dimensions}");
+            }
+            
             Grid = grid;
 
             TopLeft = topLeft;
-            BotRight = topLeft + dimensions;
+            BotRight = topLeft + (dimensions - new Vector2Int(1, 1));
 
             Dimensions = dimensions;
         }
@@ -44,22 +50,29 @@ namespace ProphetAR
         
         public SerializedGrid GetSerializedGrid()
         {
-            List<(int row, int col)> obstacles = null;
-            List<ModificationStep> modificationSteps = null;
+            List<(int row, int col)> obstacles = new List<(int row, int col)>();
+            List<ModificationStep> modificationSteps = new List<ModificationStep>();
             
             for (int row = TopLeft.y; row <= BotRight.y; row++)
             {
                 for (int col = TopLeft.x; col <= BotRight.x; col++)
                 {
-                    GridPointProperties gridPointProperties = Grid[new Vector2Int(row, col)].GridPointProperties;
+                    GridCell gridCell = Grid[new Vector2Int(row, col)];
+                    if (!gridCell)
+                    {
+                        obstacles.Add((row, col));
+                        continue;
+                    }
+                    
+                    GridPointProperties gridPointProperties =  gridCell.GridPointProperties;
                     switch (gridPointProperties.GridPointType)
                     {
                         case GridPointType.Obstacle:
-                            (obstacles ??= new List<(int row, int col)>()).Add((row, col));
+                            obstacles.Add((row, col));
                             break;
 
                         case GridPointType.ModificationStep:
-                            (modificationSteps ??= new List<ModificationStep>()).Add(new ModificationStep((row, col), gridPointProperties.ModificationStep));
+                            modificationSteps.Add(new ModificationStep((row, col), gridPointProperties.ModificationStep));
                             break;
                     }
                 }

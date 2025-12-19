@@ -51,6 +51,7 @@ namespace ProphetAR
                     if (!stopAction.AfterActionCanProgress)
                     {
                         onComplete?.Invoke(true, GridTransform.CurrentCell);
+                        yield break;
                     }
                 }
             }
@@ -64,9 +65,9 @@ namespace ProphetAR
             Sequence sequence = DOTween.Sequence().Append(
                     DOTween.To(
                         () => GridTransform.transform.position,
-                        nextWorldPosition => Grid.transform.position = nextWorldPosition,
+                        nextWorldPosition => GridTransform.transform.position = nextWorldPosition,
                         cellParent.TransformPoint(localCellPosition),
-                        2.4f));
+                        1f));
             
             yield return sequence.WaitForCompletion();
         }

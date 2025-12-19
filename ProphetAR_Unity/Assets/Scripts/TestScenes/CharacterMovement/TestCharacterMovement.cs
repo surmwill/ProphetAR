@@ -9,7 +9,7 @@ namespace ProphetAR
         private Character _character = null;
         
         [SerializeField]
-        private Vector2Int _targetCoordinates = default;
+        private Vector2Int _targetCoordinates = Vector2Int.one;
         
         private Coroutine _walkToCoordinatesCoroutine = null;
 
@@ -35,6 +35,7 @@ namespace ProphetAR
         private IEnumerator WalkToCoordinatesInner()
         {
             yield return _character.WalkToCoordinates(_targetCoordinates);
+            _walkToCoordinatesCoroutine = null;
         }
     }
 }

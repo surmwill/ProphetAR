@@ -158,4 +158,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _character: {fileID: 8805206095572177566}
-  _targetCoordinates: {x: 0, y: 0}
+  _targetCoordinates: {x: 1, y: 1}
