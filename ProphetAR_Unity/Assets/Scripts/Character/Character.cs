@@ -34,20 +34,28 @@ namespace ProphetAR
             List<NavigationInstructionSet> stops = instructionSet.SplitOnDirectionChanges(characterMoveData.IntermediateStops.Select(coord => coord.ToTuple()));
             foreach (NavigationInstructionSet instructionsToNextStop in stops)
             {
-                // Move to the stop, alert the cell when we're there
-                yield return GridTransform.MoveToAnimated(instructionsToNextStop.Target.ToVector2Int(), AnimateMovementToCell);
+                // Move to the stop
+                Vector2Int stopCoordinates = instructionsToNextStop.Target.ToVector2Int();
+                yield return GridTransform.MoveToAnimated(stopCoordinates, AnimateMovementToCell);
 
-                // This should be a game event
-                bool canProgressToNextStop = false;
-                yield return GridTransform.CurrentCell.OnCharacterStoppedHere(canProgress => canProgressToNextStop = canProgress);
-
-                if (!canProgressToNextStop && targetCoordinates != GridTransform.Coordinates)
+                // Alert that we're there
+                GameEventCharacterStoppedData characterStoppedData = new GameEventCharacterStoppedData(stopCoordinates);
+                Level.EventProcessor.RaiseEventWithData(new GameEventCharacterStopped(characterStoppedData));
+                
+                // Perform any actions at that stop
+                foreach (GameEventCharacterStoppedData.StopAction stopAction in characterStoppedData.StopActions)
                 {
-                    onComplete?.Invoke(true, GridTransform.CurrentCell);
-                    yield break;
+                    yield return stopAction.ExecuteStopAction?.Invoke();
+                    
+                    // Possibly we need to stop early
+                    if (!stopAction.AfterActionCanProgress)
+                    {
+                        onComplete?.Invoke(true, GridTransform.CurrentCell);
+                    }
                 }
             }
             
+            // We reached the target
             onComplete?.Invoke(false, GridTransform.CurrentCell);
         }
 

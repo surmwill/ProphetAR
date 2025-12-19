@@ -22,8 +22,6 @@ namespace ProphetAR
 
         [SerializeField]
         private Transform _charactersRoot = null;
-
-        public delegate void OnCharacterStopComplete(bool canProgress);
         
         public event Action<GridTransform> OnOccupierAdded;
         
@@ -133,13 +131,6 @@ namespace ProphetAR
         }
         
         #region Occupiers
-
-        public IEnumerator OnCharacterStoppedHere(OnCharacterStopComplete onStopComplete = null)
-        {
-            // Need an interface which tells children about character stopping with semaphore. WaitUntil semaphore is 0, then this completes
-            onStopComplete?.Invoke(true);
-            yield break;
-        }
         
         public void AddOccupier(GridTransform addOccupier)
         {
