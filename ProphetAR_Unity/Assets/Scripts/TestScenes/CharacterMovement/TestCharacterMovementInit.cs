@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -10,12 +11,25 @@ namespace ProphetAR
         private Level _level = null;
 
         [SerializeField]
-        private Character[] _characters = null;
+        private List<Character> _characterPrefabs = null;
 
-        private TestCharacterMovement[] CharacterMovement =>
-            _characters.Select(character => character.GetComponent<TestCharacterMovement>()).ToArray();
+        [SerializeField]
+        private List<Vector2Int> _spawnCoordinates = null;
 
-        public void Update()
+        private List<TestCharacterMovement> CharactersMovement =>
+            _characters.Select(character => character.GetComponent<TestCharacterMovement>()).ToList();
+        
+        private readonly List<Character> _characters = new List<Character>();
+
+        private void Start()
+        {
+            for (int i = 0; i < _characterPrefabs.Count; i++)
+            {
+                _characters.Add(_level.Grid.InstantiateGridObject(_characterPrefabs[i], _spawnCoordinates[i]).GetComponent<Character>());
+            }
+        }
+
+        private void Update()
         {
             if (Input.GetKeyDown(KeyCode.M))
             {
@@ -29,12 +43,12 @@ namespace ProphetAR
 
         private void MoveCharactersToCoordinates()
         {
-            Array.ForEach(CharacterMovement, characterMovement => characterMovement.MoveToCoordinates());
+            CharactersMovement.ForEach(characterMovement => characterMovement.MoveToCoordinates());
         }
         
         private void WalkCharactersToCoordinates()
         {
-            Array.ForEach(CharacterMovement, characterMovement => characterMovement.WalkToCoordinates());
+            CharactersMovement.ForEach(characterMovement => characterMovement.WalkToCoordinates());
         }
     }
 }

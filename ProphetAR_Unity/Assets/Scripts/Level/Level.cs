@@ -6,6 +6,8 @@ namespace ProphetAR
     {
         [SerializeField]
         private CustomGrid _grid = null;
+
+        public CustomGrid Grid => _grid;
         
         public GameEventProcessor EventProcessor { get; } = new();
         

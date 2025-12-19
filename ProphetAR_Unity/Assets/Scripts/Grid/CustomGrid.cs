@@ -41,16 +41,17 @@ namespace ProphetAR
 
         public event Action<GridObject, bool> OnRemovedGridObject;
         
-        private readonly HashSet<GridObject> _gridObjects = new HashSet<GridObject>();
+        private readonly HashSet<GridObject> _gridObjects = new();
 
         // Keep track of what objects are on the grid
         #region GridObjectManagement
         
-        public void InstantiateGridObject(GridObject gridObjectOrPrefab, Vector2Int coordinates)
+        public T InstantiateGridObject<T>(T gridObjectOrPrefab, Vector2Int coordinates) where T : GridObject
         {
-            GridObject gridObject = Instantiate(gridObjectOrPrefab);
+            T gridObject = Instantiate(gridObjectOrPrefab);
             gridObject.Initialize(this);
             AddGridObject(gridObject, coordinates);
+            return gridObject;
         }
 
         public void AddGridObject(GridObject gridObject, Vector2Int coordinates)
