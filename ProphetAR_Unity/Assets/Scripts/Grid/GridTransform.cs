@@ -10,11 +10,32 @@ namespace ProphetAR
     /// </summary>
     public class GridTransform : MonoBehaviour
     {
+        public delegate IEnumerator AnimateMovement(Transform parent, Vector3 localPosition);
+        
         public GridObject GridObject { get; private set; }
         
         public CustomGrid Grid { get; private set; }
 
         public GridCellContent CurrentCell => Grid[Coordinates].Content;
+
+        public IGridContentSelfPositioner CurrentCellPositioner
+        {
+            get
+            {
+                if (_checkedForCurrentCellPositioner)
+                {
+                    return _currentCellPositioner;
+                }
+
+                _checkedForCurrentCellPositioner = true;
+                _currentCellPositioner = GetComponentInChildren<IGridContentSelfPositioner>();
+
+                return _currentCellPositioner;
+            }
+        }
+
+        private bool _checkedForCurrentCellPositioner;
+        private IGridContentSelfPositioner _currentCellPositioner;
         
         public Vector2Int Coordinates {
             get
@@ -53,7 +74,7 @@ namespace ProphetAR
             Grid = grid;
         }
         
-        public IEnumerator MoveToAnimated(Vector2Int moveToCoordinates, Func<Transform, IEnumerator> animateMovement, Func<GridCellContent, Transform> getCustomParentInCell = null)
+        public IEnumerator MoveToAnimated(Vector2Int moveToCoordinates, AnimateMovement animateMovement)
         {
             if (!HasCoordinates)
             {
@@ -73,14 +94,15 @@ namespace ProphetAR
             }
 
             GridCellContent gridCellContent = gridCell.Content;
-            Transform parent = getCustomParentInCell == null ? gridCellContent.transform : getCustomParentInCell(gridCellContent);
+            Transform toParent = CurrentCellPositioner == null ? gridCellContent.transform : CurrentCellPositioner.GetCellParent(gridCellContent);
+            Vector3 toLocalPosition = CurrentCellPositioner == null ? Vector3.zero : CurrentCellPositioner.GetLocalPositionInCell(gridCellContent);
             
-            yield return animateMovement(parent);
+            yield return animateMovement(toParent, toLocalPosition);
             
-            MoveToImmediate(moveToCoordinates, getCustomParentInCell);
+            MoveToImmediate(moveToCoordinates);
         }
 
-        public void MoveToImmediate(Vector2Int moveToCoordinates, Func<GridCellContent, Transform> getCustomParentInCell = null)
+        public void MoveToImmediate(Vector2Int moveToCoordinates)
         {
             if (HasCoordinates)
             {
@@ -100,10 +122,11 @@ namespace ProphetAR
             }
 
             GridCellContent gridCellContent = gridCell.Content;
-            Transform parent = getCustomParentInCell == null ? gridCellContent.transform : getCustomParentInCell(gridCellContent);
+            Transform toParent = CurrentCellPositioner == null ? gridCellContent.transform : CurrentCellPositioner.GetCellParent(gridCellContent);
+            Vector3 toLocalPosition = CurrentCellPositioner == null ? Vector3.zero : CurrentCellPositioner.GetLocalPositionInCell(gridCellContent);
             
-            transform.SetParent(parent);
-            transform.localPosition = Vector3.zero;
+            transform.SetParent(toParent);
+            transform.localPosition = toLocalPosition;
             Coordinates = moveToCoordinates;
             
             gridCellContent.AddOccupier(this);

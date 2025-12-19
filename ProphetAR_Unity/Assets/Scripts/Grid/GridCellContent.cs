@@ -19,6 +19,9 @@ namespace ProphetAR
 
         [SerializeField]
         private GridPointProperties _gridPointProperties = new();
+
+        [SerializeField]
+        private Transform _charactersRoot = null;
         
         public event Action<GridTransform> OnOccupierAdded;
         
@@ -39,6 +42,11 @@ namespace ProphetAR
         /// Things currently occupying this cell, but could move elsewhere
         /// </summary>
         public List<GridTransform> OccupierTransforms { get; } = new();
+
+        /// <summary>
+        /// Characters occupying this cell
+        /// </summary>
+        public Transform CharactersRoot => _charactersRoot;
         
         /// <summary>
         /// The Characters currently occupying the cell

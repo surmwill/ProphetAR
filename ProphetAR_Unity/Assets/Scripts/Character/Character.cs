@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace ProphetAR
 {
-    public class Character : GridObject
+    public class Character : GridObject, IGridContentSelfPositioner
     {
         public IEnumerator WalkToCoordinates(Vector2Int targetCoordinates)
         {
@@ -33,20 +33,31 @@ namespace ProphetAR
             foreach (NavigationInstructionSet instructionsToNextStop in stops)
             {
                 // Move to the stop, alert the cell when we're there
-                yield return GridTransform.MoveToAnimated(instructionsToNextStop.Target.ToVector2Int(), AnimateMovementToParentInCell, GetParentInCell);
+                yield return GridTransform.MoveToAnimated(instructionsToNextStop.Target.ToVector2Int(), AnimateMovementToCell);
                 yield return GridTransform.CurrentCell.OnCharacterStoppedHere();
             }
         }
-        
-        protected virtual Transform GetParentInCell(GridCellContent cellContent)
+
+        protected virtual IEnumerator AnimateMovementToCell(Transform cellParent, Vector3 localCellPosition)
         {
-            return cellContent.transform;
+            Sequence sequence = DOTween.Sequence().Append(
+                    DOTween.To(
+                        () => GridTransform.transform.position,
+                        nextWorldPosition => Grid.transform.position = nextWorldPosition,
+                        cellParent.TransformPoint(localCellPosition),
+                        2.4f));
+            
+            yield return sequence.WaitForCompletion();
         }
 
-        protected virtual IEnumerator AnimateMovementToParentInCell(Transform parent)
+        public virtual Transform GetCellParent(GridCellContent cell)
         {
-            Sequence sequence = DOTween.Sequence().Append(GridTransform.transform.DOMove(parent.position, 2.5f));
-            yield return sequence.WaitForCompletion();
+            return cell.CharactersRoot;
+        }
+
+        public virtual Vector3 GetLocalPositionInCell(GridCellContent cell)
+        {
+           return Vector3.zero;
         }
     }
 }
