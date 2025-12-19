@@ -27,6 +27,11 @@ namespace ProphetAR
 
         private void OnDestroy()
         {
+            if (IsDestroying)
+            {
+                return;
+            }
+            
             IsDestroying = true;
             Grid.DestroyGridObject(this);
         }

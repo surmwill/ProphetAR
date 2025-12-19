@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &780778875192575794
+--- !u!1 &669992801872872114
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,12 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1123747183046434977}
-  - component: {fileID: 5419546522279203994}
-  - component: {fileID: 6134497558782602794}
-  - component: {fileID: 7005293644698765004}
-  - component: {fileID: 152455108312814283}
-  - component: {fileID: 2355096972439812808}
+  - component: {fileID: 5600807840686081928}
+  - component: {fileID: 7827677229853624259}
+  - component: {fileID: 2376074411873385926}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -21,66 +18,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1123747183046434977
+--- !u!4 &5600807840686081928
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 780778875192575794}
+  m_GameObject: {fileID: 669992801872872114}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7159729352519532047}
+  m_Father: {fileID: 7027812677030942244}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5419546522279203994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 780778875192575794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee5f310633954e32b086e94edf76699f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6134497558782602794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 780778875192575794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee6df3adf819482db7575bbb2447748f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7005293644698765004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 780778875192575794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cc7fc66bec4485dbc62e65019eb2d64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _character: {fileID: 6134497558782602794}
-  _targetCoordinates: {x: 0, y: 0}
---- !u!23 &152455108312814283
+--- !u!23 &7827677229853624259
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 780778875192575794}
+  m_GameObject: {fileID: 669992801872872114}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -119,15 +78,15 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &2355096972439812808
+--- !u!33 &2376074411873385926
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 780778875192575794}
+  m_GameObject: {fileID: 669992801872872114}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &3528112443703453687
+--- !u!1 &6635799212570193993
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -135,27 +94,68 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7159729352519532047}
+  - component: {fileID: 7027812677030942244}
+  - component: {fileID: 8563755770520893034}
+  - component: {fileID: 8805206095572177566}
+  - component: {fileID: 1031846693824714399}
   m_Layer: 0
-  m_Name: TestCharacterMovement
+  m_Name: TextCharacterMovement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7159729352519532047
+--- !u!4 &7027812677030942244
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3528112443703453687}
+  m_GameObject: {fileID: 6635799212570193993}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1123747183046434977}
+  - {fileID: 5600807840686081928}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8563755770520893034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6635799212570193993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5f310633954e32b086e94edf76699f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8805206095572177566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6635799212570193993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee6df3adf819482db7575bbb2447748f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1031846693824714399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6635799212570193993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cc7fc66bec4485dbc62e65019eb2d64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _character: {fileID: 8805206095572177566}
+  _targetCoordinates: {x: 0, y: 0}

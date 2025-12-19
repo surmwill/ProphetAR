@@ -102,6 +102,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gridCellContent: {fileID: 3549696623761487564}
   _spriteBorderRenderer: {fileID: 8128841419937775866}
+--- !u!1 &6244963479876938549
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 411835549083021281}
+  m_Layer: 0
+  m_Name: Characters
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &411835549083021281
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6244963479876938549}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6411149020862629682}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9087120979018016324
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,6 +164,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2404943390859561486}
+  - {fileID: 411835549083021281}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3549696623761487564
@@ -148,3 +180,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cell: {fileID: 0}
+  _gridPointProperties:
+    _gridPointType: 0
+    _gridPoint: 0
+    _modificationStep: 1
+  _charactersRoot: {fileID: 411835549083021281}

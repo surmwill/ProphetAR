@@ -46,7 +46,19 @@ namespace ProphetAR
         /// <summary>
         /// Characters occupying this cell
         /// </summary>
-        public Transform CharactersRoot => _charactersRoot;
+        public Transform CharactersRoot
+        {
+            get
+            {
+                if (_charactersRoot == null)
+                {
+                    Debug.LogWarning("Missing characters root");
+                    return transform;
+                }
+
+                return _charactersRoot;
+            }
+        }
         
         /// <summary>
         /// The Characters currently occupying the cell

@@ -19,7 +19,7 @@ namespace ProphetAR
         private List<TestCharacterMovement> CharactersMovement =>
             _characters.Select(character => character.GetComponent<TestCharacterMovement>()).ToList();
         
-        private readonly List<Character> _characters = new List<Character>();
+        private readonly List<Character> _characters = new();
 
         private void Start()
         {

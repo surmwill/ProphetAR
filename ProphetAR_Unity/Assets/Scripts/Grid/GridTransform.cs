@@ -125,6 +125,8 @@ namespace ProphetAR
             Transform toParent = CurrentCellPositioner == null ? gridCellContent.transform : CurrentCellPositioner.GetCellParent(gridCellContent);
             Vector3 toLocalPosition = CurrentCellPositioner == null ? Vector3.zero : CurrentCellPositioner.GetLocalPositionInCell(gridCellContent);
             
+            Debug.Log("MOVE TO IMMEDIATE");
+            
             transform.SetParent(toParent);
             transform.localPosition = toLocalPosition;
             Coordinates = moveToCoordinates;
