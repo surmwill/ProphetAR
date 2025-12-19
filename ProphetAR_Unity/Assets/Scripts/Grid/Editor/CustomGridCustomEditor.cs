@@ -11,8 +11,8 @@ namespace ProphetAR
         private SerializedProperty _gridDimensions;
         private SerializedProperty _originGridSection;
         private SerializedProperty _savedGrid;
-        private SerializedProperty _minCoordinate;
-        private SerializedProperty _maxCoordinate;
+        private SerializedProperty _topLeftCoordinate;
+        private SerializedProperty _botRightCoordinate;
         
         private void OnEnable()
         {
@@ -22,8 +22,8 @@ namespace ProphetAR
             _originGridSection = serializedObject.FindProperty(nameof(_originGridSection));
             _savedGrid = serializedObject.FindProperty(nameof(_savedGrid));
             
-            _minCoordinate = serializedObject.FindProperty(nameof(_minCoordinate));
-            _maxCoordinate = serializedObject.FindProperty(nameof(_maxCoordinate));
+            _topLeftCoordinate = serializedObject.FindProperty(nameof(_topLeftCoordinate));
+            _botRightCoordinate = serializedObject.FindProperty(nameof(_botRightCoordinate));
         }
 
         public override void OnInspectorGUI()
@@ -36,8 +36,8 @@ namespace ProphetAR
             EditorGUILayout.PropertyField(_gridDimensions);
             EditorGUILayout.PropertyField(_originGridSection);
 
-            EditorGUILayout.PropertyField(_minCoordinate);
-            EditorGUILayout.PropertyField(_maxCoordinate);
+            EditorGUILayout.PropertyField(_topLeftCoordinate);
+            EditorGUILayout.PropertyField(_botRightCoordinate);
             
             EditorGUILayout.Space();
             if (GUILayout.Button("Save Grid"))
