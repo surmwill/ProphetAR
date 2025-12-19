@@ -10,11 +10,17 @@ namespace ProphetAR
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
+
+            TestCharacterMovement testCharacterMovement = (TestCharacterMovement) target;
             
             EditorGUILayout.Space();
             if (GUILayout.Button("Move To Coordinates"))
             {
-                ((TestCharacterMovement) target).MoveToCoordinates();
+                testCharacterMovement.MoveToCoordinates();
+            }
+            else if (GUILayout.Button("Walk To Coordinates"))
+            {
+                testCharacterMovement.WalkToCoordinates();
             }
         }
     }

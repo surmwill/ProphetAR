@@ -10,7 +10,9 @@ namespace ProphetAR
 {
     public class Character : GridObject, IGridContentSelfPositioner
     {
-        public IEnumerator WalkToCoordinates(Vector2Int targetCoordinates)
+        public delegate void OnWalkComplete(bool didStopEarly, GridCellContent stoppedAtCell);
+        
+        public IEnumerator WalkToCoordinates(Vector2Int targetCoordinates, OnWalkComplete onComplete = null)
         {
             if (targetCoordinates == GridTransform.Coordinates)
             {
@@ -34,8 +36,19 @@ namespace ProphetAR
             {
                 // Move to the stop, alert the cell when we're there
                 yield return GridTransform.MoveToAnimated(instructionsToNextStop.Target.ToVector2Int(), AnimateMovementToCell);
-                yield return GridTransform.CurrentCell.OnCharacterStoppedHere();
+
+                // This should be a game event
+                bool canProgressToNextStop = false;
+                yield return GridTransform.CurrentCell.OnCharacterStoppedHere(canProgress => canProgressToNextStop = canProgress);
+
+                if (!canProgressToNextStop && targetCoordinates != GridTransform.Coordinates)
+                {
+                    onComplete?.Invoke(true, GridTransform.CurrentCell);
+                    yield break;
+                }
             }
+            
+            onComplete?.Invoke(false, GridTransform.CurrentCell);
         }
 
         protected virtual IEnumerator AnimateMovementToCell(Transform cellParent, Vector3 localCellPosition)
