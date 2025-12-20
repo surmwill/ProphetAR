@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ProphetAR.Editor;
 using UnityEngine;
 
 namespace ProphetAR
@@ -22,6 +23,24 @@ namespace ProphetAR
 
         [SerializeField]
         private Transform _charactersRoot = null;
+
+        [Header("Debug")]
+        [SerializeField]
+        private bool _debugShowGridPointTypeIndicator = false;
+        
+        [SerializeField]
+        private GameObject _obstacleIndicatorPrefab = null;
+        
+        [SerializeField]
+        [ReadOnly]
+        private GameObject _currentIndicator = null;
+        
+        [HideInInspector]
+        [SerializeField]
+        private GameObject _lastIndicatorPrefab = null;
+
+        [SerializeField]
+        private GridPointType _lastGridPointType = GridPointType.Clear;
         
         public event Action<GridTransform> OnOccupierAdded;
         
@@ -68,6 +87,7 @@ namespace ProphetAR
             .Where(character => character != null);
 
         private bool _areEditModeListenersBound;
+        private bool _lastGridPointTypeDirty;
 
         private void OnEnable()
         {
@@ -155,5 +175,39 @@ namespace ProphetAR
         }
         
         #endregion
+        
+        private void OnValidate()
+        {
+            _gridPointProperties.OnValidate();
+            
+            if (!_debugShowGridPointTypeIndicator)
+            {
+                if (_currentIndicator != null)
+                {
+                    EditorUtils.DestroyInEditMode(_currentIndicator);     
+                }
+
+                _lastGridPointTypeDirty = true;
+                return;
+            }
+            
+            if (_lastGridPointTypeDirty || _lastGridPointType != GridPointProperties.GridPointType)
+            {
+                if (_currentIndicator != null)
+                {
+                    EditorUtils.DestroyInEditMode(_currentIndicator);     
+                }
+
+                switch (GridPointProperties.GridPointType)
+                {
+                    case GridPointType.Obstacle:
+                        _currentIndicator = Instantiate(_obstacleIndicatorPrefab, transform);
+                        break;
+                }
+
+                _lastGridPointType = GridPointProperties.GridPointType;
+                _lastGridPointTypeDirty = false;
+            }
+        }
     }
 }

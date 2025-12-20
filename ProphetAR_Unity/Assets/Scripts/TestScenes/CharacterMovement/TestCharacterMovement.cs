@@ -6,13 +6,22 @@ namespace ProphetAR
     public class TestCharacterMovement : MonoBehaviour
     {
         [SerializeField]
-        private Character _character = null;
-        
+        private Level _level = null;
+
+        [SerializeField]
+        private Character _characterPrefab = null;
+
         [SerializeField]
         private Vector2Int _targetCoordinates = Vector2Int.one;
-        
-        private Coroutine _walkToCoordinatesCoroutine = null;
 
+        private Character _character;
+        private Coroutine _walkToCoordinatesCoroutine;
+
+        private void Start()
+        {
+            _character = _level.Grid.InstantiateGridObject(_characterPrefab, _targetCoordinates);
+        }
+        
         public void MoveToCoordinates()
         {
             if (_walkToCoordinatesCoroutine != null)

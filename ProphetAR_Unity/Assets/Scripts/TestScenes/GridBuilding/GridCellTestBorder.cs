@@ -21,7 +21,7 @@ namespace ProphetAR
             if (ApplicationUtils.IsEditMode)
             {
                 // Guaranteed that the grid cell has been hooked up by Start (unless we're editing it independent of the cell in its own prefab)
-                if (!_areEditModeListenersBound && _gridCellContent != null)
+                if (!_areEditModeListenersBound && _gridCellContent.Cell != null)
                 {
                     BindEditModeListeners();
                     EditorOnCellDimensionsChanged(_gridCellContent.Cell.Dimensions);

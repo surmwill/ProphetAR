@@ -44,6 +44,11 @@ namespace ProphetAR
                 return;
             }
 
+            if (_cellContentPrefab == null)
+            {
+                Debug.LogWarning("No cell content prefab provided");
+            }
+
             if (_cellsParent == null)
             {
                 _cellsParent = new GameObject("CellsParent").GetComponent<Transform>();

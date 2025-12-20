@@ -97,9 +97,8 @@ GameObject:
   - component: {fileID: 7027812677030942244}
   - component: {fileID: 8563755770520893034}
   - component: {fileID: 8805206095572177566}
-  - component: {fileID: 1031846693824714399}
   m_Layer: 0
-  m_Name: TextCharacterMovement
+  m_Name: TextCharacterMovement_Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -145,17 +144,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee6df3adf819482db7575bbb2447748f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1031846693824714399
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6635799212570193993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cc7fc66bec4485dbc62e65019eb2d64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _character: {fileID: 8805206095572177566}
-  _targetCoordinates: {x: 1, y: 1}
