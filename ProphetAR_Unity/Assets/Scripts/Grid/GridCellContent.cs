@@ -30,6 +30,9 @@ namespace ProphetAR
         
         [SerializeField]
         private GameObject _obstacleIndicatorPrefab = null;
+
+        [SerializeField]
+        private GameObject _modificationStepIndicatorPrefab = null;
         
         [SerializeField]
         [ReadOnly]
@@ -202,6 +205,10 @@ namespace ProphetAR
                 {
                     case GridPointType.Obstacle:
                         _currentIndicator = Instantiate(_obstacleIndicatorPrefab, transform);
+                        break;
+                    
+                    case GridPointType.ModificationStep:
+                        _currentIndicator = Instantiate(_modificationStepIndicatorPrefab, transform);
                         break;
                 }
 
