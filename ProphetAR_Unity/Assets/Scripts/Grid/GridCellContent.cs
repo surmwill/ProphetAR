@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ProphetAR.Editor;
+using TMPro;
 using UnityEngine;
 
 namespace ProphetAR
@@ -32,7 +33,7 @@ namespace ProphetAR
         private GameObject _obstacleIndicatorPrefab = null;
 
         [SerializeField]
-        private GameObject _modificationStepIndicatorPrefab = null;
+        private DebugModificationStepIndicator _modificationStepIndicatorPrefab = null;
         
         [SerializeField]
         [ReadOnly]
@@ -209,12 +210,17 @@ namespace ProphetAR
                         break;
                     
                     case GridPointType.ModificationStep:
-                        _currentIndicator = Instantiate(_modificationStepIndicatorPrefab, transform);
+                        _currentIndicator = Instantiate(_modificationStepIndicatorPrefab.gameObject, transform);
                         break;
                 }
 
                 _lastGridPointType = GridPointProperties.GridPointType;
                 _lastGridPointTypeDirty = false;
+            }
+
+            if (GridPointProperties.GridPointType == GridPointType.ModificationStep)
+            {
+                _currentIndicator.GetComponent<DebugModificationStepIndicator>().SetModificationText(GridPointProperties.ModificationStep);   
             }
         }
     }
