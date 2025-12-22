@@ -15,8 +15,10 @@ namespace ProphetAR
         
         public GameTurnManager TurnManager { get; private set; }
 
-        public void Initialize(GamePlayerConfig[] playerConfigs)
+        public void Initialize(LevelConfig levelConfig, GamePlayerConfig[] playerConfigs)
         {
+            
+            
             Players = new GamePlayer[playerConfigs.Length];
             for (int i = 0; i < playerConfigs.Length; i++)
             {

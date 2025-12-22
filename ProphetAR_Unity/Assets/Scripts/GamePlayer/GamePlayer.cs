@@ -13,9 +13,7 @@
         public GamePlayer(GamePlayerConfig config)
         {
             State = new GamePlayerState(this);
-            
             Config = config;
-            config.InitializePlayerState(State);
         }
     }
 }

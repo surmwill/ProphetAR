@@ -1,14 +1,23 @@
-﻿namespace ProphetAR
+﻿using System.Collections.Generic;
+
+namespace ProphetAR
 {
     public class GamePlayerState
     {
         public CustomPriorityQueue<MultiGameTurnAction> MultiTurnActions { get; } = new();
         
-        private readonly GamePlayer _player;
+        public List<Character> Characters { get; private set; } 
+        
+        public GamePlayer Player { get; }
         
         public GamePlayerState(GamePlayer player)
         {
-            _player = player;
+            Player = player;
+        }
+        
+        public void InitializeFromConfiguration(GamePlayerConfig config)
+        {
+            Characters = config.Characters;
         }
     }
 }

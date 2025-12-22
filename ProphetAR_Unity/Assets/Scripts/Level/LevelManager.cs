@@ -8,19 +8,23 @@ namespace ProphetAR
         private Transform _levelParent = null;
         
         [SerializeField]
-        private GameObject[] _levelPrefabs = null;
+        private Level[] _levelPrefabs = null;
         
         public Level CurrLevel { get; private set; }
         
-        public void LoadLevel(int levelIndex)
+        public void LoadLevelFromIndex(int levelIndex)
+        {
+            LoadLevelFromPrefab(_levelPrefabs[levelIndex]);
+        }
+
+        public void LoadLevelFromPrefab(Level levelPrefab)
         {
             if (CurrLevel != null)
             {
                 Destroy(CurrLevel.gameObject);
             }
 
-            CurrLevel = Instantiate(_levelPrefabs[levelIndex], _levelParent).GetComponent<Level>();
+            CurrLevel = Instantiate(levelPrefab, _levelParent);
         }
-        
     }
 }

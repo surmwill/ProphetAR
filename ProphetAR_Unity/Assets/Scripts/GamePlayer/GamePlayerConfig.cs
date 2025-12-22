@@ -1,4 +1,5 @@
-﻿
+﻿using System.Collections.Generic;
+
 namespace ProphetAR
 {
     public class GamePlayerConfig
@@ -6,17 +7,14 @@ namespace ProphetAR
         public string PlayerUid { get; }
         
         public bool IsAI { get; }
+
+        public List<Character> Characters { get; } = new();
         
-        public GamePlayerConfig(string playerUid, bool isAI)
+        public GamePlayerConfig(string playerUid, bool isAI, List<Character> characters)
         {
             PlayerUid = playerUid;
             IsAI = isAI;
-        }
-
-        // Set any initial player state variables
-        public void InitializePlayerState(GamePlayerState playerState)
-        {
-            
+            Characters = characters;
         }
     }
 }
