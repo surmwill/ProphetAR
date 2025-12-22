@@ -42,6 +42,7 @@ namespace ProphetAR
         [SerializeField]
         private GameObject _lastIndicatorPrefab = null;
 
+        [HideInInspector]
         [SerializeField]
         private GridPointType _lastGridPointType = GridPointType.Clear;
         
