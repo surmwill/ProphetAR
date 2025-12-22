@@ -218,8 +218,7 @@ MonoBehaviour:
     _modificationStep: 1
   _charactersRoot: {fileID: 411835549083021281}
   _debugShowGridPointTypeIndicator: 1
-  _obstacleIndicatorPrefab: {fileID: 3442118190669443570, guid: fa22aa03a63b01c4cb3bdd77375ae291, type: 3}
-  _modificationStepIndicatorPrefab: {fileID: 8857235193277125272, guid: ba95f9ce4b14281488371ee222e4c27f, type: 3}
+  _obstacleIndicatorPrefab: {fileID: 408977478914957520, guid: fa22aa03a63b01c4cb3bdd77375ae291, type: 3}
+  _modificationStepIndicatorPrefab: {fileID: 5081978655349362276, guid: ba95f9ce4b14281488371ee222e4c27f, type: 3}
   _currentIndicator: {fileID: 0}
-  _lastIndicatorPrefab: {fileID: 0}
   _lastGridPointType: 0

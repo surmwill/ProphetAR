@@ -32,7 +32,7 @@ namespace ProphetAR
             switch (_gridPointType)
             {
                 case GridPointType.ModificationStep:
-                    _gridPoint = GridPoints.ModificationStepValueToGridPoint(_gridPoint);
+                    _gridPoint = GridPoints.ModificationStepValueToGridPoint(ModificationStep);
                     break;
                 
                 default:
