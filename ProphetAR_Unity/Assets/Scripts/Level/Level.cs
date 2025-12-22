@@ -10,24 +10,13 @@ namespace ProphetAR
         public CustomGrid Grid => _grid;
         
         public GameEventProcessor EventProcessor { get; } = new();
-        
-        public LevelState LevelState { get; } = new();
-
-        public LevelConfig LevelConfig { get; private set; } = new();
 
         public GamePlayer[] Players { get; private set; }
         
         public GameTurnManager TurnManager { get; private set; }
 
-        private LevelEventListener _levelEventListener;
-
-        public void Initialize(LevelConfig levelConfig, GamePlayerConfig[] playerConfigs)
+        public void Initialize(GamePlayerConfig[] playerConfigs)
         {
-            _levelEventListener = new LevelEventListener(this);
-            
-            LevelConfig = levelConfig;
-            levelConfig.InitializeLevelState(LevelState);
-            
             Players = new GamePlayer[playerConfigs.Length];
             for (int i = 0; i < playerConfigs.Length; i++)
             {

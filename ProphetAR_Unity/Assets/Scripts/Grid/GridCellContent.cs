@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ProphetAR.Editor;
-using TMPro;
 using UnityEngine;
 
 namespace ProphetAR
