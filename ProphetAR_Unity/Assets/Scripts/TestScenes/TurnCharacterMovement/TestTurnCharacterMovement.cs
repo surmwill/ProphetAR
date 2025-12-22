@@ -10,7 +10,7 @@ namespace ProphetAR
 
         private void Start()
         {
-            _level.Initialize(new GamePlayerConfig[]);
+            // _level.Initialize(new GamePlayerConfig[]);
         }
     }
 }

@@ -6,18 +6,16 @@ namespace ProphetAR
     {
         public CustomPriorityQueue<MultiGameTurnAction> MultiTurnActions { get; } = new();
         
-        public List<Character> Characters { get; private set; } 
+        public List<Character> Characters { get; } 
         
         public GamePlayer Player { get; }
         
-        public GamePlayerState(GamePlayer player)
+        public GamePlayerState(GamePlayer player, GamePlayerConfig initFromConfig)
         {
             Player = player;
-        }
-        
-        public void InitializeFromConfiguration(GamePlayerConfig config)
-        {
-            Characters = config.Characters;
+            
+            // Initialize fields from the configuration
+            Characters = initFromConfig.Characters;
         }
     }
 }
