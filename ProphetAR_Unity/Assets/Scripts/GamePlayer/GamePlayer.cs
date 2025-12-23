@@ -3,6 +3,8 @@
     public class GamePlayer
     {
         public string Uid => Config.PlayerUid;
+        
+        public int Index { get; }
 
         public GamePlayerState State { get; }
         
@@ -10,9 +12,11 @@
 
         public GameEventProcessor EventProcessor { get; } = new();
         
-        public GamePlayer(GamePlayerConfig config)
+        public GamePlayer(int index, GamePlayerConfig config)
         {
+            Index = index;
             Config = config;
+            
             State = new GamePlayerState(this, config);
         }
     }

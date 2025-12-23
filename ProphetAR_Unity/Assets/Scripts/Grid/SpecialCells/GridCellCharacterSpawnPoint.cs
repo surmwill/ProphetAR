@@ -1,20 +1,17 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProphetAR
 {
-    public class GridCellCharacterSpawnPoint : MonoBehaviour
+    public class GridCellCharacterSpawnPoint : MonoBehaviour, ILevelConfigContributor
     {
         [SerializeField]
-        private GridCellContent _gridCellContent;
-        
-        [SerializeField]
-        private Vector2Int _coordinates;
+        private GridCellContent _gridCellContent = null;
 
         [SerializeField]
-        private int _playerIndex = 0;
-        
-        public Vector2Int Coordinates => _coordinates;
+        private CharacterSpawnPoint _spawnPoint = default;
+
+        public string LevelConfigEditedBy => $"Character spawn point. Player Index: {_spawnPoint.PlayerIndex}, Coordinates: {_spawnPoint.Coordinates}";
 
         private Level Level => _gridCellContent.Cell.GridSection.ParentGrid.Level;
 
@@ -25,7 +22,18 @@ namespace ProphetAR
         
         private void OnValidate()
         {
-            _coordinates = GetComponentInParent<GridCell>().Coordinates;
+            _spawnPoint.Coordinates = GetComponentInParent<GridCell>().Coordinates;
+        }
+        
+        public void EditLevelConfig(LevelConfig levelConfig)
+        {
+            if (!levelConfig.PlayerSpawnPoints.TryGetValue(_spawnPoint.PlayerIndex, out List<CharacterSpawnPoint> spawnPoints))
+            {
+                spawnPoints = new List<CharacterSpawnPoint>();
+                levelConfig.PlayerSpawnPoints[_spawnPoint.PlayerIndex] = spawnPoints;
+            }
+            
+            spawnPoints.Add(_spawnPoint);
         }
     }
 }

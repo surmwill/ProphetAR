@@ -1,4 +1,5 @@
-﻿namespace ProphetAR
+﻿
+namespace ProphetAR
 {
     public class LevelState
     {

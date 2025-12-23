@@ -5,6 +5,10 @@ namespace ProphetAR
 {
     public class LevelConfig
     {
+        // Keys are the player index, values are the spawn information
+        [DynamicallyConfigured]
+        public Dictionary<int, List<CharacterSpawnPoint>> PlayerSpawnPoints { get; } = new();
+        
         // The references (keys) aren't descriptive, but they might be useful to inspect during a breakpoint
         private readonly Dictionary<ILevelConfigContributor, string> _debugEditedBy = new();
 
@@ -14,7 +18,7 @@ namespace ProphetAR
             configContributor.EditLevelConfig(this);
         }
 
-        public string GetEditedBy()
+        public string DebugGetEditedBy()
         {
             StringBuilder sb = new StringBuilder("Level config edited by:\n\n");
             foreach (string editedBy in _debugEditedBy.Values)
