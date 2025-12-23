@@ -11,50 +11,46 @@ namespace ProphetAR
 
         public CustomGrid Grid => _grid;
         
-        public GameEventProcessor EventProcessor { get; } = new();
-
+        public LevelConfig LevelConfig { get; private set; }
+        
+        public LevelState LevelState { get; private set; }
+        
         public GamePlayer[] Players { get; private set; }
+        
+        public GameEventProcessor EventProcessor { get; } = new();
         
         public GameTurnManager TurnManager { get; private set; }
 
-        private readonly List<IContributesToLevelConfig> _levelConfigContributors = new();
+        private readonly List<ILevelConfigContributor> _levelConfigContributors = new();
 
         private bool _isInitialized;
 
         public void Initialize(LevelConfig levelConfig, GamePlayerConfig[] playerConfigs)
         {
+            // Initialize the players and their state given the configurations
             Players = new GamePlayer[playerConfigs.Length];
             for (int i = 0; i < playerConfigs.Length; i++)
             {
                 Players[i] = new GamePlayer(playerConfigs[i]);
             }
-
-            TurnManager = new GameTurnManager(this, Players);
             
-            // Initialize the level state from the level configuration
-            #if UNITY_EDITOR
-            StringBuilder levelConfigContributorsString = new StringBuilder("Level config edited by:\n\n");
-            #endif
-            
+            // Initialize the level and its state given the configuration
             for (int i = 0; i < _levelConfigContributors.Count; i++)
             {
-                IContributesToLevelConfig levelConfigContributor = _levelConfigContributors[i];
-                
-                #if UNITY_EDITOR
-                levelConfigContributorsString.AppendLine($"{i+1}: {levelConfigContributor.LevelConfigEditedBy}");
-                #endif
-                
-                // First ask if anything in the level has anything to add to the configuration
-                levelConfigContributor.EditLevelConfig(levelConfig);
+                // Different things in the level might add to the configuration (ex: spawn points, special cells)
+                levelConfig.Modify(_levelConfigContributors[i]);
             }
             
             #if UNITY_EDITOR
-            Debug.Log(levelConfigContributorsString);
+            Debug.Log(levelConfig.GetEditedBy());
             #endif
-            
-            // Set level state
-            
 
+            LevelConfig = levelConfig;
+            LevelState = new LevelState(this, levelConfig);
+            
+            // Initialize the turn manager
+            TurnManager = new GameTurnManager(this, Players);
+            
             _isInitialized = true;
         }
 
@@ -63,7 +59,7 @@ namespace ProphetAR
             TurnManager.NextTurn();   
         }
 
-        public void AddLevelConfigContributor(IContributesToLevelConfig levelConfigContributor)
+        public void AddLevelConfigContributor(ILevelConfigContributor levelConfigContributor)
         {
             if (_isInitialized)
             {

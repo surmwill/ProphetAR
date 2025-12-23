@@ -1,6 +1,6 @@
 ﻿namespace ProphetAR
 {
-    public interface IContributesToLevelConfig
+    public interface ILevelConfigContributor
     {
         string LevelConfigEditedBy { get; }
 

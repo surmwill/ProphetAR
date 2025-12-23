@@ -4,9 +4,7 @@
     {
         public Level Level { get; }
         
-        
-        
-        public LevelState(Level level, LevelConfig initFromConfig)
+        public LevelState(Level level, LevelConfig initConfig)
         {
             Level = level;
         }

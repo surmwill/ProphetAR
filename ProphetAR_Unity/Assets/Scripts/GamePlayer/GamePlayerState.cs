@@ -10,12 +10,12 @@ namespace ProphetAR
         
         public GamePlayer Player { get; }
         
-        public GamePlayerState(GamePlayer player, GamePlayerConfig initFromConfig)
+        public GamePlayerState(GamePlayer player, GamePlayerConfig initConfig)
         {
             Player = player;
             
             // Initialize fields from the configuration
-            Characters = initFromConfig.Characters;
+            Characters = initConfig.Characters;
         }
     }
 }
