@@ -11,6 +11,9 @@ namespace ProphetAR
         [SerializeField]
         private CharacterSpawnPoint _spawnPoint = default;
 
+        [SerializeField]
+        private GameObject _debugIndicator = null;
+
         public string LevelConfigEditedBy => $"Character spawn point. Player Index: {_spawnPoint.PlayerIndex}, Coordinates: {_spawnPoint.Coordinates}";
 
         private Level Level => _gridCellContent.Cell.GridSection.ParentGrid.Level;
@@ -22,6 +25,11 @@ namespace ProphetAR
         
         private void OnValidate()
         {
+            if (_gridCellContent == null)
+            {
+                _gridCellContent = GetComponentInChildren<GridCellContent>();
+            }
+            
             _spawnPoint.Coordinates = GetComponentInParent<GridCell>().Coordinates;
         }
         
