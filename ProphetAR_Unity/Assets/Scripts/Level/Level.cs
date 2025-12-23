@@ -26,6 +26,11 @@ namespace ProphetAR
 
         private bool _isInitialized;
 
+        public void Initialize(GamePlayerConfig[] playerConfigs)
+        {
+            Initialize(new LevelConfig(), playerConfigs);
+        }
+
         public void Initialize(LevelConfig levelConfig, GamePlayerConfig[] playerConfigs)
         {
             // Initialize the data needed to create the level
