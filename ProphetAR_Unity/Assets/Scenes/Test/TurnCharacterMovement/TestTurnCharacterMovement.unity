@@ -9902,6 +9902,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6411149020862629682, guid: e725aa8129522b24c97b1bc91775387e, type: 3}
   m_PrefabInstance: {fileID: 1164427718}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1164427720 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3549696623761487564, guid: e725aa8129522b24c97b1bc91775387e, type: 3}
+  m_PrefabInstance: {fileID: 1164427718}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49aba9b4b79a438a932f5959d3cf1268, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1182269815
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17295,6 +17306,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1164427719}
     m_Modifications:
+    - target: {fileID: 2078181460411078346, guid: f6add1b374d570e4e915bebe482eb9dc, type: 3}
+      propertyPath: _gridCellContent
+      value: 
+      objectReference: {fileID: 1164427720}
     - target: {fileID: 4600850141896720628, guid: f6add1b374d570e4e915bebe482eb9dc, type: 3}
       propertyPath: m_IsActive
       value: 1

@@ -30,7 +30,7 @@ namespace ProphetAR
         {
             if (_gridCellContent == null)
             {
-                _gridCellContent = GetComponentInChildren<GridCellContent>();
+                _gridCellContent = GetComponentInParent<GridCellContent>();
             }
 
             if (_gridCellContent != null)
