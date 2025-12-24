@@ -101,6 +101,10 @@ namespace ProphetAR
             }
             
             _cellContentPrefab = contentPrefab;
+            
+            #if UNITY_EDITOR
+            EditorUtility.SetDirty(this);
+            #endif
         }
     }
 }

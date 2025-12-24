@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ProphetAR
 {
@@ -7,9 +8,9 @@ namespace ProphetAR
     {
         [SerializeField]
         private GridCellContent _gridCellContent = null;
-
+        
         [SerializeField]
-        private SpriteRenderer _spriteBorderRenderer = null;
+        private Image _spriteBorderImage = null;
 
         private const float ScaleDownForMargin = 0.95f;
 
@@ -88,7 +89,7 @@ namespace ProphetAR
 
         private void EditorOnCellCoordinatesChanged(Vector2 newCoordinates)
         {
-            _spriteBorderRenderer.color = newCoordinates == Vector2.zero ? Color.green : Color.white;
+            _spriteBorderImage.color = newCoordinates == Vector2.zero ? Color.green : Color.white;
         }
     }
 }

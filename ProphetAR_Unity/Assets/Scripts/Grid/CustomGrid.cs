@@ -30,6 +30,9 @@ namespace ProphetAR
         private GridSection _originGridSection = null;
 
         [SerializeField]
+        private bool _showGridPointTypeIndicators = false;
+        
+        [SerializeField]
         private bool _showSpawnPoints = false;
         
         [SerializeField]

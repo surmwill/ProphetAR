@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using ProphetAR.Editor;
+#endif
+
 namespace ProphetAR
 {
     /// <summary>
@@ -85,6 +89,7 @@ namespace ProphetAR
             .Where(character => character != null);
 
         private bool _areEditModeListenersBound;
+        private bool _lastGridPointTypeDirty;
 
         private void OnEnable()
         {
@@ -173,6 +178,81 @@ namespace ProphetAR
         
         #endregion
         
+        #region Debug
         
+        public void DebugShowGridPointTypeIndicator(bool shouldShow)
+        {
+            _debugShowGridPointTypeIndicator = shouldShow;
+            DebugUpdateShowGridPointTypeIndicator();
+        }
+        
+        private void DebugUpdateShowGridPointTypeIndicator()
+        {
+            if (!_debugShowGridPointTypeIndicator)
+            {
+                if (_currentIndicator != null)
+                {
+                    #if UNITY_EDITOR
+                    if (!Application.isPlaying)
+                    {
+                        EditorUtils.DestroyInEditMode(_currentIndicator.gameObject);   
+                    }
+                    else
+                    {
+                        Destroy(_currentIndicator.gameObject);
+                    }
+                    #else
+                    Destroy(_currentIndicator.gameObject);
+                    #endif
+                    
+                    _currentIndicator = null;
+                }
+
+                _lastGridPointTypeDirty = true;
+                return;
+            }
+            
+            if (_lastGridPointTypeDirty || _lastGridPointType != GridPointProperties.GridPointType)
+            {
+                if (_currentIndicator != null)
+                {
+                    #if UNITY_EDITOR
+                    if (!Application.isPlaying)
+                    {
+                        EditorUtils.DestroyInEditMode(_currentIndicator.gameObject);   
+                    }
+                    else
+                    {
+                        Destroy(_currentIndicator.gameObject);
+                    }
+                    #else
+                    Destroy(_currentIndicator.gameObject);
+                    #endif
+                    
+                    _currentIndicator = null;
+                }
+
+                switch (GridPointProperties.GridPointType)
+                {
+                    case GridPointType.Obstacle:
+                        _currentIndicator = Instantiate(_obstacleIndicatorPrefab, transform);
+                        break;
+                    
+                    case GridPointType.ModificationStep:
+                        _currentIndicator = Instantiate(_modificationStepIndicatorPrefab, transform);
+                        break;
+                }
+
+                _lastGridPointType = GridPointProperties.GridPointType;
+                _lastGridPointTypeDirty = false;
+            }
+
+            if (_currentIndicator != null)
+            {
+                _currentIndicator.SetGridPoint(GridPointProperties.GridPoint);
+            }
+        }
+        
+        #endregion
     }
 }

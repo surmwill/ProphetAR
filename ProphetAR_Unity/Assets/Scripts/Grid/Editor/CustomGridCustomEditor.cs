@@ -15,6 +15,7 @@ namespace ProphetAR
         private SerializedProperty _topLeftCoordinate;
         private SerializedProperty _botRightCoordinate;
 
+        private SerializedProperty _showGridPointTypeIndicators;
         private SerializedProperty _showSpawnPoints;
         
         private void OnEnable()
@@ -28,6 +29,7 @@ namespace ProphetAR
             _topLeftCoordinate = serializedObject.FindProperty(nameof(_topLeftCoordinate));
             _botRightCoordinate = serializedObject.FindProperty(nameof(_botRightCoordinate));
 
+            _showGridPointTypeIndicators = serializedObject.FindProperty(nameof(_showGridPointTypeIndicators));
             _showSpawnPoints = serializedObject.FindProperty(nameof(_showSpawnPoints));
         }
 
@@ -37,13 +39,30 @@ namespace ProphetAR
 
             EditorGUILayout.Space();
             EditorGUILayout.PropertyField(_level);
-            
-            EditorGUILayout.PropertyField(_gridDimensions);
             EditorGUILayout.PropertyField(_originGridSection);
 
+            // Read-only grid properties
+            EditorGUILayout.PropertyField(_gridDimensions);
             EditorGUILayout.PropertyField(_topLeftCoordinate);
             EditorGUILayout.PropertyField(_botRightCoordinate);
             
+            
+
+            // Toggle grid point type indicators
+            bool prevShowGridPointTypeIndicators = _showGridPointTypeIndicators.boolValue;
+            EditorGUILayout.PropertyField(_showGridPointTypeIndicators);
+            if (_showGridPointTypeIndicators.boolValue != prevShowGridPointTypeIndicators)
+            {
+                foreach (GridCell gridCell in grid.Cells.Values)
+                {
+                    if (gridCell.Content != null)
+                    {
+                        gridCell.Content.DebugShowGridPointTypeIndicator(_showGridPointTypeIndicators.boolValue);
+                    }
+                }
+            }
+            
+            // Toggle spawn points
             bool prevShowSpawnPoints = _showSpawnPoints.boolValue;
             EditorGUILayout.PropertyField(_showSpawnPoints);
             if (_showSpawnPoints.boolValue != prevShowSpawnPoints)
@@ -59,6 +78,7 @@ namespace ProphetAR
                 }
             }
             
+            // Build the grid coordinates
             EditorGUILayout.Space();
             if (GUILayout.Button("Save Grid"))
             {
@@ -66,6 +86,7 @@ namespace ProphetAR
                 EditorUtility.SetDirty(target);
             }
             
+            // Read-only (long) list of saved grid coordinates
             EditorGUILayout.Space();
             EditorGUILayout.PropertyField(_savedGrid);
 
