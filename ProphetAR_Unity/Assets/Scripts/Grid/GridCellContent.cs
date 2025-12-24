@@ -192,19 +192,7 @@ namespace ProphetAR
             {
                 if (_currentIndicator != null)
                 {
-                    #if UNITY_EDITOR
-                    if (!Application.isPlaying)
-                    {
-                        EditorUtils.DestroyInEditMode(_currentIndicator.gameObject);   
-                    }
-                    else
-                    {
-                        Destroy(_currentIndicator.gameObject);
-                    }
-                    #else
-                    Destroy(_currentIndicator.gameObject);
-                    #endif
-                    
+                    DestroyUtils.DestroyAnywhere(_currentIndicator.gameObject);
                     _currentIndicator = null;
                 }
 
@@ -215,20 +203,8 @@ namespace ProphetAR
             if (_lastGridPointTypeDirty || _lastGridPointType != GridPointProperties.GridPointType)
             {
                 if (_currentIndicator != null)
-                {
-                    #if UNITY_EDITOR
-                    if (!Application.isPlaying)
-                    {
-                        EditorUtils.DestroyInEditMode(_currentIndicator.gameObject);   
-                    }
-                    else
-                    {
-                        Destroy(_currentIndicator.gameObject);
-                    }
-                    #else
-                    Destroy(_currentIndicator.gameObject);
-                    #endif
-                    
+                { 
+                    DestroyUtils.DestroyAnywhere(_currentIndicator.gameObject);
                     _currentIndicator = null;
                 }
 

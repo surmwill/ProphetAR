@@ -64,7 +64,7 @@ namespace ProphetAR
             {
                 if (_cellContent != null)
                 {
-                    EditorUtils.DestroyInEditMode(_cellContent.gameObject);   
+                    DestroyUtils.DestroyAnywhere(_cellContent.gameObject);   
                 }
 
                 if (_cellContentPrefab != null)

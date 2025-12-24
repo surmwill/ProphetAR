@@ -19,8 +19,9 @@ namespace ProphetAR
         {
             if (_cellsParent != null)
             {
-                EditorUtils.DestroyInEditMode(_cellsParent.gameObject);
+                DestroyUtils.DestroyAnywhere(_cellsParent.gameObject);
             }
+            
             _sectionDimensions = Vector2.zero;
         }
         
@@ -221,7 +222,7 @@ namespace ProphetAR
                 
                 if (col == currNumCols - 1)
                 {
-                    EditorUtils.DestroyInEditMode(lastCellTransform.gameObject);   
+                    DestroyUtils.DestroyAnywhere(lastCellTransform.gameObject);   
                 }
             }
 
@@ -248,7 +249,7 @@ namespace ProphetAR
                     }
                     else
                     {
-                        EditorUtils.DestroyInEditMode(cellTransform.gameObject);
+                        DestroyUtils.DestroyAnywhere(cellTransform.gameObject);
                     }
                 }
             }
@@ -344,7 +345,7 @@ namespace ProphetAR
                 }
                 else
                 {
-                    EditorUtils.DestroyInEditMode(rowTransform.gameObject);
+                    DestroyUtils.DestroyAnywhere(rowTransform.gameObject);
                 }
             }
 
@@ -364,7 +365,7 @@ namespace ProphetAR
             
             if (int.Parse(lastRow.name) == currNumRows - 1)
             {
-                EditorUtils.DestroyInEditMode(lastRow.gameObject);
+                DestroyUtils.DestroyAnywhere(lastRow.gameObject);
             }
 
             _sectionDimensions = _sectionDimensions.AddX(-1);

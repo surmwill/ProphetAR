@@ -16,18 +16,19 @@ namespace ProphetAR.Editor
         /// If we wish to destroy something during OnValidate we'll need to move the actual destruction outside of the call.
         /// </summary>
         /// <param name="obj"> The object to destroy </param>
-        public static void DestroyInEditMode(Object obj, Action callback = null)
+        public static void DestroyOnValidate(Object obj)
         {
-            if (!Application.isEditor || Application.isPlaying)
+            if (Application.isPlaying)
             {
-                Debug.LogWarning($"{nameof(DestroyInEditMode)} should only be called while you are in the editor and not running the application");
+                Object.Destroy(obj);
             }
-            
-            EditorApplication.delayCall += () =>
+            else
             {
-                Object.DestroyImmediate(obj);
-                callback?.Invoke();
-            };
+                EditorApplication.delayCall += () =>
+                {
+                    Object.DestroyImmediate(obj);
+                };   
+            }
         }
     }
 }
