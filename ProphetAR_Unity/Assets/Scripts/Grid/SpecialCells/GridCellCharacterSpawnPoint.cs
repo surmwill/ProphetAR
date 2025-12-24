@@ -13,6 +13,9 @@ namespace ProphetAR
 
         [SerializeField]
         private GameObject _debugIndicator = null;
+        
+        [SerializeField]
+        private DebugGamePlayerMaterials _debugGamePlayerMaterials = null;
 
         public string LevelConfigEditedBy => $"Character spawn point. Player Index: {_spawnPoint.PlayerIndex}, Coordinates: {_spawnPoint.Coordinates}";
 
@@ -29,8 +32,18 @@ namespace ProphetAR
             {
                 _gridCellContent = GetComponentInChildren<GridCellContent>();
             }
+
+            if (_gridCellContent != null)
+            {
+                _spawnPoint.Coordinates = _gridCellContent.Cell.Coordinates;    
+            }
             
-            _spawnPoint.Coordinates = GetComponentInParent<GridCell>().Coordinates;
+            _debugIndicator.GetComponentInChildren<MeshRenderer>().sharedMaterial = _debugGamePlayerMaterials.PlayerMaterials[_spawnPoint.PlayerIndex];
+        }
+
+        public void ShowDebugIndicator(bool shouldShow)
+        {
+            _debugIndicator.SetActive(shouldShow);
         }
         
         public void EditLevelConfig(LevelConfig levelConfig)

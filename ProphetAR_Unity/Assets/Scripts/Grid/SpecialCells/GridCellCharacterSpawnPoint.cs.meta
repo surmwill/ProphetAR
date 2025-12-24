@@ -1,3 +1,14 @@
-﻿fileFormatVersion: 2
+fileFormatVersion: 2
 guid: 0ec3d700a0b542df90c4b3eac6ac5eee
-timeCreated: 1766368553
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _gridCellContent: {instanceID: 0}
+  - _debugIndicator: {instanceID: 0}
+  - _debugGamePlayerMaterials: {fileID: 11400000, guid: 6cb192f047785194e98debb44b0c9faf, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

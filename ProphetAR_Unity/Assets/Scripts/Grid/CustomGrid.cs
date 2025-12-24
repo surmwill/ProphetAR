@@ -28,6 +28,9 @@ namespace ProphetAR
         // Used for building the grid
         [SerializeField]
         private GridSection _originGridSection = null;
+
+        [SerializeField]
+        private bool _showSpawnPoints = false;
         
         [SerializeField]
         [ReadOnly]
