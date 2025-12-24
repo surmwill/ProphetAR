@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace ProphetAR
@@ -67,6 +68,8 @@ namespace ProphetAR
                 
                 savedGridCell.GridCell.GridSection.SetParentGrid(this);
                 savedGridCell.GridCell.SetCoordinates(savedGridCell.Coordinates);
+                
+                EditorUtility.SetDirty(savedGridCell.GridCell);
             }
 
             _gridDimensions = new Vector2Int(maxX.Value - minX.Value + 1, maxY.Value - minY.Value + 1);
