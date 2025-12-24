@@ -1,8 +1,6 @@
 ﻿#if UNITY_EDITOR
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using ProphetAR.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -401,7 +399,7 @@ namespace ProphetAR
             }
         }
 
-        private void OnValidate()
+        private void ValidateGridSnaps()
         {
             if (_gridSnaps == null)
             {
@@ -431,6 +429,25 @@ namespace ProphetAR
                     gridSnap.SetSnapSection(null);
                 }
             }
+        }
+
+        private void ValidateCellContent()
+        {
+            if (_cellContentPrefab != _prevCellContentPrefab)
+            {
+                foreach (GridCell gridCell in GetCells())
+                {
+                    gridCell.SetContent(_cellContentPrefab);
+                }
+
+                _prevCellContentPrefab = _cellContentPrefab;
+            }
+        }
+
+        private void OnValidate()
+        {
+            ValidateGridSnaps();
+            ValidateCellContent();
         }
     }
 }

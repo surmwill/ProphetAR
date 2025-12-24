@@ -32,6 +32,10 @@ namespace ProphetAR
         [SerializeField]
         private GridCellContent _cellContentPrefab = null;
 
+        [HideInInspector]
+        [SerializeField]
+        private GridCellContent _prevCellContentPrefab = null;
+
         [SerializeField]
         private List<GridSnap> _gridSnaps = null;
 
