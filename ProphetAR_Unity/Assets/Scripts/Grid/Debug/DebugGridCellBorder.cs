@@ -18,6 +18,7 @@ namespace ProphetAR
 
         private void Start()
         {
+            // Run when the cell content has just been instantiated
             #if UNITY_EDITOR
             if (ApplicationUtils.IsEditMode && TryBindEditModeListeners())
             {
@@ -29,6 +30,7 @@ namespace ProphetAR
 
         private void OnEnable()
         {
+            // Run when the cell content already exists
             #if UNITY_EDITOR
             if (ApplicationUtils.IsEditMode && TryBindEditModeListeners())
             {

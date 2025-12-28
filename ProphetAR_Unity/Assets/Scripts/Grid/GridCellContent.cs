@@ -93,10 +93,10 @@ namespace ProphetAR
 
         private void OnEnable()
         {
+            // Handles the case where the cell content is already hooked up
             #if UNITY_EDITOR
             if (ApplicationUtils.IsEditMode)
             {
-                // Handles the case where the cell content is already hooked up
                 BindEditModeListeners();   
             }
             #endif
@@ -104,10 +104,10 @@ namespace ProphetAR
         
         private void Start()
         {
+            // Handles the case when we're instantiating new cell content 
             #if UNITY_EDITOR
             if (ApplicationUtils.IsEditMode)
             {
-                // Handles the case when we're instantiating new cell content 
                 BindEditModeListeners();   
             }
             #endif
