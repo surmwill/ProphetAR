@@ -42,8 +42,6 @@ namespace ProphetAR
         // Query what actions the player will need to take this turn. These actions might propagate into further actions
         public void InitialBuild()
         {
-            // Query standard actions for player. Add
-            
             // Anyone else can also add actions to the player through this event
             Player.EventProcessor.RaiseEventWithoutData(new GameEventBuildInitialGameTurn());
             
@@ -51,6 +49,10 @@ namespace ProphetAR
             ActionRequests.OnAdded += OnAddedActionRequest;
             ActionRequests.OnRemoved += OnRemovedActionRequest;
             ActionRequests.OnPriorityChanged += OnChangedActionRequestPriority;
+            
+            // The starting state of the turn is now finalized.
+            // (Certain actions might trigger further actions, altering the turn. The turn's state changes can be monitored through the above events)
+            Player.EventProcessor.RaiseEventWithoutData(new GameEventOnInitialGameTurnBuilt(ActionRequests));
         }
         
         public void CompleteActionRequest(GameTurnActionRequest actionRequest)

@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.swill.recycler": {
+      "version": "https://github.com/surmwill/recycler_unity.git?path=/RecyclerUnity/Assets/Recycler#v1.0.4",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "faf1b31bf82c33f71c16cdfbceaa1c2b33e797ca"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
