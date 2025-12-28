@@ -7,13 +7,7 @@ namespace ProphetAR
     public class TestCharacterMovement : MonoBehaviour
     {
         [SerializeField]
-        private Level _level = null;
-
-        [SerializeField]
-        private Character _characterPrefab = null;
-
-        [SerializeField]
-        private Vector2Int _targetCoordinates = Vector2Int.one;
+        private Vector2Int _targetCoordinates = Vector2Int.zero;
 
         private Character _character;
         private Coroutine _walkToCoordinatesCoroutine;

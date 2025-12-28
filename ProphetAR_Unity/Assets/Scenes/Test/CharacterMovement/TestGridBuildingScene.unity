@@ -11208,7 +11208,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _level: {fileID: 874366614}
   _characterPrefab: {fileID: 8805206095572177566, guid: a623a53404a5d0f49ae87ff6e5d00009, type: 3}
-  _targetCoordinates: {x: 1, y: 1}
+  _spawnCoordinates: {x: 0, y: 0}
+  _gamePlayerIndex: -1
+  _onStart: 1
 --- !u!1001 &885649791
 PrefabInstance:
   m_ObjectHideFlags: 0
