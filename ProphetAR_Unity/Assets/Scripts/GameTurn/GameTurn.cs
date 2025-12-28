@@ -16,8 +16,6 @@ namespace ProphetAR
         public List<Dictionary<string, object>> SerializedTurnActionsForServer { get; } = new();
 
         private readonly Level _level;
-        
-        private readonly HashSet<GameTurnActionOverTurns> _processedMultiGameTurnActions = new();
 
         // The key is the type of game event that fulfills the action request
         private readonly Dictionary<Type, List<GameTurnActionRequest>> _actionRequestsForFulfillment = new();
@@ -90,32 +88,43 @@ namespace ProphetAR
         {
             List<GameTurnActionOverTurns> cancelledActions = new List<GameTurnActionOverTurns>();
             List<GameTurnActionOverTurns> completedActions = new List<GameTurnActionOverTurns>();
-            List<GameTurnActionRequest> manualActionsRequired = new List<GameTurnActionRequest>();
+            List<GameTurnActionRequest> manualActionRequests = new List<GameTurnActionRequest>();
             
-            foreach (GameTurnActionOverTurns multiGameTurnAction in Player.State.MultiTurnActions
-                         .Select(multiGameTurnActionItem => multiGameTurnActionItem.Data)
-                         .Where(multiGameTurnAction => multiGameTurnAction.StartAtTurnNum >= TurnNumber && _processedMultiGameTurnActions.Add(multiGameTurnAction)))
+            foreach (GameTurnActionOverTurns actionOverTurns in Player.State.ActionsOverTurns.Where(actionOverTurns => actionOverTurns.StartAtTurnNum >= TurnNumber))
             {
-                if (!multiGameTurnAction.ActionOverTurnsCoroutine.MoveNext())
+                if (!actionOverTurns.Turns.MoveNext())
                 {
-                    completedActions.Add(multiGameTurnAction);
+                    completedActions.Add(actionOverTurns);
                     continue;
                 }
 
-                GameTurnActionRequest manualActionRequired = multiGameTurnAction.ActionOverTurnsCoroutine.Current;
-                if (manualActionRequired != null)
+                GameTurnActionOverTurnsTurn actionOverTurnsTurn = actionOverTurns.Turns.Current;
+                if (actionOverTurnsTurn != null)
                 {
-                    cancelledActions.Add(multiGameTurnAction);
-                    manualActionsRequired.Add(manualActionRequired);
+                    switch (actionOverTurnsTurn.Operation)
+                    {
+                        case GameTurnActionOverTurnsTurn.TurnOperation.Coroutine:
+                            yield return actionOverTurnsTurn.TurnCoroutine;
+                            break;
+                    
+                        case GameTurnActionOverTurnsTurn.TurnOperation.Callback:
+                            actionOverTurnsTurn.TurnCallback?.Invoke();
+                            break;
+                    
+                        case GameTurnActionOverTurnsTurn.TurnOperation.ManualActionRequest:
+                            cancelledActions.Add(actionOverTurns);
+                            manualActionRequests.Add(actionOverTurnsTurn.ManualActionRequest);
+                            break;
+                    }   
                 }
             }
 
             foreach (GameTurnActionOverTurns completedAction in completedActions.Concat(cancelledActions))
             {
-                Player.State.MultiTurnActions.Remove(completedAction);
+                Player.State.ActionsOverTurns.Remove(completedAction);
             }
 
-            foreach (GameTurnActionRequest manualActionRequired in manualActionsRequired)
+            foreach (GameTurnActionRequest manualActionRequired in manualActionRequests)
             {
                 ActionRequests.Enqueue(manualActionRequired);
             }

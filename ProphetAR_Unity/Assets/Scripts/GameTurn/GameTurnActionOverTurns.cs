@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 
 namespace ProphetAR
 {
@@ -7,16 +7,23 @@ namespace ProphetAR
     /// </summary>
     public abstract class GameTurnActionOverTurns : CustomPriorityQueueItem<GameTurnActionOverTurns>
     {
-        public abstract IEnumerator ActionOverTurnsCoroutine { get; }
-
         public int StartAtTurnNum { get; } 
+        
+        public IEnumerator<GameTurnActionOverTurnsTurn> Turns => _turns ??= ActionOverTurns();
+
+        protected abstract IEnumerator<GameTurnActionOverTurnsTurn> ActionOverTurns();
+
+        private IEnumerator<GameTurnActionOverTurnsTurn> _turns;
         
         public GameTurnActionOverTurns(int? startAtTurnNum = null)
         {
-            // Default start on the next turn. Normally a multi-turn action will execute its first step as a manual user
-            // action to clear the associated action request. Next turn the same action won't need to be raised again as
-            // it's now being handled by the multi-turn action
+            // Default start on the next turn
             StartAtTurnNum = startAtTurnNum ?? LevelManager.Instance.CurrLevel.TurnManager.TurnNum + 1;  
+        }
+
+        public void Reset()
+        {
+            _turns = null;
         }
     }
 }
