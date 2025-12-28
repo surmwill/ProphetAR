@@ -20,7 +20,7 @@ namespace ProphetAR
 
         public string DebugGetEditedBy()
         {
-            StringBuilder sb = new StringBuilder("Level config edited by:\n\n");
+            StringBuilder sb = new StringBuilder($"Level config edited by ({_debugEditedBy.Count}):\n\n");
             foreach (string editedBy in _debugEditedBy.Values)
             {
                 sb.AppendLine(editedBy);

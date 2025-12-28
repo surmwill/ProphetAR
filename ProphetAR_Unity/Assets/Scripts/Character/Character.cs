@@ -10,7 +10,31 @@ namespace ProphetAR
 {
     public class Character : GridObject, IGridContentSelfPositioner
     {
+        [ReadOnly]
+        [SerializeField]
+        private int _playerIndex = -1;
+
+        public GamePlayer Player => Grid.Level.Players[_playerIndex];
+
+        public int PlayerIndex
+        {
+            get
+            {
+                if (_playerIndex == -1)
+                {
+                    Debug.LogWarning("Character is not assigned to a player");
+                }
+
+                return _playerIndex;
+            }
+        }
+        
         public delegate void OnWalkComplete(bool didStopEarly, GridCellContent stoppedAtCell);
+
+        public void AssignToPlayer(GamePlayer player)
+        {
+            _playerIndex = player.Index;
+        }
         
         public IEnumerator WalkToCoordinates(Vector2Int targetCoordinates, OnWalkComplete onComplete = null)
         {

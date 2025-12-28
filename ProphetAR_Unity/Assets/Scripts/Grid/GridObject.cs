@@ -24,6 +24,8 @@ namespace ProphetAR
             Grid = grid;
             GridTransform.Initialize(this, grid);
         }
+        
+        
 
         private void OnDestroy()
         {

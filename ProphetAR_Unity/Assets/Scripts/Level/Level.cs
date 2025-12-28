@@ -90,7 +90,7 @@ namespace ProphetAR
 
                 foreach ((Character characterPrefab, CharacterSpawnPoint spawnPoint) in playerCharacterPrefabs.Zip(spawnPoints))
                 {
-                    player.State.Characters.Add(Grid.InstantiateGridObject(characterPrefab, spawnPoint.Coordinates));
+                    player.State.AddCharacter(Grid.InstantiateGridObject(characterPrefab, spawnPoint.Coordinates));
                 }
             }
         }
