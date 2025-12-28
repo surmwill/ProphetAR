@@ -96,10 +96,8 @@ namespace ProphetAR
             #if UNITY_EDITOR
             if (ApplicationUtils.IsEditMode)
             {
-                if (!_areEditModeListenersBound)
-                {
-                    BindEditModeListeners();   
-                }
+                // Handles the case where the cell content is already hooked up
+                BindEditModeListeners();   
             }
             #endif
         }
@@ -109,10 +107,8 @@ namespace ProphetAR
             #if UNITY_EDITOR
             if (ApplicationUtils.IsEditMode)
             {
-                if (!_areEditModeListenersBound)
-                {
-                    BindEditModeListeners();   
-                }
+                // Handles the case when we're instantiating new cell content 
+                BindEditModeListeners();   
             }
             #endif
         }
@@ -223,7 +219,7 @@ namespace ProphetAR
                 _lastGridPointTypeDirty = false;
             }
 
-            if (_currentIndicator != null)
+            if (_currentIndicator != null)  
             {
                 _currentIndicator.SetGridPoint(GridPointProperties.GridPoint);
             }

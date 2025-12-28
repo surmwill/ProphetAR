@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace ProphetAR
 {
     [ExecuteAlways]
-    public class GridCellTestBorder : MonoBehaviour
+    public class DebugGridCellBorder : MonoBehaviour
     {
         [SerializeField]
         private GridCellContent _gridCellContent = null;
@@ -19,15 +19,10 @@ namespace ProphetAR
         private void Start()
         {
             #if UNITY_EDITOR
-            if (ApplicationUtils.IsEditMode)
+            if (ApplicationUtils.IsEditMode && TryBindEditModeListeners())
             {
-                // Guaranteed that the grid cell has been hooked up by Start (unless we're editing it independent of the cell in its own prefab)
-                if (!_areEditModeListenersBound && _gridCellContent.Cell != null)
-                {
-                    BindEditModeListeners();
-                    EditorOnCellDimensionsChanged(_gridCellContent.Cell.Dimensions);
-                    EditorOnCellCoordinatesChanged(_gridCellContent.Cell.Coordinates);   
-                }
+                EditorOnCellDimensionsChanged(_gridCellContent.Cell.Dimensions);
+                EditorOnCellCoordinatesChanged(_gridCellContent.Cell.Coordinates);   
             }
             #endif
         }
@@ -35,19 +30,10 @@ namespace ProphetAR
         private void OnEnable()
         {
             #if UNITY_EDITOR
-            if (ApplicationUtils.IsEditMode)
+            if (ApplicationUtils.IsEditMode && TryBindEditModeListeners())
             {
-                if (!_areEditModeListenersBound)
-                {
-                    BindEditModeListeners();
-                    
-                    // Not guaranteed that the grid cell has been hooked up by OnEnable()
-                    if (_areEditModeListenersBound)
-                    {
-                        EditorOnCellDimensionsChanged(_gridCellContent.Cell.Dimensions);
-                        EditorOnCellCoordinatesChanged(_gridCellContent.Cell.Coordinates);      
-                    }
-                }
+                EditorOnCellDimensionsChanged(_gridCellContent.Cell.Dimensions);
+                EditorOnCellCoordinatesChanged(_gridCellContent.Cell.Coordinates);      
             }
             #endif
         }
@@ -62,14 +48,18 @@ namespace ProphetAR
             #endif
         }
 
-        private void BindEditModeListeners()
+        private bool TryBindEditModeListeners()
         {
             if (!_areEditModeListenersBound && _gridCellContent.Cell != null)
             {
                 _gridCellContent.Cell.EditorOnCellDimensionsChanged += EditorOnCellDimensionsChanged;
                 _gridCellContent.Cell.EditorOnCellCoordinatesChanged += EditorOnCellCoordinatesChanged;
                 _areEditModeListenersBound = true;
+
+                return true;
             }
+
+            return false;
         }
 
         private void UnbindEditorListeners()
