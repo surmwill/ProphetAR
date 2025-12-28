@@ -6880,9 +6880,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _level: {fileID: 874366614}
   _player0CharacterPrefabs:
-  - {fileID: 363817041648072071, guid: d0d596273c8228c48a2ca0a0b0002267, type: 3}
-  _player1CharacterPrefabs:
   - {fileID: 9209426569718577995, guid: 6d33e3ca8203f0247a8f97a8a03b6a98, type: 3}
+  _player1CharacterPrefabs:
+  - {fileID: 363817041648072071, guid: d0d596273c8228c48a2ca0a0b0002267, type: 3}
   _debugGamePlayerMaterials: {fileID: 11400000, guid: 6cb192f047785194e98debb44b0c9faf, type: 2}
 --- !u!1001 &876297894
 PrefabInstance:
