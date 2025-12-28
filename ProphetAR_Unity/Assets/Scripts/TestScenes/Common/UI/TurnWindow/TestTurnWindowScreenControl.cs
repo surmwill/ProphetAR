@@ -2,7 +2,7 @@
 
 namespace ProphetAR
 {
-    public class TestTurnWindowScreenControl : MonoBehaviour, IGameEvent
+    public class TestTurnWindowScreenControl : MonoBehaviour, IGameE
     {
         [SerializeField]
         private TestTurnWindowActionRequestsRecycler _actionRequestsRecycler = null;
