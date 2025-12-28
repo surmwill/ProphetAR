@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,7 +17,7 @@ namespace ProphetAR
 
         private readonly Level _level;
         
-        private readonly HashSet<MultiGameTurnAction> _processedMultiGameTurnActions = new();
+        private readonly HashSet<GameTurnActionOverTurns> _processedMultiGameTurnActions = new();
 
         // The key is the type of game event that fulfills the action request
         private readonly Dictionary<Type, List<GameTurnActionRequest>> _actionRequestsForFulfillment = new();
@@ -64,14 +65,14 @@ namespace ProphetAR
         /// <summary>
         /// Called by the player once they've completed all turn actions that require manual input
         /// </summary>
-        public void UserSetManualPartOfTurnComplete()
+        public IEnumerator SetManualPartOfTurnComplete()
         {
             if (ActionRequests.Any())
             {
                 throw new InvalidOperationException("There are still incomplete action requests that must be manually handled by the user");
             }
             
-            UserExecuteAutomaticPartOfTurn();
+            yield return AutomaticPartOfTurnCoroutine();
             
             // If any automatic actions couldn't be executed they will turn into manual actions. Once those are completed, we'll have to call this method again. This loops indefinitely
             if (!ActionRequests.Any())
@@ -85,23 +86,23 @@ namespace ProphetAR
         /// The second part of the player's turn is resuming any previous actions they've made that progress over multiple turns.
         /// If these actions cannot step forward, they will turn into a manual action, and the manual part of the user's term is returned to.
         /// </summary>
-        private void UserExecuteAutomaticPartOfTurn()
+        private IEnumerator AutomaticPartOfTurnCoroutine()
         {
-            List<MultiGameTurnAction> cancelledActions = new List<MultiGameTurnAction>();
-            List<MultiGameTurnAction> completedActions = new List<MultiGameTurnAction>();
+            List<GameTurnActionOverTurns> cancelledActions = new List<GameTurnActionOverTurns>();
+            List<GameTurnActionOverTurns> completedActions = new List<GameTurnActionOverTurns>();
             List<GameTurnActionRequest> manualActionsRequired = new List<GameTurnActionRequest>();
             
-            foreach (MultiGameTurnAction multiGameTurnAction in Player.State.MultiTurnActions
+            foreach (GameTurnActionOverTurns multiGameTurnAction in Player.State.MultiTurnActions
                          .Select(multiGameTurnActionItem => multiGameTurnActionItem.Data)
                          .Where(multiGameTurnAction => multiGameTurnAction.StartAtTurnNum >= TurnNumber && _processedMultiGameTurnActions.Add(multiGameTurnAction)))
             {
-                if (!multiGameTurnAction.ExecuteNextTurn.MoveNext())
+                if (!multiGameTurnAction.ActionOverTurnsCoroutine.MoveNext())
                 {
                     completedActions.Add(multiGameTurnAction);
                     continue;
                 }
 
-                GameTurnActionRequest manualActionRequired = multiGameTurnAction.ExecuteNextTurn.Current;
+                GameTurnActionRequest manualActionRequired = multiGameTurnAction.ActionOverTurnsCoroutine.Current;
                 if (manualActionRequired != null)
                 {
                     cancelledActions.Add(multiGameTurnAction);
@@ -109,7 +110,7 @@ namespace ProphetAR
                 }
             }
 
-            foreach (MultiGameTurnAction completedAction in completedActions.Concat(cancelledActions))
+            foreach (GameTurnActionOverTurns completedAction in completedActions.Concat(cancelledActions))
             {
                 Player.State.MultiTurnActions.Remove(completedAction);
             }

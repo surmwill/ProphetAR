@@ -6,25 +6,24 @@ namespace ProphetAR
         MonoBehaviour, 
         IGameEventOnGameTurnChangedListener,
         IGameEventOnInitialGameTurnBuiltListener,
-        IGameEventGameTurnActionsModifiedListener,
+        IGameEventGameTurnActionsModifiedListener
     {
         [SerializeField]
         private TestTurnWindowActionRequestsRecycler _actionRequestsRecycler = null;
 
-
-        public void OnEvent(GameEventOnGameTurnChangedData data)
+        void IGameEventWithTypedDataListener<IGameEventOnGameTurnChangedListener, GameEventOnGameTurnChangedData>.OnEvent(GameEventOnGameTurnChangedData data)
         {
-            throw new System.NotImplementedException();
+            
         }
 
-        public void OnEvent()
+        void IGameEventWithoutDataListener<IGameEventOnInitialGameTurnBuiltListener>.OnEvent()
         {
-            throw new System.NotImplementedException();
+            
         }
 
-        public void OnEvent(GameEventGameTurnActionsModifiedData data)
+        void IGameEventWithTypedDataListener<IGameEventGameTurnActionsModifiedListener, GameEventGameTurnActionsModifiedData>.OnEvent(GameEventGameTurnActionsModifiedData data)
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

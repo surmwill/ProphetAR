@@ -5,18 +5,16 @@ namespace ProphetAR
 {
     public abstract class CustomPriorityQueueItem<TData>
     {
-        public const int DefaultPriority = 1000;
-        
         public TData Data { get; }
 
         public event Action<CustomPriorityQueueItem<TData>, int, int> OnPriorityChanged; 
         
         public int Priority
         {
-            get => _priority;
+            get => PriorityOrDefault;
             set
             {
-                if (_priority == value)
+                if (PriorityOrDefault == value)
                 {
                     return;
                 }
@@ -26,21 +24,29 @@ namespace ProphetAR
                     priorityQueue.Remove(this, true);
                 }
                 
-                int prevPriority = _priority;
-                _priority = value;
+                int prevPriority = PriorityOrDefault;
+                PriorityOrDefault = value;
                 
                 foreach (ICustomPriorityQueue<TData> priorityQueue in _partOfPriorityQueues)
                 {
                     priorityQueue.Enqueue(this, true);
                 }
                 
-                OnPriorityChanged?.Invoke(this, prevPriority, _priority);
+                OnPriorityChanged?.Invoke(this, prevPriority, PriorityOrDefault);
             }
         }
         
-        private readonly HashSet<ICustomPriorityQueue<TData>> _partOfPriorityQueues = new();
+        protected virtual int DefaultPriority { get; } = 1000;
+
+        private int PriorityOrDefault
+        {
+            get => _priorityBacking ??= DefaultPriority;
+            set => _priorityBacking = value;
+        }
         
-        private int _priority = DefaultPriority;
+        private int? _priorityBacking;
+        
+        private readonly HashSet<ICustomPriorityQueue<TData>> _partOfPriorityQueues = new();
 
         /// <summary>
         /// Called by the internals of the custom priority queue. The user shouldn't worry about calling this

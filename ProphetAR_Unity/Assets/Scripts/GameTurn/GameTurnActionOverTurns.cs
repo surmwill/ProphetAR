@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 
 namespace ProphetAR
 {
-    public abstract class MultiGameTurnAction : CustomPriorityQueueItem<MultiGameTurnAction>
+    /// <summary>
+    /// Performs an action over a series of turns
+    /// </summary>
+    public abstract class GameTurnActionOverTurns : CustomPriorityQueueItem<GameTurnActionOverTurns>
     {
-        // Automatically executes actions over a number of turns. If the action cannot execute, an action request is returned for the user to manually deal with
-        public abstract IEnumerator<GameTurnActionRequest> ExecuteNextTurn { get; }
+        public abstract IEnumerator ActionOverTurnsCoroutine { get; }
 
         public int StartAtTurnNum { get; } 
         
-        public MultiGameTurnAction(int? startAtTurnNum = null)
+        public GameTurnActionOverTurns(int? startAtTurnNum = null)
         {
             // Default start on the next turn. Normally a multi-turn action will execute its first step as a manual user
             // action to clear the associated action request. Next turn the same action won't need to be raised again as

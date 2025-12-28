@@ -6,7 +6,7 @@ namespace ProphetAR
     {
         public GamePlayer Player { get; }
         
-        public CustomPriorityQueue<MultiGameTurnAction> MultiTurnActions { get; } = new();
+        public CustomPriorityQueue<GameTurnActionOverTurns> MultiTurnActions { get; } = new();
         
         public IEnumerable<Character> Characters => _characters;
         
