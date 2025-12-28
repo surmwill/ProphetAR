@@ -1,7 +1,7 @@
 ﻿namespace ProphetAR.Tests.GameEvents
 {
     [ListensToGameEventType(typeof(TestGameEventNoData))]
-    public interface ITestGameEventNoDataListener : IGameEventWithoutDataListenerExplicit<ITestGameEventNoDataListener>
+    public interface ITestGameEventNoDataListener : IGameEventWithoutDataListener<ITestGameEventNoDataListener>
     {
         
     }

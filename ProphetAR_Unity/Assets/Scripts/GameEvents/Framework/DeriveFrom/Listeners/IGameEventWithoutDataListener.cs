@@ -8,7 +8,7 @@
     /// 
     /// <typeparam name="TInterfaceSelf"> The interface implementing this one (it passes its own type) </typeparam>
     /// </summary>
-    public interface IGameEventWithoutDataListenerExplicit<TInterfaceSelf> : IGameEventWithoutDataListener where TInterfaceSelf : IGameEventWithoutDataListenerExplicit<TInterfaceSelf>
+    public interface IGameEventWithoutDataListener<TInterfaceSelf> : IGameEventListener where TInterfaceSelf : IGameEventWithoutDataListener<TInterfaceSelf>
     {
         public void OnEvent();
     }

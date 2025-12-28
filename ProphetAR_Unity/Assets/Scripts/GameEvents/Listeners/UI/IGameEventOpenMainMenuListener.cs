@@ -1,7 +1,7 @@
 ﻿namespace ProphetAR
 {
     [ListensToGameEventType(typeof(GameEventOpenMainMenu))]
-    public interface IGameEventOpenMainMenuListener : IGameEventWithoutDataListenerExplicit<IGameEventOpenMainMenuListener>
+    public interface IGameEventOpenMainMenuListener : IGameEventWithoutDataListener<IGameEventOpenMainMenuListener>
     {
         
     }

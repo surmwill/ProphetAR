@@ -1,6 +1,6 @@
 ﻿namespace ProphetAR
 {
-    public interface IGameEventOnTurnCompletedListener : IGameEventWithoutDataListenerExplicit<IGameEventOnTurnCompletedListener>
+    public interface IGameEventOnTurnCompletedListener : IGameEventWithoutDataListener<IGameEventOnTurnCompletedListener>
     {
         
     }

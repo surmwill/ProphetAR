@@ -38,12 +38,12 @@ namespace ProphetAR
 
         private class ConcreteListener : IEventAListener, IEventBListener, IEventAWithDataListener, IEventBWithDataListener
         {
-            void IGameEventWithoutDataListenerExplicit<IEventAListener>.OnEvent()
+            void IGameEventWithoutDataListener<IEventAListener>.OnEvent()
             {
                 Debug.Log("ON A");
             }
 
-            void IGameEventWithoutDataListenerExplicit<IEventBListener>.OnEvent()
+            void IGameEventWithoutDataListener<IEventBListener>.OnEvent()
             {
                 Debug.Log("ON B");
             }
@@ -84,13 +84,13 @@ namespace ProphetAR
         }
         
         [ListensToGameEventType(typeof(EventA))]
-        private interface IEventAListener : IGameEventWithoutDataListenerExplicit<IEventAListener>
+        private interface IEventAListener : IGameEventWithoutDataListener<IEventAListener>
         {
             
         }
         
         [ListensToGameEventType(typeof(EventB))]
-        private interface IEventBListener : IGameEventWithoutDataListenerExplicit<IEventBListener>
+        private interface IEventBListener : IGameEventWithoutDataListener<IEventBListener>
         {
             
         }

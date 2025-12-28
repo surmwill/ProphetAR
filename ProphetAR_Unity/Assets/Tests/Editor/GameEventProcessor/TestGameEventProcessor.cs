@@ -14,7 +14,7 @@ namespace ProphetAR.Tests.GameEvents
             SampleListener sampleListener = new SampleListener();
             
             gameEventProcessor.AddListenerWithData<ITestGameEventIntListener, int>(sampleListener);
-            if (gameEventProcessor.TryGetListenersForDataEvent<TestGameEventInt>(out List<IGameEventWithDataListener> listeners))
+            if (gameEventProcessor.TryGetListenersForDataEvent<TestGameEventInt>(out List<IGameEventListener> listeners))
             {
                 Assert.IsTrue(listeners.Count == 1, $"Only added one listener but there are {listeners.Count} present");
             }
@@ -43,7 +43,7 @@ namespace ProphetAR.Tests.GameEvents
             SampleListener sampleListener = new SampleListener();
             
             gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(sampleListener);
-            if (gameEventProcessor.TryGetListenersForNonDataEvent<TestGameEventNoData>(out List<IGameEventWithoutDataListener> listeners))
+            if (gameEventProcessor.TryGetListenersForNonDataEvent<TestGameEventNoData>(out List<IGameEventListener> listeners))
             {
                 Assert.IsTrue(listeners.Count == 1, $"Only added one listener but there are {listeners.Count} present");
             }
@@ -142,7 +142,7 @@ namespace ProphetAR.Tests.GameEvents
             gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(sampleListener);
             gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(sampleListener);
             
-            if (gameEventProcessor.TryGetListenersForNonDataEvent<TestGameEventNoData>(out List<IGameEventWithoutDataListener> listeners))
+            if (gameEventProcessor.TryGetListenersForNonDataEvent<TestGameEventNoData>(out List<IGameEventListener> listeners))
             {
                 Assert.IsTrue(listeners.Count == 2, $"Added a listener twice (expecting two listeners) but there are {listeners.Count} present");
             }
@@ -236,7 +236,7 @@ namespace ProphetAR.Tests.GameEvents
             gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(listenerWithCallback);
             gameEventProcessor.RaiseEventWithoutData(new TestGameEventNoData());
             
-            if (gameEventProcessor.TryGetListenersForNonDataEvent<TestGameEventNoData>(out List<IGameEventWithoutDataListener> listeners))
+            if (gameEventProcessor.TryGetListenersForNonDataEvent<TestGameEventNoData>(out List<IGameEventListener> listeners))
             {
                 Assert.Fail($"Removed all listeners, but there is still {listeners.Count} present");
             }
@@ -249,7 +249,7 @@ namespace ProphetAR.Tests.GameEvents
             DerivedSampleListener derivedSampleListener = new DerivedSampleListener();
             
             gameEventProcessor.AddListenerWithoutData<ITestGameEventNoDataListener>(derivedSampleListener);
-            if (gameEventProcessor.TryGetListenersForNonDataEvent<TestGameEventNoData>(out List<IGameEventWithoutDataListener> listeners))
+            if (gameEventProcessor.TryGetListenersForNonDataEvent<TestGameEventNoData>(out List<IGameEventListener> listeners))
             {
                 Assert.IsTrue(listeners.Count == 1, $"Only added one listener but there are {listeners.Count} present");
             }
@@ -374,13 +374,13 @@ namespace ProphetAR.Tests.GameEvents
                 NumTestObjectCopyEvents++;
             }
 
-            void IGameEventWithoutDataListenerExplicit<ITestGameEventNoDataListener>.OnEvent()
+            void IGameEventWithoutDataListener<ITestGameEventNoDataListener>.OnEvent()
             {
                 PrintDebug("ON NO DATA");
                 NumNoDataEvents++;
             }
 
-            void IGameEventWithoutDataListenerExplicit<ITestGameEventNoDataCopyListener>.OnEvent()
+            void IGameEventWithoutDataListener<ITestGameEventNoDataCopyListener>.OnEvent()
             {
                 PrintDebug("ON NO DATA COPY");
                 NumNoDataCopyEvents++;

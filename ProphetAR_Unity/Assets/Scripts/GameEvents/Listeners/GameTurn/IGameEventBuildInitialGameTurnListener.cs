@@ -1,6 +1,6 @@
 ﻿namespace ProphetAR
 {
-    public interface IGameEventBuildInitialGameTurnListener : IGameEventWithoutDataListenerExplicit<IGameEventBuildInitialGameTurnListener>
+    public interface IGameEventBuildInitialGameTurnListener : IGameEventWithoutDataListener<IGameEventBuildInitialGameTurnListener>
     {
         
     }
