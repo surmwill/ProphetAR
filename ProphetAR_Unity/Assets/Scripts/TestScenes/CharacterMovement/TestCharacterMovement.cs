@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace ProphetAR
@@ -17,9 +18,9 @@ namespace ProphetAR
         private Character _character;
         private Coroutine _walkToCoordinatesCoroutine;
 
-        private void Start()
+        private void Awake()
         {
-            _character = _level.Grid.InstantiateGridObject(_characterPrefab, _targetCoordinates);
+            _character = GetComponentInParent<Character>();
         }
         
         public void MoveToCoordinates()

@@ -9768,6 +9768,7 @@ MonoBehaviour:
   _cellsParent: {fileID: 1799138422}
   _cellPrefab: {fileID: 1312050685488113654, guid: 4d4df6b1f3a42c04982f0214aed5adc3, type: 3}
   _cellContentPrefab: {fileID: 3549696623761487564, guid: e725aa8129522b24c97b1bc91775387e, type: 3}
+  _prevCellContentPrefab: {fileID: 3549696623761487564, guid: e725aa8129522b24c97b1bc91775387e, type: 3}
   _gridSnaps: []
 --- !u!4 &721381156
 Transform:
@@ -11202,12 +11203,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 874366612}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6e54170bcdf4e63a06c37a5b3499f91, type: 3}
+  m_Script: {fileID: 11500000, guid: 13091c01247046f59782f836b49b98ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _level: {fileID: 874366614}
   _characterPrefab: {fileID: 8805206095572177566, guid: a623a53404a5d0f49ae87ff6e5d00009, type: 3}
-  _targetCoordinates: {x: 0, y: 1}
+  _targetCoordinates: {x: 1, y: 1}
 --- !u!1001 &885649791
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16984,6 +16985,8 @@ MonoBehaviour:
   _topLeftCoordinate: {x: 0, y: 0}
   _botRightCoordinate: {x: 9, y: 9}
   _originGridSection: {fileID: 721381155}
+  _showGridPointTypeIndicators: 0
+  _showSpawnPoints: 0
   _savedGrid:
   - _gridCell: {fileID: 2024936558}
     _coordinates: {x: 0, y: 0}
