@@ -89,7 +89,8 @@ namespace ProphetAR
             List<GameTurnActionOverTurns> cancelledActions = new List<GameTurnActionOverTurns>();
             List<GameTurnActionOverTurns> completedActions = new List<GameTurnActionOverTurns>();
             List<GameTurnActionRequest> manualActionRequests = new List<GameTurnActionRequest>();
-            
+
+            List<IEnumerator> turnCoroutines = new List<IEnumerator>();
             foreach (GameTurnActionOverTurns actionOverTurns in Player.State.ActionsOverTurns.Where(actionOverTurns => actionOverTurns.StartAtTurnNum >= TurnNumber))
             {
                 if (!actionOverTurns.Turns.MoveNext())
@@ -104,7 +105,7 @@ namespace ProphetAR
                     switch (actionOverTurnsTurn.Operation)
                     {
                         case GameTurnActionOverTurnsTurn.TurnOperation.Coroutine:
-                            yield return actionOverTurnsTurn.TurnCoroutine;
+                            turnCoroutines.Add(actionOverTurnsTurn.TurnCoroutine);
                             break;
                     
                         case GameTurnActionOverTurnsTurn.TurnOperation.Callback:
@@ -117,6 +118,11 @@ namespace ProphetAR
                             break;
                     }   
                 }
+            }
+            
+            if (turnCoroutines.Count > 0)
+            {
+                yield return new WaitForAllCoroutines(turnCoroutines);
             }
 
             foreach (GameTurnActionOverTurns completedAction in completedActions.Concat(cancelledActions))
