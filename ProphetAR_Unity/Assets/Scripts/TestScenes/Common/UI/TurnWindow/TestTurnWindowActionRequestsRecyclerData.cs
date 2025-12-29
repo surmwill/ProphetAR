@@ -10,10 +10,14 @@ namespace ProphetAR
         
         public GameTurnActionRequest ActionRequest { get; }
 
-        public TestTurnWindowActionRequestsRecyclerData(long actionNumber, GameTurnActionRequest actionRequest)
+        private static int _actionRequestNumber;
+
+        public TestTurnWindowActionRequestsRecyclerData(GameTurnActionRequest actionRequest)
         {
-            Key = actionNumber;
-            ActionNumber = actionNumber;
+            _actionRequestNumber++;
+            
+            Key = _actionRequestNumber;
+            ActionNumber = _actionRequestNumber;
             
             ActionRequest = actionRequest;
         }

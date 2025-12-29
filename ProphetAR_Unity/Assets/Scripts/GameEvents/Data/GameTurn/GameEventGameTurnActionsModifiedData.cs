@@ -5,7 +5,7 @@ namespace ProphetAR
     {
         public GameTurnActionRequest ModifiedRequest { get; }
         
-        public ModificationType Modified { get; }
+        public ModificationType ModificationReason { get; }
         
         public (int prevPriority, int newPriority)? PriorityChanged { get; }
         
@@ -17,7 +17,7 @@ namespace ProphetAR
             (int prevPriority, int newPriority)? priorityChanged = null,
             bool? removedByDequeue = null)
         {
-            Modified = modificationType;
+            ModificationReason = modificationType;
             ModifiedRequest = modifiedRequest;
 
             PriorityChanged = priorityChanged;

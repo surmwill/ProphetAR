@@ -63,7 +63,7 @@ namespace ProphetAR
         /// <summary>
         /// Called by the player once they've completed all turn actions that require manual input
         /// </summary>
-        public IEnumerator SetManualPartOfTurnComplete()
+        public IEnumerator SetManualPartOfTurnCompleteCoroutine()
         {
             if (ActionRequests.Any())
             {

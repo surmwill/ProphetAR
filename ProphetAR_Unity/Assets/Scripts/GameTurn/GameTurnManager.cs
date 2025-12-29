@@ -10,7 +10,7 @@ namespace ProphetAR
         
         public int TurnNum { get; private set; }
 
-        private int _currIndexTurnOrder = -1;
+        private int _currPlayerIndex = -1;
         
         private readonly List<GamePlayer> _turnOrder;
 
@@ -27,9 +27,9 @@ namespace ProphetAR
             _level.EventProcessor.RaiseEventWithData(new GameEventOnGameTurnChanged(new GameEventOnGameTurnChangedData(TurnNum, TurnNum + 1)));
             
             TurnNum++;
-            _currIndexTurnOrder = (_currIndexTurnOrder + 1) % _turnOrder.Count;
+            _currPlayerIndex = (_currPlayerIndex + 1) % _turnOrder.Count;
 
-            CurrPlayer = _turnOrder[_currIndexTurnOrder];
+            CurrPlayer = _turnOrder[_currPlayerIndex];
             CurrTurn = new GameTurn(_level, CurrPlayer, TurnNum);
             
             CurrTurn.PreTurn();
