@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,13 +23,44 @@ namespace ProphetAR
         
         public abstract void OnFocusUI();
 
-        public abstract void ExecuteAutomatically();
-
         public abstract Dictionary<string, object> SerializeForServer();
 
         public virtual bool IsCompletedByGameEvent(GameEvent gameEvent)
         {
             return CompletedByGameEventType == gameEvent.GetType();
         }
+        
+        #region AI_Execution
+
+        public AutomaticExecutionType AutomaticExecutionMethod
+        {
+            get
+            {
+                if (ExecuteAutomaticallyCoroutine == null && ExecuteAutomaticallyAction == null)
+                {
+                    Debug.LogWarning("Action request is trying to execute automatically, but no logic has been given");
+                }
+
+                return ExecuteAutomaticallyCoroutine != null ? AutomaticExecutionType.Coroutine : AutomaticExecutionType.Action;
+            }
+        }
+
+        /// <summary>
+        /// The game action can be automatically executed as a coroutine or a (C#) action, whichever one is non-null
+        /// </summary>
+        public virtual IEnumerator ExecuteAutomaticallyCoroutine { get; } = null;
+
+        /// <summary>
+        /// The game action can be automatically executed as a coroutine or a (C#) action, whichever one is non-null
+        /// </summary>
+        public virtual Action ExecuteAutomaticallyAction { get; } = null;
+
+        public enum AutomaticExecutionType
+        {
+            Coroutine = 0,
+            Action = 1,
+        }
+        
+        #endregion
     }
 }

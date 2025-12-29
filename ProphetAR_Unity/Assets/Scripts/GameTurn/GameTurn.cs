@@ -162,13 +162,36 @@ namespace ProphetAR
         }
         
         // Used by AI to complete its turn
-        public void AIExecuteActionRequestsAutomatically()
+        public IEnumerator AIExecuteActionRequestsAutomaticallyCoroutine()
         {
             while (ActionRequests.Any())
             {
-                GameTurnActionRequest action = ActionRequests.Peek().Data;
-                action.ExecuteAutomatically();
-                CompleteActionRequest(action);
+                List<IEnumerator> actionCoroutines = new List<IEnumerator>();
+                List<GameTurnActionRequest> actionRequests = ActionRequests.ToList();
+                
+                foreach (GameTurnActionRequest actionRequest in actionRequests)
+                {
+                    switch (actionRequest.AutomaticExecutionMethod)
+                    {
+                        case GameTurnActionRequest.AutomaticExecutionType.Coroutine:
+                            actionCoroutines.Add(actionRequest.ExecuteAutomaticallyCoroutine);
+                            break;
+                        
+                        case GameTurnActionRequest.AutomaticExecutionType.Action:
+                            actionRequest.ExecuteAutomaticallyAction?.Invoke();
+                            break;
+                    }
+                }
+
+                if (actionRequests.Count > 0)
+                {
+                    yield return new WaitForAllCoroutines(actionCoroutines);   
+                }
+
+                foreach (GameTurnActionRequest actionRequest in actionRequests)
+                {
+                    CompleteActionRequest(actionRequest);
+                }
             }
             
             OnComplete();

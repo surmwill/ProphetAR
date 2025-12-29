@@ -25,6 +25,8 @@ namespace ProphetAR
         private readonly List<ILevelConfigContributor> _levelConfigContributors = new();
 
         private bool _isInitialized;
+        
+        private Coroutine _nextTurnCoroutine;
 
         public void Initialize(GamePlayerConfig[] playerConfigs)
         {
@@ -95,11 +97,6 @@ namespace ProphetAR
             }
         }
 
-        public void StartFirstTurn()
-        {
-            TurnManager.NextTurn();   
-        }
-
         public void AddLevelConfigContributor(ILevelConfigContributor levelConfigContributor)
         {
             if (_isInitialized)
@@ -109,6 +106,22 @@ namespace ProphetAR
             }
             
             _levelConfigContributors.Add(levelConfigContributor);
+        }
+
+        public void StartFirstTurn()
+        {
+            NextTurn();
+        }
+        
+        public void NextTurn()
+        {
+            if (_nextTurnCoroutine != null)
+            {
+                Debug.LogWarning("Turn change is already in progress");
+                return;
+            }
+            
+            _nextTurnCoroutine = StartCoroutine(TurnManager.NextTurnCoroutine(() => _nextTurnCoroutine = null));
         }
     }
 }
