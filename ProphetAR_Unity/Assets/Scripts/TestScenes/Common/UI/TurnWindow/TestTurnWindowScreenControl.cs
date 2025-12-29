@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ProphetAR
 {
@@ -20,6 +21,9 @@ namespace ProphetAR
         [SerializeField]
         private TMP_Text _currPlayerText = null;
 
+        [SerializeField]
+        private Button _completeManualPartOfTurnButton = null;
+
         private GameTurn CurrTurn => _level.TurnManager.CurrTurn;
 
         private void Awake()
@@ -31,6 +35,8 @@ namespace ProphetAR
                 player.EventProcessor.AddListenerWithData<IGameEventOnInitialGameTurnBuiltListener, GameEventGameTurnActionsModifiedData>(this);
                 player.EventProcessor.AddListenerWithoutData<IGameEventOnPostGameTurnListener>(this);
             }
+            
+            _completeManualPartOfTurnButton.onClick.AddListener(CompleteManualPartOfTurn);
         }
 
         /// <summary>
@@ -39,6 +45,7 @@ namespace ProphetAR
         void IGameEventWithoutDataListener<IGameEventOnPreGameTurnListener>.OnEvent()
         {
             _currPlayerText.text = $"Player: {CurrTurn.Player.Index.ToString()}";
+            _completeManualPartOfTurnButton.enabled = true;
         }
         
         /// <summary>
@@ -101,6 +108,17 @@ namespace ProphetAR
             {
                 return _actionRequestsRecycler.DataForEntries.FirstOrDefault(recyclerData => recyclerData.ActionRequest == actionRequest);
             }
+        }
+        
+        private void CompleteManualPartOfTurn()
+        {
+            _completeManualPartOfTurnButton.enabled = false;
+            StartCoroutine(CurrTurn.CompleteManualPartOfTurnCoroutine(hasMoreManualRequests => _completeManualPartOfTurnButton.enabled = hasMoreManualRequests));
+        }
+        
+        private void OnDestroy()
+        {
+            _completeManualPartOfTurnButton.onClick.RemoveListener(CompleteManualPartOfTurn);
         }
     }
 }

@@ -7,6 +7,8 @@ namespace ProphetAR
 {
     public class GameTurn
     {
+        public delegate void CompleteManualPartOfTurnCallback(bool hasMoreManualRequests);
+        
         public int TurnNumber { get; }
         
         public GamePlayer Player { get; }
@@ -63,7 +65,7 @@ namespace ProphetAR
         /// <summary>
         /// Called by the player once they've completed all turn actions that require manual input
         /// </summary>
-        public IEnumerator SetManualPartOfTurnCompleteCoroutine()
+        public IEnumerator CompleteManualPartOfTurnCoroutine(CompleteManualPartOfTurnCallback onComplete = null)
         {
             if (ActionRequests.Any())
             {
@@ -77,7 +79,10 @@ namespace ProphetAR
             {
                 // All automatic actions executed and there are no actions left to perform this turn
                 OnComplete();
+                onComplete?.Invoke(false);
             }
+            
+            onComplete?.Invoke(true);
         }
 
         /// <summary>
