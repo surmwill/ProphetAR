@@ -115,6 +115,7 @@ namespace ProphetAR
                 if (actionOverTurnsTurn.RequiresManualAction)
                 {
                     cancelledActionsOverTurns.Add(actionOverTurns);
+                    postExecutionManualActionsRequired.Add(actionOverTurnsTurn.ManualActionRequired);
                     continue;
                 }
 
