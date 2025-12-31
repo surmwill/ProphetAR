@@ -23,7 +23,11 @@ namespace ProphetAR
         
         public abstract void OnFocusUI();
 
-        public abstract Dictionary<string, object> ServerSerializedGameStateChanges();
+        public virtual Dictionary<string, object> ServerSerializedGameStateChanges()
+        {
+            // To be implemented if we ever need multiplayer or cheat detection
+            return null;
+        }
 
         public virtual bool IsCompletedByGameEvent(GameEvent gameEvent)
         {
