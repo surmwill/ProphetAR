@@ -55,7 +55,7 @@ namespace ProphetAR
         public T InstantiateGridObject<T>(T gridObjectOrPrefab, Vector2Int coordinates) where T : GridObject
         {
             T gridObject = Instantiate(gridObjectOrPrefab);
-            gridObject.Initialize(this);
+            gridObject.GridObjectInitialize(this);
             AddGridObject(gridObject, coordinates);
             return gridObject;
         }

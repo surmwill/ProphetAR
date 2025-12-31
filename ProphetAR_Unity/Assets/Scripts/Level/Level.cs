@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace ProphetAR
@@ -90,9 +88,14 @@ namespace ProphetAR
                     continue;
                 }
 
-                foreach ((Character characterPrefab, CharacterSpawnPoint spawnPoint) in playerCharacterPrefabs.Zip(spawnPoints))
+                for (int i = 0; i < playerCharacterPrefabs.Count; i++)
                 {
-                    player.State.AddCharacter(Grid.InstantiateGridObject(characterPrefab, spawnPoint.Coordinates));
+                    Character characterPrefab = playerCharacterPrefabs[i];
+                    CharacterSpawnPoint spawnPoint = spawnPoints[i];
+                    CharacterStats characterStats = player.Config.CharacterStats[i];
+                    
+                    Character character = Grid.InstantiateGridObject(characterPrefab, spawnPoint.Coordinates);
+                    character.Initialize(player, characterStats);
                 }
             }
         }

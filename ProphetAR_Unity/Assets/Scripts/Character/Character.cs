@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -14,26 +13,28 @@ namespace ProphetAR
         [SerializeField]
         private int _playerIndex = -1;
 
-        public GamePlayer Player => Grid.Level.Players[_playerIndex];
-
-        public int PlayerIndex
-        {
-            get
-            {
-                if (_playerIndex == -1)
-                {
-                    Debug.LogWarning("Character is not assigned to a player");
-                }
-
-                return _playerIndex;
-            }
-        }
+        [ReadOnly]
+        [SerializeField]
+        private CharacterStats _characterStats;
         
         public delegate void OnWalkComplete(bool didStopEarly, GridCellContent stoppedAtCell);
 
-        public void AssignToPlayer(GamePlayer player)
+        public GamePlayer Player
         {
-            _playerIndex = player.Index;
+            get => Grid.Level.Players[_playerIndex];
+            set => _playerIndex = value.Index;
+        }
+
+        public CharacterStats CharacterStats
+        {
+            get => _characterStats;
+            set => _characterStats = value;
+        }
+
+        public void Initialize(GamePlayer player, CharacterStats characterStats)
+        {
+            Player = player;
+            CharacterStats = characterStats;
         }
         
         public IEnumerator WalkToCoordinates(Vector2Int targetCoordinates, OnWalkComplete onComplete = null)

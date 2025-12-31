@@ -19,13 +19,11 @@ namespace ProphetAR
             GridTransform = GetComponent<GridTransform>();
         }
 
-        public void Initialize(CustomGrid grid)
+        public void GridObjectInitialize(CustomGrid grid)
         {
             Grid = grid;
             GridTransform.Initialize(this, grid);
         }
-        
-        
 
         private void OnDestroy()
         {

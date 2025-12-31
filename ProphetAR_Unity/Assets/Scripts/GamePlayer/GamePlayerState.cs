@@ -15,7 +15,6 @@ namespace ProphetAR
         public void AddCharacter(Character character)
         {
             _characters.Add(character);
-            character.AssignToPlayer(Player);
         }
 
         public void RemoveCharacter(Character character)

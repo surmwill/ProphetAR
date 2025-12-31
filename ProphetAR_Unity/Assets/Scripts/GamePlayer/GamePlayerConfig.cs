@@ -10,11 +10,14 @@ namespace ProphetAR
 
         public List<Character> CharacterPrefabs { get; }
         
-        public GamePlayerConfig(string playerUid, bool isAI, List<Character> characterPrefabs)
+        public List<CharacterStats> CharacterStats { get; } 
+        
+        public GamePlayerConfig(string playerUid, bool isAI, List<Character> characterPrefabs, List<CharacterStats> characterStats)
         {
             PlayerUid = playerUid;
             IsAI = isAI;
             CharacterPrefabs = characterPrefabs;
+            CharacterStats = characterStats;
         }
     }
 }
