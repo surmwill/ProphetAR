@@ -23,7 +23,7 @@ namespace ProphetAR
         
         public abstract void OnFocusUI();
 
-        public abstract Dictionary<string, object> SerializeForServer();
+        public abstract Dictionary<string, object> ServerSerializedGameStateChanges();
 
         public virtual bool IsCompletedByGameEvent(GameEvent gameEvent)
         {
@@ -31,6 +31,10 @@ namespace ProphetAR
         }
         
         #region AI_Execution
+
+        public bool DidAutomaticExecutionFail => OnAutomaticExecutionFailedManualAction != null;
+
+        public virtual GameTurnActionRequest OnAutomaticExecutionFailedManualAction { get; } = null;
 
         public AutomaticExecutionType AutomaticExecutionMethod
         {

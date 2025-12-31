@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace ProphetAR
 {
@@ -8,61 +9,36 @@ namespace ProphetAR
     /// </summary>
     public class GameTurnActionOverTurnsTurn
     {
-        public IEnumerator TurnCoroutine { get; }
+        /// <summary>
+        /// The actions to automatically perform this turn
+        /// </summary>
+        public List<GameTurnActionRequest> TurnActionRequests { get; }
         
-        public Action TurnCallback { get; }
-        
-        public GameTurnActionRequest ManualActionRequest { get; }
+        /// <summary>
+        /// If we need to stop the action and handle something manually, this can be returned
+        /// </summary>
+        public GameTurnActionRequest ManualActionRequired { get; }
 
-        public TurnOperation Operation
+        public bool RequiresManualAction => ManualActionRequired != null;
+
+        public static GameTurnActionOverTurnsTurn WithActions(List<GameTurnActionRequest> turnActionRequests)
         {
-            get
-            {
-                if (TurnCoroutine != null)
-                {
-                    return TurnOperation.Coroutine;
-                }
-
-                if (TurnCallback != null)
-                {
-                    return TurnOperation.Callback;
-                }
-                
-                if (ManualActionRequest != null)
-                {
-                    return TurnOperation.ManualActionRequest;
-                }
-
-                return TurnOperation.Empty;
-            }
+            return new GameTurnActionOverTurnsTurn(turnActionRequests);
         }
 
-        public GameTurnActionOverTurnsTurn()
+        public static GameTurnActionOverTurnsTurn Cancel(GameTurnActionRequest manualActionRequired)
         {
-            
+            return new GameTurnActionOverTurnsTurn(manualActionRequired);
         }
 
-        public GameTurnActionOverTurnsTurn(IEnumerator turnCoroutine)
+        private GameTurnActionOverTurnsTurn(GameTurnActionRequest manualActionRequired)
         {
-            TurnCoroutine = turnCoroutine;
-        }
-        
-        public GameTurnActionOverTurnsTurn(Action turnCallback)
-        {
-            TurnCallback = turnCallback;
-        }
-        
-        public GameTurnActionOverTurnsTurn(GameTurnActionRequest manualActionRequest)
-        {
-            ManualActionRequest = manualActionRequest;
+            ManualActionRequired = manualActionRequired;
         }
 
-        public enum TurnOperation
+        private GameTurnActionOverTurnsTurn(List<GameTurnActionRequest> turnActionRequests)
         {
-            Empty = 0,
-            Coroutine = 1,
-            Callback = 2,
-            ManualActionRequest = 3,
+            TurnActionRequests = turnActionRequests;
         }
     }
 }

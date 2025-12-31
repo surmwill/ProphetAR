@@ -43,7 +43,7 @@ namespace ProphetAR
 
             if (CurrPlayer.Config.IsAI)
             {
-                yield return CurrTurn.AIExecuteActionRequestsAutomaticallyCoroutine();
+                yield return CurrTurn.AIExecuteTurnAutomaticallyCoroutine();
             }
             
             onComplete?.Invoke();

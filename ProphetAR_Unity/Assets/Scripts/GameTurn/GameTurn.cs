@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace ProphetAR
 {
@@ -15,7 +16,7 @@ namespace ProphetAR
 
         public CustomPriorityQueue<GameTurnActionRequest> ActionRequests { get; } = new();
         
-        public List<Dictionary<string, object>> SerializedTurnActionsForServer { get; } = new();
+        public List<Dictionary<string, object>> ServerSerializedGameStateChangesForTurn { get; } = new();
 
         private readonly Level _level;
 
@@ -59,7 +60,7 @@ namespace ProphetAR
         public void CompleteActionRequest(GameTurnActionRequest actionRequest)
         {
             ActionRequests.Remove(actionRequest);
-            SerializedTurnActionsForServer.Add(actionRequest.SerializeForServer());
+            ServerSerializedGameStateChangesForTurn.Add(actionRequest.ServerSerializedGameStateChanges());
         }
         
         /// <summary>
@@ -91,51 +92,56 @@ namespace ProphetAR
         /// </summary>
         private IEnumerator AutomaticPartOfTurnCoroutine()
         {
-            List<GameTurnActionOverTurns> cancelledActions = new List<GameTurnActionOverTurns>();
-            List<GameTurnActionOverTurns> completedActions = new List<GameTurnActionOverTurns>();
-            List<GameTurnActionRequest> manualActionRequests = new List<GameTurnActionRequest>();
+            List<GameTurnActionOverTurns> completedActionsOverTurns = new List<GameTurnActionOverTurns>();
+            List<GameTurnActionOverTurns> cancelledActionsOverTurns = new List<GameTurnActionOverTurns>();
 
-            List<IEnumerator> turnCoroutines = new List<IEnumerator>();
+            List<GameTurnActionRequest> actionsToExecuteThisTurn = new List<GameTurnActionRequest>();
+            List<GameTurnActionRequest> postExecutionManualActionsRequired = new List<GameTurnActionRequest>();
+            
             foreach (GameTurnActionOverTurns actionOverTurns in Player.State.ActionsOverTurns.Where(actionOverTurns => actionOverTurns.StartAtTurnNum >= TurnNumber))
             {
                 if (!actionOverTurns.Turns.MoveNext())
                 {
-                    completedActions.Add(actionOverTurns);
+                    completedActionsOverTurns.Add(actionOverTurns);
                     continue;
                 }
 
                 GameTurnActionOverTurnsTurn actionOverTurnsTurn = actionOverTurns.Turns.Current;
-                if (actionOverTurnsTurn != null)
+                if (actionOverTurnsTurn == null)
                 {
-                    switch (actionOverTurnsTurn.Operation)
-                    {
-                        case GameTurnActionOverTurnsTurn.TurnOperation.Coroutine:
-                            turnCoroutines.Add(actionOverTurnsTurn.TurnCoroutine);
-                            break;
-                    
-                        case GameTurnActionOverTurnsTurn.TurnOperation.Callback:
-                            actionOverTurnsTurn.TurnCallback?.Invoke();
-                            break;
-                    
-                        case GameTurnActionOverTurnsTurn.TurnOperation.ManualActionRequest:
-                            cancelledActions.Add(actionOverTurns);
-                            manualActionRequests.Add(actionOverTurnsTurn.ManualActionRequest);
-                            break;
-                    }   
+                    continue;
+                }
+
+                if (actionOverTurnsTurn.RequiresManualAction)
+                {
+                    cancelledActionsOverTurns.Add(actionOverTurns);
+                    continue;
+                }
+
+                if (actionOverTurnsTurn.TurnActionRequests?.Count > 0)
+                {
+                    actionsToExecuteThisTurn.AddRange(actionOverTurnsTurn.TurnActionRequests);
                 }
             }
             
-            if (turnCoroutines.Count > 0)
+            yield return ExecuteActionRequestsAutomaticallyCoroutine(actionsToExecuteThisTurn);
+            
+            foreach (GameTurnActionRequest executedAction in actionsToExecuteThisTurn)
             {
-                yield return new WaitForAllCoroutines(turnCoroutines);
+                if (executedAction.DidAutomaticExecutionFail)
+                {
+                    postExecutionManualActionsRequired.Add(executedAction.OnAutomaticExecutionFailedManualAction);    
+                }
+                
+                ServerSerializedGameStateChangesForTurn.Add(executedAction.ServerSerializedGameStateChanges());   
             }
 
-            foreach (GameTurnActionOverTurns completedAction in completedActions.Concat(cancelledActions))
+            foreach (GameTurnActionOverTurns completedActionOverTurns in completedActionsOverTurns.Concat(cancelledActionsOverTurns))
             {
-                Player.State.ActionsOverTurns.Remove(completedAction);
+                Player.State.ActionsOverTurns.Remove(completedActionOverTurns);
             }
 
-            foreach (GameTurnActionRequest manualActionRequired in manualActionRequests)
+            foreach (GameTurnActionRequest manualActionRequired in postExecutionManualActionsRequired)
             {
                 ActionRequests.Enqueue(manualActionRequired);
             }
@@ -162,39 +168,50 @@ namespace ProphetAR
         }
         
         // Used by AI to complete its turn
-        public IEnumerator AIExecuteActionRequestsAutomaticallyCoroutine()
+        public IEnumerator AIExecuteTurnAutomaticallyCoroutine()
         {
             while (ActionRequests.Any())
             {
-                List<IEnumerator> actionCoroutines = new List<IEnumerator>();
                 List<GameTurnActionRequest> actionRequests = ActionRequests.ToList();
+                
+                yield return ExecuteActionRequestsAutomaticallyCoroutine(actionRequests);
                 
                 foreach (GameTurnActionRequest actionRequest in actionRequests)
                 {
-                    switch (actionRequest.AutomaticExecutionMethod)
+                    if (actionRequest.DidAutomaticExecutionFail)
                     {
-                        case GameTurnActionRequest.AutomaticExecutionType.Coroutine:
-                            actionCoroutines.Add(actionRequest.ExecuteAutomaticallyCoroutine);
-                            break;
-                        
-                        case GameTurnActionRequest.AutomaticExecutionType.Action:
-                            actionRequest.ExecuteAutomaticallyAction?.Invoke();
-                            break;
+                        Debug.LogWarning($"Automatic execution failed for AI action: {actionRequest.GetType()}. Manual recovery is not available");
                     }
-                }
-
-                if (actionRequests.Count > 0)
-                {
-                    yield return new WaitForAllCoroutines(actionCoroutines);   
-                }
-
-                foreach (GameTurnActionRequest actionRequest in actionRequests)
-                {
+                    
                     CompleteActionRequest(actionRequest);
                 }
             }
             
             OnComplete();
+        }
+
+        private IEnumerator ExecuteActionRequestsAutomaticallyCoroutine(IEnumerable<GameTurnActionRequest> actionRequests)
+        {
+            List<IEnumerator> actionCoroutines = new List<IEnumerator>();
+            
+            foreach (GameTurnActionRequest actionRequest in actionRequests)
+            {
+                switch (actionRequest.AutomaticExecutionMethod)
+                {
+                    case GameTurnActionRequest.AutomaticExecutionType.Coroutine:
+                        actionCoroutines.Add(actionRequest.ExecuteAutomaticallyCoroutine);
+                        break;
+                        
+                    case GameTurnActionRequest.AutomaticExecutionType.Action:
+                        actionRequest.ExecuteAutomaticallyAction?.Invoke();
+                        break;
+                }
+            }
+            
+            if (actionCoroutines.Count > 0)
+            {
+                yield return new WaitForAllCoroutines(actionCoroutines);   
+            }
         }
         
         private void OnAddedActionRequest(CustomPriorityQueueItem<GameTurnActionRequest> addedActionRequestItem)
