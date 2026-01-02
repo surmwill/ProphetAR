@@ -88,11 +88,12 @@ namespace ProphetAR
                     continue;
                 }
 
+                GamePlayerConfig playerConfig = player.Config;
                 for (int i = 0; i < playerCharacterPrefabs.Count; i++)
                 {
                     Character characterPrefab = playerCharacterPrefabs[i];
                     CharacterSpawnPoint spawnPoint = spawnPoints[i];
-                    CharacterStats characterStats = player.Config.CharacterStats[i];
+                    CharacterStats characterStats = playerConfig.CharacterStats[i];
                     
                     Character character = Grid.InstantiateGridObject(characterPrefab, spawnPoint.Coordinates);
                     character.Initialize(player, characterStats);

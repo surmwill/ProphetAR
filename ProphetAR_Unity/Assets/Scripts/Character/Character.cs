@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ProphetAR
 {
-    public class Character : GridObject, IGridContentSelfPositioner
+    public class Character : GridObject, IGridContentSelfPositioner, IGameEventOnPreGameTurnListener, IGameEventBuildInitialGameTurnListener
     {
         [ReadOnly]
         [SerializeField]
@@ -30,12 +30,37 @@ namespace ProphetAR
             get => _characterStats;
             set => _characterStats = value;
         }
+        
+        public List<CharacterAbility> Abilities { get; } = new();
 
         public void Initialize(GamePlayer player, CharacterStats characterStats)
         {
             Player = player;
             CharacterStats = characterStats;
         }
+        
+        #region Turn_Callbacks
+        
+        // Pre-turn
+        void IGameEventWithoutDataListener<IGameEventOnPreGameTurnListener>.OnEvent()
+        {
+            UpdateStatsForNewTurn();
+        }
+        
+        // Build turn
+        void IGameEventWithoutDataListener<IGameEventBuildInitialGameTurnListener>.OnEvent()
+        {
+            Level.TurnManager.CurrTurn.ActionRequests.Enqueue(new CharacterActionRequest(this));         
+        }
+
+        private void UpdateStatsForNewTurn()
+        {
+            _characterStats.ActionPoints = Mathf.Min(_characterStats.ActionPoints + _characterStats.ActionPointsRegenPerTurn, _characterStats.MaxActionPoints);
+        }
+        
+        #endregion
+        
+        #region Movement
         
         public IEnumerator WalkToCoordinates(Vector2Int targetCoordinates, OnWalkComplete onComplete = null)
         {
@@ -96,7 +121,11 @@ namespace ProphetAR
             
             yield return sequence.WaitForCompletion();
         }
-
+        
+        #endregion
+        
+        #region Cell_Positioning
+        
         public virtual Transform GetCellParent(GridCellContent cell)
         {
             return cell.CharactersRoot;
@@ -104,7 +133,9 @@ namespace ProphetAR
 
         public virtual Vector3 GetLocalPositionInCell(GridCellContent cell)
         {
-           return Vector3.zero;
+            return Vector3.zero;
         }
+        
+        #endregion
     }
 }
