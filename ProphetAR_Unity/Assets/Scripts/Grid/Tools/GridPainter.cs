@@ -13,10 +13,24 @@ namespace ProphetAR
         
         public void ShowMovementArea(NavigationDestinationSet possibleDestinations, GridSlice gridSlice)
         {
-            foreach (NavigationDestination navigationDestination in possibleDestinations)
+            foreach (GridCell gridCell in gridSlice)
             {
-                GridCell gridCell = Grid[gridSlice.Origin + navigationDestination.Position.ToVector2Int()];
-                
+                if (possibleDestinations.Destinations.TryGetValue(gridCell.Coordinates.ToTuple(), out NavigationDestination destination))
+                {
+                    gridCell.GridCellPainter.ShowIsNavigable(true, destination.StepsRequired);
+                }
+                else
+                {
+                    gridCell.GridCellPainter.ShowIsNavigable(false);
+                }
+            }
+        }
+
+        public void ClearMovementArea(GridSlice gridSlice)
+        {
+            foreach (GridCell gridCell in gridSlice)
+            {
+                gridCell.GridCellPainter.ShowIsNavigable(false);
             }
         }
     }

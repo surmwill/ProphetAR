@@ -9,9 +9,10 @@ namespace GridPathFinding
     
         public int MaxNumSteps { get; }
 
+        // Non-null
         public Dictionary<(int row, int col), NavigationDestination> Destinations { get; }
 
-        // The first destination is always the origin (i.e. we don't move)
+        // Can we move further than the origin?
         public bool CanMove => Destinations.Count > 1;
 
         public NavigationDestinationSet((int row, int col) origin, int maxNumSteps, Dictionary<(int row, int col), NavigationDestination> destinations)

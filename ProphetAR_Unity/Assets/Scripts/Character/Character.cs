@@ -61,6 +61,13 @@ namespace ProphetAR
         #endregion
         
         #region Movement
+
+        public (NavigationDestinationSet Destinations, GridSlice Area) GetMovementArea()
+        {
+            int maxSteps = _characterStats.ActionPoints;
+            GridSlice area = GridSlice.CreateFromCenter(Grid, GridTransform.Coordinates, maxSteps);
+            return (GridTransform.GetPathsFrom(maxSteps, area), area);
+        }
         
         public IEnumerator WalkToCoordinates(Vector2Int targetCoordinates, OnWalkComplete onComplete = null)
         {

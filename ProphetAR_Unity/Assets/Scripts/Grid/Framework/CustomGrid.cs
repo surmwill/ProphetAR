@@ -25,7 +25,7 @@ namespace ProphetAR
         [ReadOnly]
         private Vector2Int _botRightCoordinate = default;
         
-        // Used for building the grid
+        [Tooltip("Used for building the grid")]
         [SerializeField]
         private GridSection _originGridSection = null;
 
@@ -39,15 +39,22 @@ namespace ProphetAR
         [ReadOnly]
         private List<SavedGridCell> _savedGrid = null;
 
-        public Level Level => _level;
-        
-        public Dictionary<Vector2Int, GridCell> Cells { get; } = new();
-
         public event Action<GridObject> OnAddedGridObject;
 
         public event Action<GridObject, bool> OnRemovedGridObject;
         
+        public Level Level => _level;
+        
+        public Dictionary<Vector2Int, GridCell> Cells { get; } = new();
+        
+        public GridPainter GridPainter { get; private set; }
+        
         private readonly HashSet<GridObject> _gridObjects = new();
+        
+        private void Awake()
+        {
+            GridPainter = new GridPainter(this);
+        }
 
         // Keep track of what objects are on the grid
         #region GridObjectManagement

@@ -12,7 +12,7 @@ namespace GridPathFinding
     
         public (int row, int col) Target { get; }
     
-        // Never null. If the origin and the target are the same then this is empty. If a path cannot be made then no instruction set will be returned in the first place
+        // Non-null. If the origin and the target are the same then this is empty. If a path cannot be made then no instruction set will be returned in the first place
         public List<NavigationInstruction> PathToTarget { get; }
         
         public List<(int row, int col)> PathCoordinates { get; } = new();

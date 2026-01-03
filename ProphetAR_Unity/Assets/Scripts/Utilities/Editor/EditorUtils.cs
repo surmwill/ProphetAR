@@ -24,10 +24,7 @@ namespace ProphetAR.Editor
             }
             else
             {
-                EditorApplication.delayCall += () =>
-                {
-                    Object.DestroyImmediate(obj);
-                };   
+                EditorApplication.delayCall += () => Object.DestroyImmediate(obj);   
             }
         }
     }

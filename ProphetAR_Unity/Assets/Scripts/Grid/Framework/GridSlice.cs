@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using GridPathFinding;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace ProphetAR
     /// <summary>
     /// Represents a rectangular window of cells relative to the entire grid
     /// </summary>
-    public readonly struct GridSlice
+    public readonly struct GridSlice : IEnumerable<GridCell>
     {
         public CustomGrid Grid { get; }
 
@@ -48,7 +49,7 @@ namespace ProphetAR
 
         public string SliceDescription()
         {
-            return $"Top left: {TopLeft}, Bot right: {BotRight}, Dimensions: {Dimensions}";
+            return $"Top left/Origin: {TopLeft}, Bot right: {BotRight}, Dimensions: {Dimensions}";
         }
 
         public bool ContainsPoint(Vector2Int coordinates)
@@ -101,6 +102,29 @@ namespace ProphetAR
                 
                 return Grid[coordinates];      
             }
-        } 
+        }
+
+        public IEnumerator<GridCell> GetEnumerator()
+        {
+            for (int row = TopLeft.y; row <= BotRight.y; row++)
+            {
+                for (int col = TopLeft.x; col <= BotRight.x; col++)
+                {
+                    yield return this[(row, col).ToVector2Int()];
+                }
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+        
+        public static GridSlice CreateFromCenter(CustomGrid grid, Vector2Int origin, int magnitudeInEachDirection)
+        {
+            Vector2Int topLeft = origin - magnitudeInEachDirection * Vector2Int.one;
+            Vector2Int dimensions = (magnitudeInEachDirection * 2 + 1) * Vector2Int.one;
+            return new GridSlice(grid, topLeft, dimensions);
+        }
     }
 }
