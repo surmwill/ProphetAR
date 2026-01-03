@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace GridPathFinding
 {
-    public class NavigationDestinationSet
+    public class NavigationDestinationSet : IEnumerable<NavigationDestination>
     {
         public (int row, int col) Origin { get; }
     
@@ -31,6 +32,16 @@ namespace GridPathFinding
                 
                 return null;
             }
+        }
+
+        public IEnumerator<NavigationDestination> GetEnumerator()
+        {
+            return Destinations.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

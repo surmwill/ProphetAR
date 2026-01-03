@@ -11,8 +11,14 @@ namespace ProphetAR
     public readonly struct GridSlice
     {
         public CustomGrid Grid { get; }
+
+        public Vector2Int Origin => TopLeft;
+        
+        public Vector2Int BotLeft { get; }
         
         public Vector2Int TopLeft { get; }
+        
+        public Vector2 TopRight { get; }
         
         public Vector2Int BotRight { get; }
         
@@ -32,7 +38,10 @@ namespace ProphetAR
             Grid = grid;
 
             TopLeft = topLeft;
-            BotRight = topLeft + (dimensions - new Vector2Int(1, 1));
+            BotLeft = topLeft + new Vector2Int(dimensions.x - 1, 0);
+
+            TopRight = topLeft + new Vector2Int(0, dimensions.y - 1);
+            BotRight = topLeft + (dimensions - Vector2Int.one);
 
             Dimensions = dimensions;
         }
@@ -58,7 +67,7 @@ namespace ProphetAR
                 for (int col = TopLeft.x; col <= BotRight.x; col++)
                 {
                     GridCell gridCell = Grid[new Vector2Int(row, col)];
-                    if (!gridCell)
+                    if (gridCell == null)
                     {
                         obstacles.Add((row, col));
                         continue;
@@ -80,7 +89,18 @@ namespace ProphetAR
 
             return new SerializedGrid(Dimensions.ToTuple(), obstacles: obstacles, modificationSteps: modificationSteps);
         }
-        
-        public GridCell this[Vector2Int coordinates] => Grid[coordinates];
+
+        public GridCell this[Vector2Int coordinates]
+        {
+            get
+            {
+                if (!ContainsPoint(coordinates))
+                {
+                    throw new ArgumentException($"Given coordinates {coordinates} are not contained within the slice. {SliceDescription()}");
+                }
+                
+                return Grid[coordinates];      
+            }
+        } 
     }
 }
