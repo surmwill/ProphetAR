@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
@@ -6,6 +5,7 @@ namespace ProphetAR
 {
     public class ARManager : Singleton<ARManager>
     {
+        [Header("Framework")]
         [SerializeField]
         private ARRaycastManager _raycastManager = null;
 
@@ -14,22 +14,28 @@ namespace ProphetAR
 
         [SerializeField]
         private ARCameraManager _cameraManager = null;
-
-        [SerializeField]
-        private GroundPlaneManager _groundPlaneManager = null;
-
+        
         [SerializeField]
         private ARSession _arSession = null;
+        
+        [SerializeField]
+        private GroundPlaneManager _groundPlaneManager = null;
+        
+        [Header("Tools")]
+        [SerializeField]
+        private ARGridCellSelector _arGridCellSelector;
 
         public ARRaycastManager RaycastManager => _raycastManager;
 
         public ARAnchorManager AnchorManager => _anchorManager;
 
         public ARCameraManager CameraManager => _cameraManager;
-
-        public GroundPlaneManager GroundPlaneManager => _groundPlaneManager;
         
         public ARSession ARSession => _arSession;
+        
+        public GroundPlaneManager GroundPlaneManager => _groundPlaneManager;
+
+        public ARGridCellSelector ARGridCellSelector => _arGridCellSelector;
 
         public Camera ARCamera
         {
@@ -45,5 +51,11 @@ namespace ProphetAR
         }
 
         private Camera _arCamera;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            
+        }
     }
 }
