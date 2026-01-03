@@ -5,13 +5,15 @@ using Object = UnityEngine.Object;
 
 namespace ProphetAR
 {
-    public class ARObjectSelector<T> : MonoBehaviour where T : class
+    public abstract class ARObjectSelector<T> : MonoBehaviour where T : class
     {
         [SerializeField]
         private LayerMask _gridObjectLayers = default;
         
         public T LastHovered { get; private set; }
 
+        private static readonly bool SelectingUnityObject = typeof(Object).IsAssignableFrom(typeof(T));
+        
         // Not that T could also be an interface type and not a (unity) Object
         private Object _lastHoveredUnityObject;
 
@@ -22,13 +24,20 @@ namespace ProphetAR
         
         private Action<T> _onSelected;
         private Action _onCancelled;
+        
+        // The length is an estimate on the upper bound of the number of hits we'll receive in a raycast (we might then filter out invalid ones)
+        private readonly RaycastHit[] _raycastHits = new RaycastHit[5];
 
         public void Initialize(Camera arCamera)
         {
             _arCamera = arCamera;
         }
         
-        public ARSelectingObjectYieldInstruction StartGridCellSelection(Action<T> onHovered = null, Action<T> onSelected = null, Action onCancelled = null)
+        public ARSelectingObjectYieldInstruction StartObjectSelection(
+            Action<T> onHovered = null, 
+            Action<T> onSelected = null, 
+            Action onCancelled = null,
+            Func<T, bool> isValidForSelection = null)
         {
             if (_gridCellSelectionCoroutine != null)
             {
@@ -40,35 +49,43 @@ namespace ProphetAR
             _onCancelled = onCancelled;
 
             _selectingObjectYieldInstruction = new ARSelectingObjectYieldInstruction();
-            _gridCellSelectionCoroutine = StartCoroutine(GridCellSelection(onHovered));
+            _gridCellSelectionCoroutine = StartCoroutine(GridCellSelection(onHovered, isValidForSelection));
 
             return _selectingObjectYieldInstruction;
         }
 
-        private IEnumerator GridCellSelection(Action<T> onHovered = null)
+        private IEnumerator GridCellSelection(Action<T> onHovered = null, Func<T, bool> isValidForSelection = null)
         {
             for (;;)
             {
                 Ray cameraRay = new Ray(_arCamera.transform.position, _arCamera.transform.forward);
-                if (Physics.Raycast(cameraRay, out RaycastHit raycastHit, Mathf.Infinity, _gridObjectLayers))
+                int numHits = Physics.RaycastNonAlloc(cameraRay, _raycastHits, Mathf.Infinity, _gridObjectLayers);
+                
+                for (int i = 0; i < numHits; i++)
                 {
-                    T hitGridObject = raycastHit.transform.GetComponent<T>();
+                    T hitGridObject = _raycastHits[i].transform.GetComponent<T>();
+                    bool cachedIsValidForSelection = false;
                     
-                    // Component
-                    if (hitGridObject is Object unityObject)
+                    // Component (overrides ==)
+                    if (SelectingUnityObject)
                     {
-                        if (unityObject != null && unityObject != _lastHoveredUnityObject)
+                        if (hitGridObject is Object unityObject && 
+                            unityObject != null && 
+                            unityObject != _lastHoveredUnityObject &&
+                            (isValidForSelection?.Invoke(hitGridObject) ?? true))
                         {
                             _lastHoveredUnityObject = unityObject;
                             LastHovered = hitGridObject;
                             onHovered?.Invoke(hitGridObject);
+                            break;
                         }
                     }
                     // Interface
-                    else if (hitGridObject != null && LastHovered != hitGridObject)
+                    else if (hitGridObject != null && LastHovered != hitGridObject &&  (isValidForSelection?.Invoke(hitGridObject) ?? true))
                     {
                         LastHovered = hitGridObject;
                         onHovered?.Invoke(hitGridObject);
+                        break;
                     }
                 }
 

@@ -56,6 +56,7 @@ namespace ProphetAR
         {
             base.Awake();
             
+            _arGridCellSelector.Initialize(ARCamera);   
         }
     }
 }
