@@ -1,5 +1,4 @@
-﻿using ProphetAR.Editor;
-using UnityEngine;
+﻿using UnityEngine;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -29,11 +28,19 @@ namespace ProphetAR
         [ReadOnly]
         private GridCellContent _cellContent;
 
+        [SerializeField]
+        private GridCellPainter _cellPainter;
+
         public GridSection GridSection => _gridSection;
         
         public GridCellContent Content => _cellContent;
 
         public GridPointProperties GridPointProperties => Content.GridPointProperties;
+
+        /// <summary>
+        /// Paints overlays (ex: green if the cell is navigable, red for being in attack range)
+        /// </summary>
+        public GridCellPainter GridCellPainter => _cellPainter;
 
         public Vector2Int Coordinates => _coordinates;
 

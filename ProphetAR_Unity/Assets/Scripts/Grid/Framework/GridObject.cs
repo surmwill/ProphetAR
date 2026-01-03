@@ -11,8 +11,6 @@ namespace ProphetAR
         public Level Level => Grid.Level;
         
         public GridTransform GridTransform { get; private set; }
-        
-        public bool IsDestroying { get; private set; }
 
         private void Awake()
         {
@@ -27,12 +25,6 @@ namespace ProphetAR
 
         private void OnDestroy()
         {
-            if (IsDestroying)
-            {
-                return;
-            }
-            
-            IsDestroying = true;
             Grid.DestroyGridObject(this);
         }
     }

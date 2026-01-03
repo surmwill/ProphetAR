@@ -80,7 +80,7 @@ namespace ProphetAR
 
         public void DestroyGridObject(GridObject gridObject)
         {
-            if (!gridObject.IsDestroying)
+            if (!gridObject.destroyCancellationToken.IsCancellationRequested)
             {
                 Destroy(gridObject.gameObject);
                 return;
