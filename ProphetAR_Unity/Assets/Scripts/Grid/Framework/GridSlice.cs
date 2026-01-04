@@ -52,7 +52,7 @@ namespace ProphetAR
             return $"Top left/Origin: {TopLeft}, Bot right: {BotRight}, Dimensions: {Dimensions}";
         }
 
-        public bool ContainsPoint(Vector2Int coordinates)
+        public bool ContainsCoordinates(Vector2Int coordinates)
         {
             return coordinates.x >= TopLeft.x && coordinates.x <= BotRight.x &&
                    coordinates.y >= TopLeft.y && coordinates.y <= BotRight.y;
@@ -95,7 +95,7 @@ namespace ProphetAR
         {
             get
             {
-                if (!ContainsPoint(coordinates))
+                if (!ContainsCoordinates(coordinates))
                 {
                     throw new ArgumentException($"Given coordinates {coordinates} are not contained within the slice. {SliceDescription()}");
                 }

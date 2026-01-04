@@ -9,6 +9,8 @@ namespace ProphetAR
     {
         [SerializeField]
         private LayerMask _gridObjectLayers = default;
+
+        public delegate void OnHovered(T lastHover, T currHover);
         
         public T LastHovered { get; private set; }
 
@@ -20,7 +22,7 @@ namespace ProphetAR
         private Camera _arCamera;
         
         private Coroutine _gridCellSelectionCoroutine;
-        private ARSelectingObjectYieldInstruction _selectingObjectYieldInstruction;
+        private WaitForARObjectSelection<T> _waitForObjectSelection;
         
         private Action<T> _onSelected;
         private Action _onCancelled;
@@ -33,8 +35,8 @@ namespace ProphetAR
             _arCamera = arCamera;
         }
         
-        public ARSelectingObjectYieldInstruction StartObjectSelection(
-            Action<T> onHovered = null, 
+        public WaitForARObjectSelection<T> StartObjectSelection(
+            OnHovered onHovered = null,
             Action<T> onSelected = null, 
             Action onCancelled = null,
             Func<T, bool> isValidForSelection = null)
@@ -48,13 +50,13 @@ namespace ProphetAR
             _onSelected = onSelected;
             _onCancelled = onCancelled;
 
-            _selectingObjectYieldInstruction = new ARSelectingObjectYieldInstruction();
+            _waitForObjectSelection = new WaitForARObjectSelection<T>(this);
             _gridCellSelectionCoroutine = StartCoroutine(GridCellSelection(onHovered, isValidForSelection));
 
-            return _selectingObjectYieldInstruction;
+            return _waitForObjectSelection;
         }
 
-        private IEnumerator GridCellSelection(Action<T> onHovered = null, Func<T, bool> isValidForSelection = null)
+        private IEnumerator GridCellSelection(OnHovered onHovered = null, Func<T, bool> isValidForSelection = null)
         {
             for (;;)
             {
@@ -74,17 +76,21 @@ namespace ProphetAR
                             unityObject != _lastHoveredUnityObject &&
                             (isValidForSelection?.Invoke(hitGridObject) ?? true))
                         {
+                            T prevHover = LastHovered;
+                            
                             _lastHoveredUnityObject = unityObject;
                             LastHovered = hitGridObject;
-                            onHovered?.Invoke(hitGridObject);
+                            
+                            onHovered?.Invoke(prevHover, LastHovered);
                             break;
                         }
                     }
                     // Interface
                     else if (hitGridObject != null && LastHovered != hitGridObject &&  (isValidForSelection?.Invoke(hitGridObject) ?? true))
                     {
+                        T prevHover = LastHovered;
                         LastHovered = hitGridObject;
-                        onHovered?.Invoke(hitGridObject);
+                        onHovered?.Invoke(prevHover, LastHovered);
                         break;
                     }
                 }
@@ -118,20 +124,21 @@ namespace ProphetAR
                 return;
             }
             
-            LastHovered = null;
-            
             StopCoroutine(_gridCellSelectionCoroutine);
             _gridCellSelectionCoroutine = null;
 
+            T selected = LastHovered;
+            LastHovered = null;
+            
             if (fromSelection)
             {
-                _selectingObjectYieldInstruction.Selected = true;
+                _waitForObjectSelection.SetResolvedSelected(selected);
             }
             else
             {
-                _selectingObjectYieldInstruction.Cancelled = true;
+                _waitForObjectSelection.SetResolvedCancelled();
             }
-            _selectingObjectYieldInstruction = null;
+            _waitForObjectSelection = null;
 
             Action onCancelled = _onCancelled;
             _onCancelled = null;

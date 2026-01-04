@@ -54,12 +54,12 @@ namespace ProphetAR
         }
 
         /// <summary>
-        /// The game action can be automatically executed as a coroutine or a (C#) action, whichever one is non-null
+        /// The game action can be automatically executed as a coroutine or a (C#) action, one of these needs to be overriden to non-null
         /// </summary>
         public virtual IEnumerator ExecuteAutomaticallyCoroutine { get; } = null;
 
         /// <summary>
-        /// The game action can be automatically executed as a coroutine or a (C#) action, whichever one is non-null
+        /// The game action can be automatically executed as a coroutine or a (C#) action, one of these needs to be overriden to non-null
         /// </summary>
         public virtual Action ExecuteAutomaticallyAction { get; } = null;
 

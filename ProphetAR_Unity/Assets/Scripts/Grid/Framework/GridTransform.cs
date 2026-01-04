@@ -134,7 +134,7 @@ namespace ProphetAR
 
         public NavigationDestinationSet GetPathsFrom(int maxNumSteps, GridSlice area)
         {
-            if (!area.ContainsPoint(Coordinates))
+            if (!area.ContainsCoordinates(Coordinates))
             {
                 throw new ArgumentException($"The transform at {Coordinates} is not contained in the grid slice with properties: (${area.SliceDescription()})");
             }
@@ -145,12 +145,12 @@ namespace ProphetAR
         
         public NavigationInstructionSet GetPathTo(Vector2Int target, GridSlice area)
         {
-            if (!area.ContainsPoint(Coordinates))
+            if (!area.ContainsCoordinates(Coordinates))
             {
                 throw new ArgumentException($"The transform at {Coordinates} is not contained in the grid slice with properties: (${area.SliceDescription()})");
             }
             
-            if (!area.ContainsPoint(target))
+            if (!area.ContainsCoordinates(target))
             {
                 throw new ArgumentException($"The target {target} is not contained in the grid slice with properties: (${area.SliceDescription()})");
             }

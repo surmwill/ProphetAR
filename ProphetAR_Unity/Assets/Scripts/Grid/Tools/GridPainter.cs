@@ -1,4 +1,5 @@
-﻿using GridPathFinding;
+﻿using System;
+using GridPathFinding;
 
 namespace ProphetAR
 {
@@ -11,7 +12,7 @@ namespace ProphetAR
             Grid = grid;
         }
         
-        public void ShowMovementArea(NavigationDestinationSet possibleDestinations, GridSlice gridSlice)
+        public DisposableGridPainter ShowMovementArea(NavigationDestinationSet possibleDestinations, GridSlice gridSlice)
         {
             foreach (GridCell gridCell in gridSlice)
             {
@@ -24,6 +25,8 @@ namespace ProphetAR
                     gridCell.GridCellPainter.ShowIsNavigable(false);
                 }
             }
+
+            return new DisposableGridPainter(() => ClearMovementArea(gridSlice));
         }
 
         public void ClearMovementArea(GridSlice gridSlice)
@@ -31,6 +34,25 @@ namespace ProphetAR
             foreach (GridCell gridCell in gridSlice)
             {
                 gridCell.GridCellPainter.ShowIsNavigable(false);
+            }
+        }
+
+        /// <summary>
+        /// Allows us to paint grid cells in using blocks { } instead of having paired ShowPaint() HidePaint() calls.
+        /// This is optional and the ShowPaint() HidePaint() pattern can be used all the same.
+        /// </summary>
+        public class DisposableGridPainter : IDisposable
+        {
+            private readonly Action _cleanup;
+            
+            public DisposableGridPainter(Action cleanup)
+            {
+                _cleanup = cleanup;
+            }
+
+            public void Dispose()
+            {
+                _cleanup?.Invoke();
             }
         }
     }
