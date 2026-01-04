@@ -30,8 +30,8 @@ namespace ProphetAR
                 _waitForMovementCellSelection = ARManager.Instance.ARGridCellSelector.StartObjectSelection(
                     onHovered: OnGridCellHovered, 
                     isValidForSelection: gridCell => area.ContainsCoordinates(gridCell.Coordinates),
-                    onSelected: StopCellHover,
-                    onCancelled: () => StopCellHover(_waitForMovementCellSelection.Selector.LastHovered));
+                    onSelected: _ => StopCellHover(),
+                    onCancelled: StopCellHover);
                 
                 yield return _waitForMovementCellSelection;
             }
@@ -47,24 +47,24 @@ namespace ProphetAR
 
         private void OnGridCellHovered(GridCell prevGridCell, GridCell currGridCell)
         {
-            _onSelectedGridCellSequence?.Kill();
-            
-            StopCellHover(prevGridCell);
-            
+            StopCellHover();
             _onSelectedGridCellSequence = DOTween.Sequence()
                 .Append(currGridCell.transform.DOLocalMoveY(OnSelectedGridCellRaise, OnSelectedGridCellAnimTime))
                 .Join(currGridCell.transform.DOScale(new Vector3(OnSelectedGridCellScale, OnSelectedGridCellScale, 1f), OnSelectedGridCellAnimTime));
         }
 
-        private void StopCellHover(GridCell gridCell)
+        private void StopCellHover()
         {
-            if (gridCell == null)
+            _onSelectedGridCellSequence?.Kill();
+
+            GridCell hoveredGridCell = _waitForMovementCellSelection.Selector.LastHovered;
+            if (hoveredGridCell == null)
             {
                 return;
             }
             
-            gridCell.transform.localPosition = gridCell.transform.localPosition.WithY(0f);
-            gridCell.transform.localScale = Vector3.one;
+            hoveredGridCell.transform.localPosition = hoveredGridCell.transform.localPosition.WithY(0f);
+            hoveredGridCell.transform.localScale = Vector3.one;
         }
 
         public override void Cancel()
@@ -75,8 +75,6 @@ namespace ProphetAR
             }
         }
 
-        public CharacterAbilityMovement(Character character) : base(character)
-        {
-        }
+        public CharacterAbilityMovement(Character character) : base(character) { }
     }
 }
