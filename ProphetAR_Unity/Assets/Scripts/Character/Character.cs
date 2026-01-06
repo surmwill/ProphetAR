@@ -22,7 +22,18 @@ namespace ProphetAR
         public GamePlayer Player
         {
             get => Grid.Level.Players[_playerIndex];
-            set => _playerIndex = value.Index;
+            set
+            {
+                if (_playerIndex == value.Index)
+                {
+                    return;
+                }
+
+                int prevIndex = _playerIndex;
+                _playerIndex = value.Index;
+                
+                OnPlayerChange(prevIndex >= 0 ? Level.Players[prevIndex] : null, value.Index >= 0 ? Level.Players[value.Index] : null);
+            }
         }
 
         public CharacterStats CharacterStats
@@ -38,7 +49,28 @@ namespace ProphetAR
             Player = player;
             CharacterStats = characterStats;
         }
-        
+
+        private void OnPlayerChange(GamePlayer prevPlayer, GamePlayer currPlayer)
+        {
+            if (prevPlayer != null)
+            {
+                prevPlayer.EventProcessor.RemoveListenerWithoutData<IGameEventOnPreGameTurnListener>(this);
+                prevPlayer.EventProcessor.RemoveListenerWithoutData<IGameEventBuildInitialGameTurnListener>(this);
+            }
+            
+            if (currPlayer != null)
+            {
+                currPlayer.EventProcessor.AddListenerWithoutData<IGameEventOnPreGameTurnListener>(this);
+                currPlayer.EventProcessor.AddListenerWithoutData<IGameEventBuildInitialGameTurnListener>(this);
+            }
+        }
+
+        protected override void OnDestroy()
+        {
+            Player = null;
+            base.OnDestroy();
+        }
+
         #region Turn_Callbacks
         
         // Pre-turn

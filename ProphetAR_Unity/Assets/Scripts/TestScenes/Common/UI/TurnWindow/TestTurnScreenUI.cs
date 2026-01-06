@@ -5,18 +5,19 @@ using UnityEngine.UI;
 
 namespace ProphetAR
 {
-    public class TestTurnWindowScreenControl : 
+    public class TestTurnScreenUI : 
         MonoBehaviour, 
         IGameEventOnPreGameTurnListener,
         IGameEventOnInitialGameTurnBuiltListener,
         IGameEventGameTurnActionsModifiedListener,
-        IGameEventOnPostGameTurnListener
+        IGameEventOnPostGameTurnListener,
+        IGameEventShowCharacterActionsUIListener
     {
         [SerializeField]
         private Level _level = null;
         
         [SerializeField]
-        private TestTurnWindowActionRequestsRecycler _actionRequestsRecycler = null;
+        private TestTurnScreenActionRequestsRecyclerUI _actionRequestsRecycler = null;
 
         [SerializeField]
         private TMP_Text _currPlayerText = null;
@@ -38,7 +39,26 @@ namespace ProphetAR
             
             _completeManualPartOfTurnButton.onClick.AddListener(CompleteManualPartOfTurn);
         }
+        
+        private void CompleteManualPartOfTurn()
+        {
+            _completeManualPartOfTurnButton.enabled = false;
+            StartCoroutine(CurrTurn.CompleteManualPartOfTurnCoroutine(hasMoreManualRequests => _completeManualPartOfTurnButton.enabled = hasMoreManualRequests));
+        }
+        
+        private void OnDestroy()
+        {
+            _completeManualPartOfTurnButton.onClick.RemoveListener(CompleteManualPartOfTurn);
+        }
+        
+        
+        // An action during the turn is requesting us to show the character's actions
+        void IGameEventWithoutDataListener<IGameEventShowCharacterActionsUIListener>.OnEvent()
+        {
+        }
 
+        #region TurnEvents
+        
         /// <summary>
         /// Pre-turn
         /// </summary>
@@ -61,7 +81,7 @@ namespace ProphetAR
         /// </summary>
         void IGameEventWithoutDataListener<IGameEventOnInitialGameTurnBuiltListener>.OnEvent()
         {
-            _actionRequestsRecycler.AppendEntries(CurrTurn.ActionRequests.Select(actionRequest => new TestTurnWindowActionRequestsRecyclerData(actionRequest)));
+            _actionRequestsRecycler.AppendEntries(CurrTurn.ActionRequests.Select(actionRequest => new TestTurnScreenActionRequestsRecyclerUIData(actionRequest)));
         }
         
         /// <summary>
@@ -72,7 +92,7 @@ namespace ProphetAR
             switch (data.ModificationReason)
             {
                 case GameEventGameTurnActionsModifiedData.ModificationType.Added:
-                    _actionRequestsRecycler.AppendEntries(new [] { new TestTurnWindowActionRequestsRecyclerData(data.ModifiedRequest) });
+                    _actionRequestsRecycler.AppendEntries(new [] { new TestTurnScreenActionRequestsRecyclerUIData(data.ModifiedRequest) });
                     break;
                 
                 case GameEventGameTurnActionsModifiedData.ModificationType.Removed:
@@ -84,7 +104,7 @@ namespace ProphetAR
                     int firstGreaterPriorityIndex = -1;
                     for (int i = 0; i < _actionRequestsRecycler.DataForEntries.Count; i++)
                     {
-                        TestTurnWindowActionRequestsRecyclerData recyclerData = _actionRequestsRecycler.DataForEntries[i];
+                        TestTurnScreenActionRequestsRecyclerUIData recyclerData = _actionRequestsRecycler.DataForEntries[i];
                         if (recyclerData.ActionRequest.Priority > data.ModifiedRequest.Priority)
                         {
                             firstGreaterPriorityIndex = i;
@@ -97,28 +117,19 @@ namespace ProphetAR
                         (_actionRequestsRecycler.DataForEntries[firstGreaterPriorityIndex - 1].ActionRequest != data.ModifiedRequest))
                     {
                         _actionRequestsRecycler.RemoveAtKey(FindRecyclerDataForActionRequest(data.ModifiedRequest).Key);
-                        _actionRequestsRecycler.InsertAtKey(firstGreaterPriorityIndex, new TestTurnWindowActionRequestsRecyclerData(data.ModifiedRequest));
+                        _actionRequestsRecycler.InsertAtKey(firstGreaterPriorityIndex, new TestTurnScreenActionRequestsRecyclerUIData(data.ModifiedRequest));
                     }
 
                     break;
                 }
             }
             
-            TestTurnWindowActionRequestsRecyclerData FindRecyclerDataForActionRequest(GameTurnActionRequest actionRequest)
+            TestTurnScreenActionRequestsRecyclerUIData FindRecyclerDataForActionRequest(GameTurnActionRequest actionRequest)
             {
                 return _actionRequestsRecycler.DataForEntries.FirstOrDefault(recyclerData => recyclerData.ActionRequest == actionRequest);
             }
         }
         
-        private void CompleteManualPartOfTurn()
-        {
-            _completeManualPartOfTurnButton.enabled = false;
-            StartCoroutine(CurrTurn.CompleteManualPartOfTurnCoroutine(hasMoreManualRequests => _completeManualPartOfTurnButton.enabled = hasMoreManualRequests));
-        }
-        
-        private void OnDestroy()
-        {
-            _completeManualPartOfTurnButton.onClick.RemoveListener(CompleteManualPartOfTurn);
-        }
+        #endregion
     }
 }

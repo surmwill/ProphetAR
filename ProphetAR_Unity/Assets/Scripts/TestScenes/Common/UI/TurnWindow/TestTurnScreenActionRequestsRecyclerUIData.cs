@@ -2,7 +2,7 @@
 
 namespace ProphetAR
 {
-    public class TestTurnWindowActionRequestsRecyclerData : IRecyclerScrollRectData<long>
+    public class TestTurnScreenActionRequestsRecyclerUIData : IRecyclerScrollRectData<long>
     {
         public long Key { get; }
         
@@ -12,7 +12,7 @@ namespace ProphetAR
 
         private static int _actionRequestNumber;
 
-        public TestTurnWindowActionRequestsRecyclerData(GameTurnActionRequest actionRequest)
+        public TestTurnScreenActionRequestsRecyclerUIData(GameTurnActionRequest actionRequest)
         {
             _actionRequestNumber++;
             

@@ -23,7 +23,7 @@ namespace ProphetAR
             GridTransform.Initialize(this, grid);
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             Grid.DestroyGridObject(this);
         }
