@@ -4,7 +4,7 @@ namespace ProphetAR
 {
     public class CharacterActionRequest : GameTurnActionRequest
     {
-        public override Type CompletedByGameEventType => typeof(GameEventCharacterEndTurnData);
+        public override Type CompletedByGameEventType => typeof(GameEventCharacterOutOfActions);
         
         public Character Character { get; }
 
@@ -15,7 +15,12 @@ namespace ProphetAR
         
         public override void OnFocusUI()
         {
-            Character.Player.EventProcessor.RaiseEventWithData(new GameEventShowCharacterActionsUI(new GameEventShowCharacterActionsUIData(Character)));
+            Character.Player.EventProcessor.RaiseEventWithData(new GameEventShowCharacterActionsUI(Character));
+        }
+
+        public override bool IsCompletedByGameEvent(GameEvent gameEvent)
+        {
+            return gameEvent is GameEventCharacterOutOfActions characterOutOfActions && characterOutOfActions.Data == Character;
         }
     }
 }

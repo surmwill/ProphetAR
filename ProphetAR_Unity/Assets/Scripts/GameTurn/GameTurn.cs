@@ -16,6 +16,7 @@ namespace ProphetAR
 
         public CustomPriorityQueue<GameTurnActionRequest> ActionRequests { get; } = new();
         
+        // Not used yet (would only be used if we incorporate a server for cheat-detection or multiplayer)
         public List<Dictionary<string, object>> ServerSerializedGameStateChangesForTurn { get; } = new();
 
         private readonly Level _level;

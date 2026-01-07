@@ -7,10 +7,14 @@ namespace ProphetAR
 {
     public class TestTurnScreenUI : 
         MonoBehaviour, 
+        
+        // Turn management events
         IGameEventOnPreGameTurnListener,
         IGameEventOnInitialGameTurnBuiltListener,
         IGameEventGameTurnActionsModifiedListener,
         IGameEventOnPostGameTurnListener,
+        
+        // Turn events
         IGameEventShowCharacterActionsUIListener
     {
         [SerializeField]
@@ -20,7 +24,13 @@ namespace ProphetAR
         private TestTurnScreenActionRequestsRecyclerUI _actionRequestsRecycler = null;
 
         [SerializeField]
+        private TestTurnScreenCharacterAbilitiesUI _characterAbilities = null;
+
+        [SerializeField]
         private TMP_Text _currPlayerText = null;
+
+        [SerializeField]
+        private TMP_Text _currTurnText = null;
 
         [SerializeField]
         private Button _completeManualPartOfTurnButton = null;
@@ -29,35 +39,59 @@ namespace ProphetAR
 
         private void Awake()
         {
-            foreach (GamePlayer player in _level.Players)
-            {
-                player.EventProcessor.AddListenerWithoutData<IGameEventOnPreGameTurnListener>(this);
-                player.EventProcessor.AddListenerWithoutData<IGameEventOnInitialGameTurnBuiltListener>(this);
-                player.EventProcessor.AddListenerWithData<IGameEventOnInitialGameTurnBuiltListener, GameEventGameTurnActionsModifiedData>(this);
-                player.EventProcessor.AddListenerWithoutData<IGameEventOnPostGameTurnListener>(this);
-            }
-            
+            BindPlayerEvents(true);
             _completeManualPartOfTurnButton.onClick.AddListener(CompleteManualPartOfTurn);
         }
         
+        // Button to go to the next turn
         private void CompleteManualPartOfTurn()
         {
             _completeManualPartOfTurnButton.enabled = false;
             StartCoroutine(CurrTurn.CompleteManualPartOfTurnCoroutine(hasMoreManualRequests => _completeManualPartOfTurnButton.enabled = hasMoreManualRequests));
         }
         
+        // Action request: a character has action points left
+        void IGameEventWithTypedDataListener<IGameEventShowCharacterActionsUIListener, Character>.OnEvent(Character data)
+        {
+            _characterAbilities.Show(data.Abilities);
+        }
+        
         private void OnDestroy()
         {
+            BindPlayerEvents(false);
             _completeManualPartOfTurnButton.onClick.RemoveListener(CompleteManualPartOfTurn);
         }
         
-        
-        // An action during the turn is requesting us to show the character's actions
-        void IGameEventWithoutDataListener<IGameEventShowCharacterActionsUIListener>.OnEvent()
+        private void BindPlayerEvents(bool bind)
         {
+            foreach (GamePlayer player in _level.Players)
+            {
+                if (bind)
+                {
+                    // Turn manager events
+                    player.EventProcessor.AddListenerWithoutData<IGameEventOnPreGameTurnListener>(this);
+                    player.EventProcessor.AddListenerWithoutData<IGameEventOnInitialGameTurnBuiltListener>(this);
+                    player.EventProcessor.AddListenerWithData<IGameEventOnInitialGameTurnBuiltListener, GameEventGameTurnActionsModifiedData>(this);
+                    player.EventProcessor.AddListenerWithoutData<IGameEventOnPostGameTurnListener>(this);
+                
+                    // Turn events
+                    player.EventProcessor.AddListenerWithData<IGameEventShowCharacterActionsUIListener, Character>(this);   
+                }
+                else
+                {
+                    // Turn manager events
+                    player.EventProcessor.RemoveListenerWithoutData<IGameEventOnPreGameTurnListener>(this);
+                    player.EventProcessor.RemoveListenerWithoutData<IGameEventOnInitialGameTurnBuiltListener>(this);
+                    player.EventProcessor.RemoveListenerWithData<IGameEventOnInitialGameTurnBuiltListener>(this);
+                    player.EventProcessor.RemoveListenerWithoutData<IGameEventOnPostGameTurnListener>(this);
+                
+                    // Turn events
+                    player.EventProcessor.RemoveListenerWithData<IGameEventShowCharacterActionsUIListener>(this);   
+                }
+            }
         }
 
-        #region TurnEvents
+        #region TurnManagementEvents
         
         /// <summary>
         /// Pre-turn

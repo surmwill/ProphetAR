@@ -5,21 +5,21 @@ using UnityEngine;
 namespace ProphetAR
 {
     [Serializable]
-    public struct CharacterStats
+    public class CharacterStats
     {
         [SerializeField]
-        private int _actionPoints;
+        private int _actionPoints = 10;
         
         [SerializeField]
-        private int _maxActionPoints;
+        private int _maxActionPoints = 10;
         
         [SerializeField]
-        private int _actionPointsRegenPerTurn;
+        private int _actionPointsRegenPerTurn = 5;
 
         public int ActionPoints
         {
             get => _actionPoints;
-            set => _actionPoints = value;
+            set => _actionPoints = Mathf.Max(value, 0);
         }
 
         public int MaxActionPoints
@@ -32,16 +32,6 @@ namespace ProphetAR
         {
             get => _actionPointsRegenPerTurn; 
             set => _actionPointsRegenPerTurn = value;
-        }
-
-        public static CharacterStats Sample()
-        {
-            return new CharacterStats
-            {
-                ActionPoints = 10,
-                MaxActionPoints = 10,
-                ActionPointsRegenPerTurn = 10
-            };
         }
     }
 }

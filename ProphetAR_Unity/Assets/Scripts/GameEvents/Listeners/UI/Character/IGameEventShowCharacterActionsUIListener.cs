@@ -1,7 +1,7 @@
 ﻿namespace ProphetAR
 {
     [ListensToGameEventType(typeof(GameEventShowCharacterActionsUI))]
-    public interface IGameEventShowCharacterActionsUIListener : IGameEventWithoutDataListener<IGameEventShowCharacterActionsUIListener>
+    public interface IGameEventShowCharacterActionsUIListener : IGameEventWithTypedDataListener<IGameEventShowCharacterActionsUIListener, Character>
     {
         
     }

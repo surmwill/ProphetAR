@@ -1,8 +1,8 @@
 ﻿namespace ProphetAR
 {
-    public class GameEventShowCharacterActionsUI : GameEventWithTypedData<GameEventShowCharacterActionsUIData>
+    public class GameEventShowCharacterActionsUI : GameEventWithTypedData<Character>
     {
-        public GameEventShowCharacterActionsUI(GameEventShowCharacterActionsUIData data) : base(data)
+        public GameEventShowCharacterActionsUI(Character data) : base(data)
         {
             
         }

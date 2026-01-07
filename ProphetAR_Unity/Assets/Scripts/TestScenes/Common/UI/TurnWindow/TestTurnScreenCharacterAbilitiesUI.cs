@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,10 +14,14 @@ namespace ProphetAR
         [SerializeField]
         private TestTurnScreenCharacterAbilityUI _abilityPrefab = null;
         
-        private readonly List<TestTurnScreenCharacterAbilityUI> _characterAbilities = new();
-
+        public bool Shown { get; private set; }
+        
         private const float ShowTime = 1.4f;
         private const float HideTime = 0.4f;
+        
+        private readonly List<TestTurnScreenCharacterAbilityUI> _characterAbilities = new();
+        
+        private bool _firstShow;
         
         private Sequence _showSequence;
         private Sequence _hideSequence;
@@ -34,14 +39,24 @@ namespace ProphetAR
                     _characterAbilities.Add(characterAbilityUI);
                 }
                 
-                LayoutRebuilder.ForceRebuildLayoutImmediate(_abilitiesParent);
+                if (_firstShow)
+                {
+                    _firstShow = false;
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(_abilitiesParent);   
+                }
             }
+            
+            if (Shown)
+            {
+                return;
+            }
+            Shown = true;
 
             if (_characterAbilities.Count == 0)
             {
                 return;
             }
-
+            
             float height = ((RectTransform) _characterAbilities[0].transform).rect.height;
             _showSequence = DOTween.Sequence().Append(transform.DOLocalMoveY(height, ShowTime));
         }
@@ -50,7 +65,28 @@ namespace ProphetAR
         {
             _showSequence?.Kill();
 
-            _hideSequence = DOTween.Sequence().Append(transform.DOLocalMoveY(0, HideTime));
+            if (!Shown)
+            {
+                return;
+            }
+            Shown = false;
+            
+            _hideSequence = DOTween.Sequence()
+                .Append(transform.DOLocalMoveY(0, HideTime))
+                .OnKill(() =>
+                {
+                    if (!clear)
+                    {
+                        return;
+                    }
+
+                    foreach (TestTurnScreenCharacterAbilityUI ability in _characterAbilities)
+                    {
+                        Destroy(ability.gameObject);
+                    }
+                    
+                    _characterAbilities.Clear();
+                });
         }
     }
 }

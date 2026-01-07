@@ -7,6 +7,10 @@ namespace ProphetAR
 {
     public abstract class GameTurnActionRequest : CustomPriorityQueueItem<GameTurnActionRequest>
     {
+        private static long _requestNum;
+        
+        public long RequestNum { get; }
+        
         public abstract Type CompletedByGameEventType { get; }
         
         public virtual Transform FocusTransform { get; }
@@ -29,9 +33,18 @@ namespace ProphetAR
             return null;
         }
 
+        /// <summary>
+        /// Note that the GameEvent will always match the <see cref="CompletedByGameEventType"/> we provide.
+        /// Implement this method for any additional checking.
+        /// </summary>
         public virtual bool IsCompletedByGameEvent(GameEvent gameEvent)
         {
-            return CompletedByGameEventType == gameEvent.GetType();
+            return true;
+        }
+        
+        protected GameTurnActionRequest()
+        {
+            RequestNum = _requestNum++;
         }
         
         #region AI_Execution

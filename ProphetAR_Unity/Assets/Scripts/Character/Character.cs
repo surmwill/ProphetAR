@@ -64,6 +64,17 @@ namespace ProphetAR
                 currPlayer.EventProcessor.AddListenerWithoutData<IGameEventBuildInitialGameTurnListener>(this);
             }
         }
+        
+        private bool CheckOutOfActionPoints()
+        {
+            if (CharacterStats.ActionPoints == 0)
+            {
+                Player.EventProcessor.RaiseEventWithData(new GameEventCharacterOutOfActions(this));
+                return true;
+            }
+
+            return false;
+        }
 
         protected override void OnDestroy()
         {
@@ -71,7 +82,7 @@ namespace ProphetAR
             base.OnDestroy();
         }
 
-        #region Turn_Callbacks
+        #region TurnCallbacks
         
         // Pre-turn
         void IGameEventWithoutDataListener<IGameEventOnPreGameTurnListener>.OnEvent()
@@ -121,10 +132,42 @@ namespace ProphetAR
             Level.EventProcessor.RaiseEventWithData(new GameEventCharacterMove(characterMoveData));
 
             List<NavigationInstructionSet> stops = instructionSet.SplitOnDirectionChanges(characterMoveData.IntermediateStops.Select(coord => coord.ToTuple()));
+            bool stoppedEarly = false;
+            
             foreach (NavigationInstructionSet instructionsToNextStop in stops)
             {
+                int distanceToStop = instructionsToNextStop.Magnitude;
+                
                 // Move to the stop
                 Vector2Int stopCoordinates = instructionsToNextStop.Target.ToVector2Int();
+                NavigationInstruction.NavigationDirection direction = instructionsToNextStop.PathToTarget.First().Direction;
+
+                // (Previous stops might have reduced our action points)
+                if (CharacterStats.ActionPoints < distanceToStop)
+                {
+                    int missingDistance = distanceToStop - CharacterStats.ActionPoints;
+                    distanceToStop -= missingDistance;
+                    
+                    switch (direction)
+                    {
+                        case NavigationInstruction.NavigationDirection.Up:
+                            stopCoordinates += Vector2Int.up * missingDistance;
+                            break;
+                        
+                        case NavigationInstruction.NavigationDirection.Down:
+                            stopCoordinates -= Vector2Int.up * missingDistance;
+                            break;
+                        
+                        case NavigationInstruction.NavigationDirection.Left:
+                            stopCoordinates += Vector2Int.right * missingDistance;
+                            break;
+                        
+                        case NavigationInstruction.NavigationDirection.Right:
+                            stopCoordinates -= Vector2Int.right * missingDistance;
+                            break;
+                    }
+                }
+                
                 yield return GridTransform.MoveToAnimated(stopCoordinates, AnimateMovementToCell);
 
                 // Alert that we're there
@@ -132,21 +175,38 @@ namespace ProphetAR
                 Level.EventProcessor.RaiseEventWithData(new GameEventCharacterStopped(characterStoppedData));
                 
                 // Perform any actions at that stop
-                foreach (GameEventCharacterStoppedData.StopAction stopAction in characterStoppedData.StopActions)
+                List<GameEventCharacterStoppedData.OnStopAction> stopActions = characterStoppedData.StopActions.ToList();
+                foreach (GameEventCharacterStoppedData.OnStopAction stopAction in stopActions)
                 {
-                    yield return stopAction.ExecuteStopAction?.Invoke();
-                    
-                    // Possibly we need to stop early
-                    if (!stopAction.AfterActionCanProgress)
+                    switch (stopAction.ExecutionMethod)
                     {
-                        onComplete?.Invoke(true, GridTransform.CurrentCell);
-                        yield break;
+                        case GameEventCharacterStoppedData.OnStopAction.StopActionExecutionType.Coroutine:
+                            yield return stopAction.StopCoroutine;
+                            break;
+                        
+                        case GameEventCharacterStoppedData.OnStopAction.StopActionExecutionType.Action:
+                            stopAction.StopAction?.Invoke();
+                            break;
                     }
+
+                    // Possibly we need to stop early
+                    if (!stopAction.CanProgressAfterStop)
+                    {
+                        stoppedEarly = true;
+                        break;
+                    }
+                }
+
+                CharacterStats.ActionPoints -= distanceToStop;
+                if (stoppedEarly || CharacterStats.ActionPoints == 0)
+                {
+                    break;
                 }
             }
             
             // We reached the target
-            onComplete?.Invoke(false, GridTransform.CurrentCell);
+            onComplete?.Invoke(stoppedEarly, GridTransform.CurrentCell);
+            CheckOutOfActionPoints();
         }
 
         protected virtual IEnumerator AnimateMovementToCell(Transform cellParent, Vector3 localCellPosition)
@@ -163,7 +223,7 @@ namespace ProphetAR
         
         #endregion
         
-        #region Cell_Positioning
+        #region CellPositioning
         
         public virtual Transform GetCellParent(GridCellContent cell)
         {
