@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Swill.Recycler;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -50,7 +51,7 @@ namespace ProphetAR
             StartCoroutine(CurrTurn.CompleteManualPartOfTurnCoroutine(hasMoreManualRequests => _completeManualPartOfTurnButton.enabled = hasMoreManualRequests));
         }
         
-        // Action request: a character has action points left
+        // Action request: a character has action points left to use. Show the UI with their ability options
         void IGameEventWithTypedDataListener<IGameEventShowCharacterActionsUIListener, Character>.OnEvent(Character data)
         {
             _characterAbilities.Show(data.Abilities);
@@ -107,6 +108,7 @@ namespace ProphetAR
         /// </summary>
         void IGameEventWithoutDataListener<IGameEventOnPostGameTurnListener>.OnEvent()
         {
+            _characterAbilities.Hide();
             _actionRequestsRecycler.Clear();
         }
         
@@ -130,7 +132,7 @@ namespace ProphetAR
                     break;
                 
                 case GameEventGameTurnActionsModifiedData.ModificationType.Removed:
-                    _actionRequestsRecycler.RemoveAtKey(FindRecyclerDataForActionRequest(data.ModifiedRequest).Key);
+                    _actionRequestsRecycler.RemoveAtKey(data.ModifiedRequest.RequestNum, FixEntries.HorizontalRight);
                     break;
 
                 case GameEventGameTurnActionsModifiedData.ModificationType.PriorityChanged:
@@ -150,17 +152,12 @@ namespace ProphetAR
                         (firstGreaterPriorityIndex == 0 && _actionRequestsRecycler.DataForEntries[0].ActionRequest != data.ModifiedRequest) ||
                         (_actionRequestsRecycler.DataForEntries[firstGreaterPriorityIndex - 1].ActionRequest != data.ModifiedRequest))
                     {
-                        _actionRequestsRecycler.RemoveAtKey(FindRecyclerDataForActionRequest(data.ModifiedRequest).Key);
+                        _actionRequestsRecycler.RemoveAtKey(data.ModifiedRequest.RequestNum);
                         _actionRequestsRecycler.InsertAtKey(firstGreaterPriorityIndex, new TestTurnScreenActionRequestsRecyclerUIData(data.ModifiedRequest));
                     }
 
                     break;
                 }
-            }
-            
-            TestTurnScreenActionRequestsRecyclerUIData FindRecyclerDataForActionRequest(GameTurnActionRequest actionRequest)
-            {
-                return _actionRequestsRecycler.DataForEntries.FirstOrDefault(recyclerData => recyclerData.ActionRequest == actionRequest);
             }
         }
         
