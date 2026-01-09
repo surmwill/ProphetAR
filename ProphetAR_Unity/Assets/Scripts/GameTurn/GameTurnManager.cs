@@ -30,7 +30,8 @@ namespace ProphetAR
         
         public IEnumerator NextTurnCoroutine(Action onComplete = null)
         {
-            _level.EventProcessor.RaiseEventWithData(new GameEventOnGameTurnChanged(new GameEventOnGameTurnChangedData(TurnNum, TurnNum + 1)));
+            _level.EventProcessor.RaiseEventWithData(new GameEventOnGameTurnChanged(
+                new GameEventOnGameTurnChangedData(TurnNum, TurnNum + 1, CurrPlayer, NextPlayer)));
             
             TurnNum++;
             _currPlayerIndex = NextPlayerIndex;

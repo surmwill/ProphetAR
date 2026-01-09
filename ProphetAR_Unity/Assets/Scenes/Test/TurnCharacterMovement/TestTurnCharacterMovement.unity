@@ -6986,9 +6986,16 @@ MonoBehaviour:
   _level: {fileID: 874366614}
   _player0CharacterPrefabs:
   - {fileID: 9209426569718577995, guid: 6d33e3ca8203f0247a8f97a8a03b6a98, type: 3}
+  _player0CharacterStats:
+  - _actionPoints: 10
+    _maxActionPoints: 10
+    _actionPointsRegenPerTurn: 5
   _player1CharacterPrefabs:
   - {fileID: 363817041648072071, guid: d0d596273c8228c48a2ca0a0b0002267, type: 3}
-  _debugGamePlayerMaterials: {fileID: 11400000, guid: 6cb192f047785194e98debb44b0c9faf, type: 2}
+  _player1CharacterStats:
+  - _actionPoints: 10
+    _maxActionPoints: 10
+    _actionPointsRegenPerTurn: 5
 --- !u!1001 &876297894
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18878,6 +18885,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2914700381022008457, guid: d508ffec8fd4a8b49b8c2296b25a1c31, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7379819833451299389, guid: d508ffec8fd4a8b49b8c2296b25a1c31, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7379819833451299389, guid: d508ffec8fd4a8b49b8c2296b25a1c31, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7379819833451299389, guid: d508ffec8fd4a8b49b8c2296b25a1c31, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7379819833451299389, guid: d508ffec8fd4a8b49b8c2296b25a1c31, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7379819833451299389, guid: d508ffec8fd4a8b49b8c2296b25a1c31, type: 3}
+      propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

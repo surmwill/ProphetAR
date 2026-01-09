@@ -132,7 +132,7 @@ namespace ProphetAR
                     break;
                 
                 case GameEventGameTurnActionsModifiedData.ModificationType.Removed:
-                    _actionRequestsRecycler.RemoveAtKey(data.ModifiedRequest.RequestNum, FixEntries.HorizontalRight);
+                    _actionRequestsRecycler.RemoveAtKey(data.ModifiedRequest.RequestNum);
                     break;
 
                 case GameEventGameTurnActionsModifiedData.ModificationType.PriorityChanged:
