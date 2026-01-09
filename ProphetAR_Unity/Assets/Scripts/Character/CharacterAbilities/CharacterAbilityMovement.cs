@@ -7,15 +7,15 @@ namespace ProphetAR
 {
     public class CharacterAbilityMovement : CharacterAbility
     {
-        private const float OnSelectedGridCellRaise = 0.3f;
-        private const float OnSelectedGridCellScale = 1.3f;
-        private const float OnSelectedGridCellAnimTime = 1.4f; 
-        
         public override string Uid => nameof(CharacterAbilityMovement);
 
         public override int MinNumActionPoints => 1;
 
-        public override IEnumerator AbilityCoroutine => ExecuteAbility();
+        protected override IEnumerator AbilityCoroutine => ExecuteAbility();
+        
+        private const float OnSelectedGridCellRaise = 0.3f;
+        private const float OnSelectedGridCellScale = 1.3f;
+        private const float OnSelectedGridCellAnimTime = 1.4f; 
 
         private WaitForARObjectSelection<GridCell> _waitForMovementCellSelection;
 
@@ -72,6 +72,10 @@ namespace ProphetAR
             if (_waitForMovementCellSelection.IsWaiting)
             {
                 _waitForMovementCellSelection.Selector.Cancel();
+            }
+            else
+            {
+                Debug.LogWarning("Cannot cancel mid-movement");
             }
         }
 

@@ -12,41 +12,57 @@ namespace ProphetAR
 
         public Character Character { get; }
         
-        public virtual IEnumerator AbilityCoroutine { get; } = null;
-
-        public virtual Action AbilityAction { get; } = null;
+        /// <summary>
+        /// The ability can either be a simple callback or a Coroutine performed over time.
+        /// One of these needs to be overriden to non-null.
+        /// </summary>
+        protected virtual IEnumerator AbilityCoroutine { get; } = null;
 
         /// <summary>
         /// The ability can either be a simple callback or a Coroutine performed over time.
         /// One of these needs to be overriden to non-null.
         /// </summary>
-        public AbilityExecutionType AbilityExecutionMethod
+        protected virtual Action AbilityAction { get; } = null;
+        
+        /// <summary>
+        /// Note there's only something to cancel if the ability is a Coroutine
+        /// </summary>
+        public virtual void Cancel() { }
+        
+        public void Execute()
         {
-            get
+            if (AbilityCoroutine != null && AbilityAction != null)
             {
-                if (AbilityCoroutine == null && AbilityAction == null)
-                {
-                    Debug.LogWarning("Missing ability execution method");
-                }
+                throw new InvalidOperationException("An ability should either be execute by coroutine or action, not both (both are non-null)");
+            }
+            
+            if (AbilityCoroutine == null && AbilityAction == null)
+            {
+                Debug.LogWarning("Missing ability execution method");
+            }
 
-                return AbilityCoroutine != null ? AbilityExecutionType.Coroutine : AbilityExecutionType.Action;
+            if (AbilityAction != null)
+            {
+                AbilityAction.Invoke();
+            }
+            else if (AbilityCoroutine != null)
+            {
+                Character.StartCoroutine(ExecuteInner());
             }
         }
 
-        public virtual void Cancel()
+        private IEnumerator ExecuteInner()
         {
-            // There's only something to cancel if the ability is a Coroutine
+            Character.CurrentlyExecutingAbilities.Add(this);
+            
+            yield return AbilityCoroutine;
+            
+            Character.CurrentlyExecutingAbilities.Remove(this);
         }
 
         protected CharacterAbility(Character character)
         {
             Character = character;
-        }
-
-        public enum AbilityExecutionType
-        {
-            Coroutine = 0,
-            Action = 1,
         }
     }
 }

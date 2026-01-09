@@ -1,52 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Swill.Recycler;
-using UnityEngine;
 
 namespace ProphetAR
 {
-    public class TestTurnScreenCharacterAbilitiesRecycler : 
-        RecyclerScrollRect<string, TestTurnScreenCharacterAbilitiesRecyclerUIData>,
-        IGameEventShowCharacterActionsUIListener,
-        IGameEventOnGameTurnChangedListener
+    public class TestTurnScreenCharacterAbilitiesRecycler : RecyclerScrollRect<string, TestTurnScreenCharacterAbilitiesRecyclerUIData>
     {
-        [SerializeField]
-        private CanvasGroup _canvasGroup = null;
-
         private Character _currCharacter;
 
-        private readonly HashSet<Character> _hasAbilitiesInProgress = null;
-        
-        // Showing actions for different character
-        void IGameEventWithTypedDataListener<IGameEventShowCharacterActionsUIListener, Character>.OnEvent(Character data)
+        public void ShowAbilitiesForCharacter(Character character)
         {
-            if (data == _currCharacter)
+            if (_currCharacter == character)
             {
                 return;
             }
-            _currCharacter = data;
+            _currCharacter = character;
             
             Clear();
-            AppendEntries(_currCharacter.Abilities.Select(ability => new TestTurnScreenCharacterAbilitiesRecyclerUIData(ability)));
-        }
-
-        // New turn
-        void IGameEventWithTypedDataListener<IGameEventOnGameTurnChangedListener, GameEventOnGameTurnChangedData>.OnEvent(GameEventOnGameTurnChangedData data)
-        {
-            _currCharacter = null;
-            _hasAbilitiesInProgress.Clear();
-            Clear();
-        }
-
-        public void ExecuteAbility(CharacterAbility ability)
-        {
-            if (ability.Character != _currCharacter)
-            {
-                throw new InvalidOperationException("Attempting to execute ability of a character other than the currently referenced one");
-            }
-            
-            
+            AppendEntries(character.Abilities.Select(ability => new TestTurnScreenCharacterAbilitiesRecyclerUIData(ability)));
         }
     }
 }

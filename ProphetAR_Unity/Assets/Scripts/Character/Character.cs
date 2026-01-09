@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -44,6 +45,10 @@ namespace ProphetAR
         
         public List<CharacterAbility> Abilities { get; } = new();
 
+        public List<CharacterAbility> CurrentlyExecutingAbilities { get; } = new();
+
+        public bool IsExecutingAbility => CurrentlyExecutingAbilities.Count > 0;
+
         public void Initialize(GamePlayer player, CharacterStats characterStats)
         {
             Player = player;
@@ -64,6 +69,12 @@ namespace ProphetAR
                 currPlayer.EventProcessor.AddListenerWithoutData<IGameEventBuildInitialGameTurnListener>(this);
             }
         }
+
+        protected override void OnDestroy()
+        {
+            Player = null;
+            base.OnDestroy();
+        }
         
         private bool CheckOutOfActionPoints()
         {
@@ -74,12 +85,6 @@ namespace ProphetAR
             }
 
             return false;
-        }
-
-        protected override void OnDestroy()
-        {
-            Player = null;
-            base.OnDestroy();
         }
 
         #region TurnCallbacks

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Swill.Recycler;
+﻿using Swill.Recycler;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +15,23 @@ namespace ProphetAR
         
         protected override void OnBind(TestTurnScreenCharacterAbilitiesRecyclerUIData entryData)
         {
-            // entryData.CharacterAbility.
+            _abilityText.text = entryData.CharacterAbility.Uid;
+            _abilityButton.onClick.AddListener(ExecuteAbility);
+        }
+
+        protected override void OnRecycled()
+        {
+            _abilityButton.onClick.RemoveListener(ExecuteAbility);
+        }
+
+        private void ExecuteAbility()
+        {
+            Data.CharacterAbility.Execute();   
+        }
+
+        private void Update()
+        {
+            _abilityButton.interactable = Data.CharacterAbility.Character.IsExecutingAbility;
         }
     }
 }

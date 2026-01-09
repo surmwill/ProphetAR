@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Swill.Recycler;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,7 +24,7 @@ namespace ProphetAR
         private TestTurnScreenActionRequestsRecyclerUI _actionRequestsRecycler = null;
 
         [SerializeField]
-        private TestTurnScreenCharacterAbilitiesUI _characterAbilities = null;
+        private TestTurnScreenCharacterAbilitiesRecycler _characterAbilitiesRecycler = null;
 
         [SerializeField]
         private TMP_Text _currPlayerText = null;
@@ -54,7 +53,8 @@ namespace ProphetAR
         // Action request: a character has action points left to use. Show the UI with their ability options
         void IGameEventWithTypedDataListener<IGameEventShowCharacterActionsUIListener, Character>.OnEvent(Character data)
         {
-            _characterAbilities.Show(data.Abilities);
+            _characterAbilitiesRecycler.ShowAbilitiesForCharacter(data);
+       
         }
         
         private void OnDestroy()
@@ -100,6 +100,7 @@ namespace ProphetAR
         void IGameEventWithoutDataListener<IGameEventOnPreGameTurnListener>.OnEvent()
         {
             _currPlayerText.text = $"Player: {CurrTurn.Player.Index.ToString()}";
+            _currTurnText.text = $"Turn: {CurrTurn.TurnNumber.ToString()}";
             _completeManualPartOfTurnButton.enabled = true;
         }
         
@@ -108,7 +109,7 @@ namespace ProphetAR
         /// </summary>
         void IGameEventWithoutDataListener<IGameEventOnPostGameTurnListener>.OnEvent()
         {
-            _characterAbilities.Hide();
+            _characterAbilitiesRecycler.Clear();
             _actionRequestsRecycler.Clear();
         }
         
