@@ -22,10 +22,16 @@ namespace ProphetAR
         private Vector2Int _coordinates;
 
         [SerializeField]
-        private GridCellContent _cellContentPrefab;
+        private Transform _cellContentParent = null;
         
         [SerializeField]
+        private GridCellContent _cellContentPrefab;
+
+        [SerializeField]
+        private GridCellContent _lastCellContentPrefab;
+        
         [ReadOnly]
+        [SerializeField]
         private GridCellContent _cellContent;
 
         [SerializeField]
@@ -72,31 +78,29 @@ namespace ProphetAR
             {
                 return;
             }
-
-            if (_cellContent != null)
-            {
-                DestroyUtils.DestroyAnywhere(_cellContent.gameObject);
-            }
+            
+            DestroyUtils.DestroyAnywhereChildren(_cellContentParent.gameObject);
 
             if (contentPrefab != null)
             {
                 #if UNITY_EDITOR
                 if (!Application.isPlaying)
                 {
-                    _cellContent = (GridCellContent) PrefabUtility.InstantiatePrefab(contentPrefab, transform);
+                    _cellContent = (GridCellContent) PrefabUtility.InstantiatePrefab(contentPrefab, _cellContentParent);
                 }
                 else
                 {
-                    _cellContent = Instantiate(contentPrefab, transform);     
+                    _cellContent = Instantiate(contentPrefab, _cellContentParent);     
                 }
                 #else
-                _cellContent = Instantiate(contentPrefab, transform); 
+                _cellContent = Instantiate(contentPrefab, _cellContentParent); 
                 #endif
                 
                 _cellContent.SetGridCell(this);
             }
             
             _cellContentPrefab = contentPrefab;
+            _lastCellContentPrefab = contentPrefab;
             
             #if UNITY_EDITOR
             EditorUtility.SetDirty(this);

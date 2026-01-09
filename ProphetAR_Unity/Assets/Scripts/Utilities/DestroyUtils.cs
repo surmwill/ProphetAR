@@ -20,5 +20,18 @@ namespace ProphetAR
             Object.Destroy(obj);
             #endif
         }
+
+        public static void DestroyAnywhereChildren(GameObject gameObject)
+        {
+            if (gameObject == null)
+            {
+                return;
+            }
+            
+            foreach (Transform child in gameObject.transform)
+            {
+                DestroyAnywhere(child.gameObject);
+            }
+        }
     }
 }

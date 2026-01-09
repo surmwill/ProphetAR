@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -10,15 +11,15 @@ namespace ProphetAR
     {
         public void SaveGrid()
         {
-            if (_originGridSection.SectionDimensions.x < 0 || _originGridSection.SectionDimensions.y < 0)
-            {
-                Debug.LogError("Must have positive grid dimensions");
-                return;
-            }
-
             if (_originGridSection == null)
             {
                 Debug.LogError("Missing origin grid section");
+                return;
+            }
+            
+            if (_originGridSection.SectionDimensions.x < 0 || _originGridSection.SectionDimensions.y < 0)
+            {
+                Debug.LogError("Must have positive grid dimensions");
                 return;
             }
             

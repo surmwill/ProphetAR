@@ -29,16 +29,15 @@ namespace ProphetAR
         [Header("Debug")]
         [SerializeField]
         private bool _debugShowGridPointTypeIndicator = false;
+
+        [SerializeField]
+        private Transform _debugGridPointIndicatorParent = null;
         
         [SerializeField]
         private DebugCellGridPointTypeIndicator _obstacleIndicatorPrefab = null;
 
         [SerializeField]
         private DebugCellModificationStepIndicator _modificationStepIndicatorPrefab = null;
-        
-        [SerializeField]
-        [ReadOnly]
-        private DebugCellGridPointTypeIndicator _currentIndicator = null;
 
         [HideInInspector]
         [SerializeField]
@@ -186,42 +185,28 @@ namespace ProphetAR
         {
             if (!_debugShowGridPointTypeIndicator)
             {
-                if (_currentIndicator != null)
-                {
-                    DestroyUtils.DestroyAnywhere(_currentIndicator.gameObject);
-                    _currentIndicator = null;
-                }
-
+                DestroyUtils.DestroyAnywhereChildren(_debugGridPointIndicatorParent.gameObject);
                 _lastGridPointTypeDirty = true;
                 return;
             }
             
             if (_lastGridPointTypeDirty || _lastGridPointType != GridPointProperties.GridPointType)
             {
-                if (_currentIndicator != null)
-                { 
-                    DestroyUtils.DestroyAnywhere(_currentIndicator.gameObject);
-                    _currentIndicator = null;
-                }
-
+                DestroyUtils.DestroyAnywhereChildren(_debugGridPointIndicatorParent.gameObject);
+                
                 switch (GridPointProperties.GridPointType)
                 {
-                    case GridPointType.Obstacle:
-                        _currentIndicator = Instantiate(_obstacleIndicatorPrefab, transform);
+                    case GridPointType.Obstacle: 
+                        Instantiate(_obstacleIndicatorPrefab, _debugGridPointIndicatorParent).SetGridPoint(GridPointProperties.GridPoint);
                         break;
                     
                     case GridPointType.ModificationStep:
-                        _currentIndicator = Instantiate(_modificationStepIndicatorPrefab, transform);
+                        Instantiate(_modificationStepIndicatorPrefab, _debugGridPointIndicatorParent).SetGridPoint(GridPointProperties.GridPoint);
                         break;
                 }
 
                 _lastGridPointType = GridPointProperties.GridPointType;
                 _lastGridPointTypeDirty = false;
-            }
-
-            if (_currentIndicator != null)  
-            {
-                _currentIndicator.SetGridPoint(GridPointProperties.GridPoint);
             }
         }
         

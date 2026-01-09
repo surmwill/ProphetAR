@@ -140,10 +140,20 @@ namespace ProphetAR
         {
             Cells.Clear();
 
+            HashSet<SavedGridCell> toRemove = new HashSet<SavedGridCell>();
             foreach (SavedGridCell savedGridCell in _savedGrid)
             {
-                Cells[savedGridCell.Coordinates] = savedGridCell.GridCell;
+                if (savedGridCell.GridCell == null)
+                {
+                    toRemove.Add(savedGridCell);
+                }
+                else
+                {
+                    Cells[savedGridCell.Coordinates] = savedGridCell.GridCell;   
+                }
             }
+
+            _savedGrid.RemoveAll(savedGridCell => toRemove.Contains(savedGridCell));
             
             foreach (GridCell cell in Cells.Values)
             {

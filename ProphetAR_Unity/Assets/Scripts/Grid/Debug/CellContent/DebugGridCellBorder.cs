@@ -10,7 +10,7 @@ namespace ProphetAR
         private GridCellContent _gridCellContent = null;
         
         [SerializeField]
-        private Image _spriteBorderImage = null;
+        private Image _borderImage = null;
 
         private const float ScaleDownForMargin = 0.95f;
 
@@ -52,7 +52,7 @@ namespace ProphetAR
 
         private bool TryBindEditModeListeners()
         {
-            if (!_areEditModeListenersBound && _gridCellContent.Cell != null)
+            if (!_areEditModeListenersBound && _gridCellContent != null && _gridCellContent.Cell != null)
             {
                 _gridCellContent.Cell.EditorOnCellDimensionsChanged += EditorOnCellDimensionsChanged;
                 _gridCellContent.Cell.EditorOnCellCoordinatesChanged += EditorOnCellCoordinatesChanged;
@@ -76,12 +76,12 @@ namespace ProphetAR
 
         private void EditorOnCellDimensionsChanged(Vector2 dimensions)
         {
-            transform.localScale = new Vector3(ScaleDownForMargin * dimensions.x, ScaleDownForMargin * dimensions.y, 1f);
+            transform.localScale = new Vector3(ScaleDownForMargin * dimensions.x, 1f, ScaleDownForMargin * dimensions.y);
         }
 
         private void EditorOnCellCoordinatesChanged(Vector2 newCoordinates)
         {
-            _spriteBorderImage.color = newCoordinates == Vector2.zero ? Color.green : Color.white;
+            _borderImage.color = newCoordinates == Vector2.zero ? Color.green : Color.white;
         }
     }
 }

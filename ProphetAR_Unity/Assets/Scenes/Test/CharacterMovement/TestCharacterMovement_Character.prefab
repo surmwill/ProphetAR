@@ -146,6 +146,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerIndex: -1
+  _characterStats:
+    _actionPoints: 9999
+    _maxActionPoints: 9999
+    _actionPointsRegenPerTurn: 5
 --- !u!114 &-4982173815264123191
 MonoBehaviour:
   m_ObjectHideFlags: 0

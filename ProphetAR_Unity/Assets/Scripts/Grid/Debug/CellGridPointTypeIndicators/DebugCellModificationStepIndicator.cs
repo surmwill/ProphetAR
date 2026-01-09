@@ -8,7 +8,7 @@ namespace ProphetAR
     public class DebugCellModificationStepIndicator : DebugCellGridPointTypeIndicator
     {
         [SerializeField]
-        private TMP_Text _modificationValueText = null;
+        private TextMeshPro _modificationValueText = null;
 
         public override void SetGridPoint(char gridPoint)
         {

@@ -13,8 +13,7 @@ namespace ProphetAR
         [ReadOnly]
         [SerializeField]
         private int _playerIndex = -1;
-
-        [ReadOnly]
+        
         [SerializeField]
         private CharacterStats _characterStats;
         
@@ -22,16 +21,17 @@ namespace ProphetAR
 
         public GamePlayer Player
         {
-            get => Grid.Level.Players[_playerIndex];
+            get => _playerIndex >= 0 ? Grid.Level.Players[_playerIndex] : null;
             set
             {
-                if (_playerIndex == value.Index)
+                int newPlayerIndex = Player?.Index ?? -1;
+                if (_playerIndex == newPlayerIndex)
                 {
                     return;
                 }
 
                 int prevIndex = _playerIndex;
-                _playerIndex = value.Index;
+                _playerIndex = newPlayerIndex;
                 
                 OnPlayerChange(prevIndex >= 0 ? Level.Players[prevIndex] : null, value.Index >= 0 ? Level.Players[value.Index] : null);
             }

@@ -9,9 +9,6 @@ namespace ProphetAR
     // Editor only calls. Extra functionality is needed for building the grid through the editor
     public partial class GridCell
     {
-        private GridCellContent _lastCellContentPrefab;
-        private bool _checkedLastCellContentPrefab;
-
         public event Action<Vector2> EditorOnCellDimensionsChanged;
         public event Action<Vector2> EditorOnCellCoordinatesChanged;
         
@@ -53,23 +50,21 @@ namespace ProphetAR
 
         private void OnValidate()
         {
-            if (!_checkedLastCellContentPrefab)
-            {
-                _checkedLastCellContentPrefab = true;
-                _lastCellContentPrefab = _cellContentPrefab;
-                return;
-            }
-            
             if (_lastCellContentPrefab != _cellContentPrefab)
             {
+                if (_lastCellContentPrefab != null && _cellContentPrefab != null)
+                {
+                    Debug.Log(_lastCellContentPrefab.gameObject.name + " " + _cellContentPrefab.gameObject.name + " " + (_lastCellContentPrefab == _cellContentPrefab));   
+                }       
+                
                 if (_cellContent != null)
                 {
-                    DestroyUtils.DestroyAnywhere(_cellContent.gameObject);   
+                    DestroyUtils.DestroyAnywhereChildren(_cellContentParent.gameObject);
                 }
 
                 if (_cellContentPrefab != null)
                 {
-                    _cellContent = (GridCellContent) PrefabUtility.InstantiatePrefab(_cellContentPrefab, transform);
+                    _cellContent = (GridCellContent) PrefabUtility.InstantiatePrefab(_cellContentPrefab, _cellContentParent);
                     _cellContent.SetGridCell(this);
                 }
             }
