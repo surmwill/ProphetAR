@@ -74,7 +74,10 @@ namespace ProphetAR
         private void OnValidate()
         {
             CheckCellContentChange();
-            _cellPainter.transform.position = Middle;
+            if (_gridSection != null)
+            {
+                _cellPainter.transform.position = Middle;   
+            }
         }
     }
 }

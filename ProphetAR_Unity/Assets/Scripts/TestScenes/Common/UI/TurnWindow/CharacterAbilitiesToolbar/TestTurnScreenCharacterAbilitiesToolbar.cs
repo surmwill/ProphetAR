@@ -5,13 +5,16 @@ using UnityEngine;
 
 namespace ProphetAR
 {
-    public class TestTurnWindowCharacterAbilitiesToolbar : MonoBehaviour, 
+    public class TestTurnScreenCharacterAbilitiesToolbar : MonoBehaviour, 
         IGameEventShowCharacterActionsUIListener,
         IGameEventCharacterStatsModifiedListener,
         IGameEventOnPostGameTurnListener
     {
         [SerializeField]
         private TestTurnScreenUI _testTurnScreenUI;
+
+        [SerializeField]
+        private TMP_Text _currCharacterText = null;
         
         [SerializeField]
         private TMP_Text _abilityPointsText = null;
@@ -59,7 +62,9 @@ namespace ProphetAR
             _currCharacter = data;
             
             _characterAbilitiesRecycler.ShowAbilitiesForCharacter(data);
+            
             _abilityPointsText.text = data.CharacterStats.ActionPoints.ToString();
+            _currCharacterText.text = _currCharacter.name;
         }
 
         // Show character action points as they decrease
