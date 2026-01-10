@@ -14,9 +14,9 @@ namespace ProphetAR
         [SerializeField]
         private TextMeshPro _navigableNumSteps = null;
         
-        public void ShowIsNavigable(bool showIndicator, int numSteps = 0)
+        public void ShowIsNavigable(bool show, int numSteps = 0)
         {
-            if (showIndicator)
+            if (show)
             {
                 _navigableIndicator.gameObject.SetActive(true);
                 _navigableNumSteps.text = numSteps.ToString();
