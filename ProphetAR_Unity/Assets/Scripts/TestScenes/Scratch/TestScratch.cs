@@ -10,6 +10,7 @@ namespace ProphetAR
     {
         private IEnumerator Start()
         {
+            Debug.Log("Coroutines started");
             yield return new WaitForAllCoroutines(CoroutineOne(), CoroutineTwo());
             Debug.Log("All coroutines done");
         }
