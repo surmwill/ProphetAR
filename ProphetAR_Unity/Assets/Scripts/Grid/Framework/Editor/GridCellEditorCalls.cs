@@ -1,6 +1,5 @@
 ﻿#if UNITY_EDITOR
 using System;
-using ProphetAR.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -48,28 +47,34 @@ namespace ProphetAR
             EditorOnCellDimensionsChanged?.Invoke(newDimensions);
         }
 
-        private void OnValidate()
+        private void CheckCellContentChange()
         {
-            if (_lastCellContentPrefab != _cellContentPrefab)
+            if (_lastCellContentPrefab == _cellContentPrefab)
             {
-                if (_lastCellContentPrefab != null && _cellContentPrefab != null)
-                {
-                    Debug.Log(_lastCellContentPrefab.gameObject.name + " " + _cellContentPrefab.gameObject.name + " " + (_lastCellContentPrefab == _cellContentPrefab));   
-                }       
-                
-                if (_cellContent != null)
-                {
-                    DestroyUtils.DestroyAnywhereChildren(_cellContentParent.gameObject);
-                }
+                return;
+            }
+            
+            if (_cellContentParent == null)
+            {
+                Debug.LogWarning("Missing parent transform for cell content");   
+                return;
+            }
+            
+            DestroyUtils.DestroyAnywhereChildren(_cellContentParent.gameObject);
 
-                if (_cellContentPrefab != null)
-                {
-                    _cellContent = (GridCellContent) PrefabUtility.InstantiatePrefab(_cellContentPrefab, _cellContentParent);
-                    _cellContent.SetGridCell(this);
-                }
+            if (_cellContentPrefab != null)
+            {
+                _cellContent = (GridCellContent) PrefabUtility.InstantiatePrefab(_cellContentPrefab, _cellContentParent);
+                _cellContent.SetGridCell(this);
             }
 
-            _lastCellContentPrefab = _cellContentPrefab;
+            _lastCellContentPrefab = _cellContentPrefab; 
+        }
+
+        private void OnValidate()
+        {
+            CheckCellContentChange();
+            _cellPainter.transform.position = Middle;
         }
     }
 }

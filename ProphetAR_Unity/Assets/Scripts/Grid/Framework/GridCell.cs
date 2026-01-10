@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -27,6 +28,7 @@ namespace ProphetAR
         [SerializeField]
         private GridCellContent _cellContentPrefab;
 
+        [HideInInspector]
         [SerializeField]
         private GridCellContent _lastCellContentPrefab;
         
@@ -74,6 +76,11 @@ namespace ProphetAR
         
         public void SetContent(GridCellContent contentPrefab)
         {
+            if (_cellContentParent == null)
+            {
+                throw new InvalidOperationException("Missing parent transform for the grid cell content");
+            }
+            
             if (_cellContentPrefab == contentPrefab)
             {
                 return;
@@ -99,6 +106,8 @@ namespace ProphetAR
                 _cellContent.SetGridCell(this);
             }
             
+            // _lastCellContent is only used in OnValidate to detect changes in the serialized prefab we drag in.
+            // Since that isn't happening here (we're doing it through code), we set them to the same thing to detect that in the future.
             _cellContentPrefab = contentPrefab;
             _lastCellContentPrefab = contentPrefab;
             

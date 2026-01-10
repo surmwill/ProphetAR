@@ -183,6 +183,12 @@ namespace ProphetAR
         
         private void DebugUpdateShowGridPointTypeIndicator()
         {
+            if (_debugGridPointIndicatorParent == null)
+            {
+                Debug.LogWarning("Missing parent transform to place the indicator under");
+                return;
+            }
+            
             if (!_debugShowGridPointTypeIndicator)
             {
                 DestroyUtils.DestroyAnywhereChildren(_debugGridPointIndicatorParent.gameObject);

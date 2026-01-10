@@ -2,13 +2,10 @@
 
 namespace ProphetAR
 {
-    public class GameEventOnInitialGameTurnBuilt : GameEventWithoutData
+    public class GameEventOnInitialGameTurnBuilt : GameEventWithTypedData<IEnumerable<GameTurnActionRequest>>
     {
-        public IEnumerable<GameTurnActionRequest> StartingActionRequests { get; }
-        
-        public GameEventOnInitialGameTurnBuilt(IEnumerable<GameTurnActionRequest> startingActionRequests)
+        public GameEventOnInitialGameTurnBuilt(IEnumerable<GameTurnActionRequest> data) : base(data)
         {
-            StartingActionRequests = startingActionRequests;
         }
     }
 }

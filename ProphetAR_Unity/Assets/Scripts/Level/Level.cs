@@ -19,10 +19,10 @@ namespace ProphetAR
         public GameEventProcessor EventProcessor { get; } = new();
         
         public GameTurnManager TurnManager { get; private set; }
+        
+        public bool IsInitialized { get; private set; }
 
         private readonly List<ILevelConfigContributor> _levelConfigContributors = new();
-
-        private bool _isInitialized;
         
         private Coroutine _nextTurnCoroutine;
 
@@ -40,7 +40,7 @@ namespace ProphetAR
             InitializeLevel();
             
             // The game is ready for its first turn
-            _isInitialized = true;
+            IsInitialized = true;
         }
 
         private void InitializeData(LevelConfig levelConfig, GamePlayerConfig[] playerConfigs)
@@ -103,7 +103,7 @@ namespace ProphetAR
 
         public void AddLevelConfigContributor(ILevelConfigContributor levelConfigContributor)
         {
-            if (_isInitialized)
+            if (IsInitialized)
             {
                 Debug.LogWarning("The level config has already been created and used");
                 return;

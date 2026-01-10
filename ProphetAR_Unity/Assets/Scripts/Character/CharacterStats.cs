@@ -33,5 +33,16 @@ namespace ProphetAR
             get => _actionPointsRegenPerTurn; 
             set => _actionPointsRegenPerTurn = value;
         }
+
+        public void ModifyActionPoints(Character character, int amount)
+        {
+            ActionPoints = Math.Max(ActionPoints + amount, 0);
+            character.Player.EventProcessor.RaiseEventWithData(new GameEventCharacterStatsModified(new GameEventCharacterStatsModifiedData(character, this)));
+        }
+
+        public void ReduceActionPoints(Character character, int amount)
+        {
+            ModifyActionPoints(character, -amount);
+        }
     }
 }

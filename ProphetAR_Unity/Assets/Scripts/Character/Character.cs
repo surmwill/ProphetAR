@@ -75,17 +75,6 @@ namespace ProphetAR
             Player = null;
             base.OnDestroy();
         }
-        
-        private bool CheckOutOfActionPoints()
-        {
-            if (CharacterStats.ActionPoints == 0)
-            {
-                Player.EventProcessor.RaiseEventWithData(new GameEventCharacterOutOfActions(this));
-                return true;
-            }
-
-            return false;
-        }
 
         #region TurnCallbacks
         
@@ -202,7 +191,7 @@ namespace ProphetAR
                     }
                 }
 
-                CharacterStats.ActionPoints -= distanceToStop;
+                CharacterStats.ReduceActionPoints(this, distanceToStop);
                 if (stoppedEarly || CharacterStats.ActionPoints == 0)
                 {
                     break;
@@ -211,7 +200,6 @@ namespace ProphetAR
             
             // We reached the target
             onComplete?.Invoke(stoppedEarly, GridTransform.CurrentCell);
-            CheckOutOfActionPoints();
         }
 
         protected virtual IEnumerator AnimateMovementToCell(Transform cellParent, Vector3 localCellPosition)

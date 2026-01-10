@@ -55,7 +55,7 @@ namespace ProphetAR
             
             // The starting state of the turn is now finalized.
             // (Certain actions might trigger further actions, altering the turn. The turn's state changes can be monitored through the above events)
-            Player.EventProcessor.RaiseEventWithoutData(new GameEventOnInitialGameTurnBuilt(ActionRequests));
+            Player.EventProcessor.RaiseEventWithData(new GameEventOnInitialGameTurnBuilt(ActionRequests));
         }
         
         public void CompleteActionRequest(GameTurnActionRequest actionRequest)
