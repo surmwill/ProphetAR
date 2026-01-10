@@ -8,11 +8,14 @@ namespace ProphetAR
         public string Key { get; }
         
         public Color Color { get; }
+        
+        public bool IsLarge { get; }
 
-        public TestRecyclerUIData(string key, Color color)
+        public TestRecyclerUIData(string key, Color color, bool isLarge)
         {
             Key = key;
             Color = color;
+            IsLarge = isLarge;
         }
     }
 }
