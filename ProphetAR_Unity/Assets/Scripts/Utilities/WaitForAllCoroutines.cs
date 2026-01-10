@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace ProphetAR
@@ -8,9 +9,14 @@ namespace ProphetAR
     {
         private readonly List<IEnumerator> _coroutines;
         
-        public WaitForAllCoroutines(List<IEnumerator> coroutines)
+        public WaitForAllCoroutines(params IEnumerator[] coroutines)
         {
-            _coroutines = coroutines;
+            _coroutines = coroutines.ToList();
+        }
+        
+        public WaitForAllCoroutines(IEnumerable<IEnumerator> coroutines)
+        {
+            _coroutines = coroutines.ToList();
         }
 
         public override bool keepWaiting
