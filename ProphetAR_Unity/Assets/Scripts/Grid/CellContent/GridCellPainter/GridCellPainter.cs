@@ -18,7 +18,7 @@ namespace ProphetAR
         {
             if (show)
             {
-                _navigableIndicator.gameObject.SetActive(true);
+                _navigableIndicator.gameObject.SetActive(true); 
                 _navigableNumSteps.text = numSteps.ToString();
             }
             else
