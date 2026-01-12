@@ -61,7 +61,7 @@ namespace ProphetAR
             }
             
             DestroyUtils.DestroyAnywhereChildren(_cellContentParent.gameObject);
-
+            
             if (_cellContentPrefab != null)
             {
                 _cellContent = (GridCellContent) PrefabUtility.InstantiatePrefab(_cellContentPrefab, _cellContentParent);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace ProphetAR
     /// <summary>
     /// The grid in the Unity scene. Called CustomGrid because Unity already has a Grid component
     /// </summary>
-    public partial class CustomGrid : MonoBehaviour, ISerializationCallbackReceiver
+    public partial class CustomGrid : MonoBehaviour, ISerializationCallbackReceiver, IEnumerable<GridCell>
     {
         [SerializeField]
         private Level _level = null;
@@ -187,6 +188,20 @@ namespace ProphetAR
         public void OnBeforeSerialize()
         {
             // Empty
+        }
+        
+        #endregion
+        
+        #region Enumeration
+        
+        public IEnumerator<GridCell> GetEnumerator()
+        {
+            return Cells.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
         
         #endregion

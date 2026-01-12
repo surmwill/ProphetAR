@@ -12,6 +12,8 @@ namespace ProphetAR
         // The references (keys) aren't descriptive, but they might be useful to inspect during a breakpoint
         private readonly Dictionary<ILevelConfigContributor, string> _debugEditedBy = new();
 
+        public bool HasBeenEdited => _debugEditedBy.Count > 0;
+
         public void Modify(ILevelConfigContributor configContributor)
         {
             _debugEditedBy.Add(configContributor, configContributor.LevelConfigEditedBy);

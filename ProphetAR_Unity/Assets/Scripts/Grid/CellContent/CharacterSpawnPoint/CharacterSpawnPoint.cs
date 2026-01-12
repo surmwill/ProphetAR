@@ -14,6 +14,12 @@ namespace ProphetAR
 
         public int PlayerIndex => _playerIndex;
 
+        public CharacterSpawnPoint(int playerIndex, Vector2Int coordinates)
+        {
+            _playerIndex = playerIndex;
+            _coordinates = coordinates;
+        }
+
         public Vector2Int Coordinates
         {
             get => _coordinates;

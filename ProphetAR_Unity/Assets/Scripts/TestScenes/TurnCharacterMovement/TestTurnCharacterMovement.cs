@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -22,13 +23,17 @@ namespace ProphetAR
         [SerializeField]
         private List<CharacterStats> _player1CharacterStats = null;
 
-        private void Start()
+        private IEnumerator Start()
         {
             _level.Initialize(new []
             {
                 new GamePlayerConfig("Player0", false, _player0CharacterPrefabs, _player0CharacterStats),
                 new GamePlayerConfig("Player1", false, _player1CharacterPrefabs, _player1CharacterStats)
             });
+
+            yield return null;
+
+            _level.StartFirstTurn();
         }
 
         private void OnValidate()

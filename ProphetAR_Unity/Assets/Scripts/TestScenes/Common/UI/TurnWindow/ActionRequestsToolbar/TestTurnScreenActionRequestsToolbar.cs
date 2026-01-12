@@ -34,14 +34,14 @@ namespace ProphetAR
             {
                 if (bind)
                 {
-                    player.EventProcessor.AddListenerWithData<IGameEventBuildInitialGameTurnListener, IEnumerable<GameTurnActionRequest>>(this);
+                    player.EventProcessor.AddListenerWithData<IGameEventOnInitialGameTurnBuiltListener, IEnumerable<GameTurnActionRequest>>(this);
                     player.EventProcessor.AddListenerWithData<IGameEventGameTurnActionsModifiedListener, GameEventGameTurnActionsModifiedData>(this);
                     
                     player.EventProcessor.AddListenerWithoutData<IGameEventOnPostGameTurnListener>(this);
                 }
                 else
                 {
-                    player.EventProcessor.AddListenerWithData<IGameEventBuildInitialGameTurnListener, IEnumerable<GameTurnActionRequest>>(this);
+                    player.EventProcessor.AddListenerWithData<IGameEventOnInitialGameTurnBuiltListener, IEnumerable<GameTurnActionRequest>>(this);
                     player.EventProcessor.AddListenerWithData<IGameEventGameTurnActionsModifiedListener, GameEventGameTurnActionsModifiedData>(this);
                     
                     player.EventProcessor.AddListenerWithoutData<IGameEventOnPostGameTurnListener>(this);

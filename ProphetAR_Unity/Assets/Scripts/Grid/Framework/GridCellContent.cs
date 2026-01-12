@@ -87,6 +87,8 @@ namespace ProphetAR
             .Select(occupierTransform => occupierTransform.GridObject as Character)
             .Where(character => character != null);
 
+        public bool HasCharacters => Characters.Any();
+
         private bool _areEditModeListenersBound;
         private bool _lastGridPointTypeDirty;
 

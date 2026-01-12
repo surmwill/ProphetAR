@@ -60,7 +60,10 @@ namespace ProphetAR
             }
             
             #if UNITY_EDITOR
-            Debug.Log(levelConfig.DebugGetEditedBy());
+            if (levelConfig.HasBeenEdited)
+            {
+                Debug.Log(levelConfig.DebugGetEditedBy());   
+            }
             #endif
 
             LevelConfig = levelConfig;
@@ -75,28 +78,48 @@ namespace ProphetAR
             foreach (GamePlayer player in Players)
             {
                 // Spawn the characters of each player
-                if (!LevelConfig.PlayerSpawnPoints.TryGetValue(player.Index, out List<CharacterSpawnPoint> spawnPoints) || spawnPoints.Count == 0)
-                {
-                    Debug.LogWarning($"No character spawn points for player {player.Index}: {player.Uid}");
-                    continue;
-                }
-
                 List<Character> playerCharacterPrefabs = player.Config.CharacterPrefabs;
                 if (playerCharacterPrefabs == null || playerCharacterPrefabs.Count == 0)
                 {
                     Debug.LogWarning($"No characters found for player {player.Index}: {player.Uid}");
                     continue;
                 }
-
+                
                 GamePlayerConfig playerConfig = player.Config;
+                
+                LevelConfig.PlayerSpawnPoints.TryGetValue(player.Index, out List<CharacterSpawnPoint> spawnPoints);
+                IEnumerator<Vector2Int> defaultSpawnCoordinates = GetNextDefaultCellSpawnCoordinates();
+                
                 for (int i = 0; i < playerCharacterPrefabs.Count; i++)
                 {
                     Character characterPrefab = playerCharacterPrefabs[i];
-                    CharacterSpawnPoint spawnPoint = spawnPoints[i];
-                    CharacterStats characterStats = playerConfig.CharacterStats[i];
+
+                    CharacterSpawnPoint spawnPoint = default;
+                    if (i < spawnPoints?.Count)
+                    {
+                        spawnPoint = spawnPoints[i];
+                    }
+                    else
+                    {
+                        defaultSpawnCoordinates.MoveNext();
+                        Debug.LogWarning($"Missing spawn point for player {player.Index}: {player.Uid}. Using default {defaultSpawnCoordinates.Current}");
+                        spawnPoint = new CharacterSpawnPoint(player.Index, defaultSpawnCoordinates.Current);
+                    }
+                    
                     
                     Character character = Grid.InstantiateGridObject(characterPrefab, spawnPoint.Coordinates);
-                    character.Initialize(player, characterStats);
+                    character.Initialize(player, playerConfig.CharacterStats[i]);
+                }
+            }
+
+            IEnumerator<Vector2Int> GetNextDefaultCellSpawnCoordinates()
+            {
+                foreach (GridCell gridCell in Grid)
+                {
+                    if (gridCell.GridPointProperties.GridPointType == GridPointType.Clear && !gridCell.Content.HasCharacters)
+                    {
+                        yield return gridCell.Coordinates;
+                    }
                 }
             }
         }

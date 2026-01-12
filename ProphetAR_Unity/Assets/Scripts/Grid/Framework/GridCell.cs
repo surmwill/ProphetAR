@@ -27,8 +27,7 @@ namespace ProphetAR
         
         [SerializeField]
         private GridCellContent _cellContentPrefab;
-
-        [HideInInspector]
+        
         [SerializeField]
         private GridCellContent _lastCellContentPrefab;
         
