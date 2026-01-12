@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using DG.Tweening;
 using GridPathFinding;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace ProphetAR
 
         public override int MinNumActionPoints => 1;
 
-        protected override IEnumerator AbilityCoroutine => ExecuteAbility();
+        protected override CharacterAbilityCoroutine AbilityCoroutine => ExecuteAbility;
         
         private const float OnSelectedGridCellRaise = 0.3f;
         private const float OnSelectedGridCellScale = 1.3f;
@@ -21,7 +22,7 @@ namespace ProphetAR
 
         private Sequence _onSelectedGridCellSequence;
 
-        private IEnumerator ExecuteAbility()
+        private IEnumerator ExecuteAbility(Action onComplete, Action onCancelled)
         {
             (NavigationDestinationSet destinations, GridSlice area) = Character.GetMovementArea();
 

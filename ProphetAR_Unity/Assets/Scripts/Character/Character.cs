@@ -24,16 +24,16 @@ namespace ProphetAR
             get => _playerIndex >= 0 ? Grid.Level.Players[_playerIndex] : null;
             set
             {
-                int newPlayerIndex = Player?.Index ?? -1;
+                int newPlayerIndex = value?.Index ?? -1;
                 if (_playerIndex == newPlayerIndex)
                 {
                     return;
                 }
 
-                int prevIndex = _playerIndex;
+                int prevPlayerIndex = _playerIndex;
                 _playerIndex = newPlayerIndex;
                 
-                OnPlayerChange(prevIndex >= 0 ? Level.Players[prevIndex] : null, value.Index >= 0 ? Level.Players[value.Index] : null);
+                OnPlayerChange(prevPlayerIndex >= 0 ? Level.Players[prevPlayerIndex] : null, newPlayerIndex >= 0 ? Level.Players[newPlayerIndex] : null);
             }
         }
 
@@ -65,6 +65,7 @@ namespace ProphetAR
             
             if (currPlayer != null)
             {
+                Debug.Log("Bound build initial game turn");
                 currPlayer.EventProcessor.AddListenerWithoutData<IGameEventOnPreGameTurnListener>(this);
                 currPlayer.EventProcessor.AddListenerWithoutData<IGameEventBuildInitialGameTurnListener>(this);
             }
