@@ -39,11 +39,14 @@ namespace ProphetAR
             
             if (_waitForMovementCellSelection.ResolvedCancelled)
             {
+                onCancelled?.Invoke();
                 yield break;
             }
 
             GridCell selectedGridCell = _waitForMovementCellSelection.SelectedObject;
             yield return Character.WalkToCoordinates(selectedGridCell.Coordinates);
+            
+            onComplete?.Invoke();
         }
 
         private void OnGridCellHovered(GridCell prevGridCell, GridCell currGridCell)
@@ -68,16 +71,16 @@ namespace ProphetAR
             hoveredGridCell.transform.localScale = Vector3.one;
         }
 
-        public override void Cancel()
+        public override bool TryCancel()
         {
             if (_waitForMovementCellSelection.IsWaiting)
             {
                 _waitForMovementCellSelection.Selector.Cancel();
+                return true;
             }
-            else
-            {
-                Debug.LogWarning("Cannot cancel mid-movement");
-            }
+            
+            Debug.LogWarning("Cannot cancel mid-movement");
+            return false;
         }
 
         public CharacterAbilityMovement(Character character) : base(character) { }
