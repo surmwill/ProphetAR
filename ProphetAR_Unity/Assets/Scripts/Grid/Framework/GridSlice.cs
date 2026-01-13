@@ -85,6 +85,11 @@ namespace ProphetAR
                             modificationSteps.Add(new ModificationStep((row, col), gridPointProperties.ModificationStep));
                             break;
                     }
+
+                    if (gridCell.Content.HasCharacters)
+                    {
+                        obstacles.Add((row, col));
+                    }
                 }
             }
 
@@ -97,7 +102,8 @@ namespace ProphetAR
             {
                 if (!ContainsCoordinates(coordinates))
                 {
-                    throw new ArgumentException($"Given coordinates {coordinates} are not contained within the slice. {SliceDescription()}");
+                    Debug.LogWarning($"Given coordinates {coordinates} are not contained within the slice. {SliceDescription()}");
+                    return null;
                 }
                 
                 return Grid[coordinates];      

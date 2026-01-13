@@ -42,7 +42,7 @@ namespace ProphetAR
             get => _characterStats;
             set => _characterStats = value;
         }
-        
+
         public List<CharacterAbility> Abilities { get; } = new();
 
         public List<CharacterAbility> CurrentlyExecutingAbilities { get; } = new();
@@ -53,6 +53,9 @@ namespace ProphetAR
         {
             Player = player;
             CharacterStats = characterStats;
+            
+            // Temporarily hard-coded: these should be loaded from the player config
+            Abilities.Add(new CharacterAbilityMovement(this));
         }
 
         private void OnPlayerChange(GamePlayer prevPlayer, GamePlayer currPlayer)

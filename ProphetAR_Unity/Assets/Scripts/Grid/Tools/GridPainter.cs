@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using GridPathFinding;
 
 namespace ProphetAR
@@ -14,7 +15,7 @@ namespace ProphetAR
         
         public DisposableGridPainter ShowMovementArea(NavigationDestinationSet possibleDestinations, GridSlice gridSlice)
         {
-            foreach (GridCell gridCell in gridSlice)
+            foreach (GridCell gridCell in gridSlice.Where(gridCell => gridCell != null))
             {
                 if (possibleDestinations.Destinations.TryGetValue(gridCell.Coordinates.ToTuple(), out NavigationDestination destination))
                 {

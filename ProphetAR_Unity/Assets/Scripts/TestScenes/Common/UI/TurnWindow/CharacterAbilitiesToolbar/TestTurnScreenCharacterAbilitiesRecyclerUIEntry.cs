@@ -31,7 +31,7 @@ namespace ProphetAR
 
         private void Update()
         {
-            _abilityButton.interactable = Data.CharacterAbility.Character.IsExecutingAbility;
+            _abilityButton.interactable = !Data.CharacterAbility.Character.IsExecutingAbility;
         }
     }
 }

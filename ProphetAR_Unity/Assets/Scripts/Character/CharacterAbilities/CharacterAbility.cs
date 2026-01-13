@@ -27,10 +27,6 @@ namespace ProphetAR
         /// One of these needs to be overriden to non-null.
         /// </summary>
         protected virtual Action AbilityAction { get; } = null;
-                
-        protected bool IsComplete { get; set; }
-        
-        protected bool IsCancelled { get; set; }
         
         /// <summary>
         /// There's only something to cancel if the ability is a Coroutine.
@@ -56,7 +52,6 @@ namespace ProphetAR
             if (AbilityAction != null)
             {
                 AbilityAction.Invoke();
-                IsComplete = true;
                 onComplete?.Invoke();
             }
             else if (AbilityCoroutine != null)
@@ -67,16 +62,19 @@ namespace ProphetAR
 
         private IEnumerator ExecuteInner(Action onComplete, Action onCancelled)
         {
+            bool isComplete = false;
+            bool isCancelled = false;
+            
             using (new CharacterAbilityExecutionTracker(this))
             {
-                yield return AbilityCoroutine(() => IsComplete = true, () => IsCancelled = true);   
+                yield return AbilityCoroutine(() => isComplete = true, () => isCancelled = true);   
             }
             
-            if (IsComplete)
+            if (isComplete)
             {
                 onComplete?.Invoke();
             }
-            else if (IsCancelled)
+            else if (isCancelled)
             {
                 onCancelled?.Invoke();
             }
