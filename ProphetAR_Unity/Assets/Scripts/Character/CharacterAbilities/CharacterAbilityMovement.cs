@@ -30,7 +30,8 @@ namespace ProphetAR
             {
                 _waitForMovementCellSelection = ARManager.Instance.ARGridCellSelector.StartObjectSelection(
                     onHovered: OnGridCellHovered, 
-                    isValidForSelection: gridCell =>
+                    getObjectFromCollision: hitTransform => hitTransform.GetComponentInParent<GridCell>(),
+                    isValidObject: gridCell =>
                     {
                         Debug.Log(gridCell.Coordinates);
                         return area.ContainsCoordinates(gridCell.Coordinates);
