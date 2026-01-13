@@ -75,6 +75,9 @@ namespace ProphetAR
             Func<T, bool> isValidObject = null,
             bool debugDrawRays = false)
         {
+            // Wait one frame to return the custom yield instruction 
+            yield return null;
+            
             for (;;)
             {
                 Ray cameraRay = new Ray(_arCamera.transform.position, _arCamera.transform.forward);

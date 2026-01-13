@@ -20,7 +20,8 @@ namespace ProphetAR
 
         private WaitForARObjectSelection<GridCell> _waitForMovementCellSelection;
 
-        private Sequence _onSelectedGridCellSequence;
+        private GridCell _currHoveredGridCell;
+        private Sequence _onHoveredGridCellSequence;
 
         private IEnumerator ExecuteAbility(Action onComplete, Action onCancelled)
         {
@@ -29,15 +30,15 @@ namespace ProphetAR
             using (Character.Grid.GridPainter.ShowMovementArea(destinations, area))
             {
                 _waitForMovementCellSelection = ARManager.Instance.ARGridCellSelector.StartObjectSelection(
-                    onHovered: OnGridCellHovered, 
+                    onHovered: OnNewGridCellHovered, 
                     getObjectFromCollision: hitTransform => hitTransform.GetComponentInParent<GridCell>(),
                     isValidObject: gridCell =>
                     {
                         Debug.Log(gridCell.Coordinates);
                         return area.ContainsCoordinates(gridCell.Coordinates);
                     },
-                    onSelected: _ => StopCellHover(),
-                    onCancelled: StopCellHover);
+                    onSelected: _ => StopCurrentCellHover(),
+                    onCancelled: StopCurrentCellHover);
                 
                 yield return _waitForMovementCellSelection;
             }
@@ -54,26 +55,27 @@ namespace ProphetAR
             onComplete?.Invoke();
         }
 
-        private void OnGridCellHovered(GridCell prevGridCell, GridCell currGridCell)
+        private void OnNewGridCellHovered(GridCell prevGridCell, GridCell currGridCell)
         {
-            StopCellHover();
-            _onSelectedGridCellSequence = DOTween.Sequence()
+            StopCurrentCellHover();
+
+            _currHoveredGridCell = currGridCell;
+            _onHoveredGridCellSequence = DOTween.Sequence()
                 .Append(currGridCell.transform.DOLocalMoveY(OnSelectedGridCellRaise, OnSelectedGridCellAnimTime))
                 .Join(currGridCell.transform.DOScale(new Vector3(OnSelectedGridCellScale, OnSelectedGridCellScale, 1f), OnSelectedGridCellAnimTime));
         }
 
-        private void StopCellHover()
+        private void StopCurrentCellHover()
         {
-            _onSelectedGridCellSequence?.Kill();
-
-            GridCell hoveredGridCell = _waitForMovementCellSelection.Selector.LastHovered;
-            if (hoveredGridCell == null)
+            _onHoveredGridCellSequence?.Kill();
+            
+            if (_currHoveredGridCell == null)
             {
                 return;
             }
             
-            hoveredGridCell.transform.localPosition = hoveredGridCell.transform.localPosition.WithY(0f);
-            hoveredGridCell.transform.localScale = Vector3.one;
+            _currHoveredGridCell.transform.localPosition = _currHoveredGridCell.transform.localPosition.WithY(0f);
+            _currHoveredGridCell.transform.localScale = Vector3.one;
         }
 
         public override bool TryCancel()
