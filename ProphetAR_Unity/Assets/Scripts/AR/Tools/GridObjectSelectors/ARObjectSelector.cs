@@ -62,11 +62,13 @@ namespace ProphetAR
             {
                 Ray cameraRay = new Ray(_arCamera.transform.position, _arCamera.transform.forward);
                 int numHits = Physics.RaycastNonAlloc(cameraRay, _raycastHits, Mathf.Infinity, _gridObjectLayers);
+                Debug.DrawRay(_arCamera.transform.position, _arCamera.transform.forward * 10, Color.green, 10f);
+                
+                Debug.Log(numHits);
                 
                 for (int i = 0; i < numHits; i++)
                 {
                     T hitGridObject = _raycastHits[i].transform.GetComponent<T>();
-                    bool cachedIsValidForSelection = false;
                     
                     // Component (overrides ==)
                     if (SelectingUnityObject)

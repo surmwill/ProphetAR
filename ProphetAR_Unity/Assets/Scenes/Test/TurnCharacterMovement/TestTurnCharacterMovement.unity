@@ -8490,6 +8490,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Singleton (ARManager)
       objectReference: {fileID: 0}
+    - target: {fileID: 7625877599100606909, guid: e2da4992e53fcb34ab3290c076d52da4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7625877599100606909, guid: e2da4992e53fcb34ab3290c076d52da4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7625877599100606909, guid: e2da4992e53fcb34ab3290c076d52da4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5.21
+      objectReference: {fileID: 0}
+    - target: {fileID: 7625877599100606909, guid: e2da4992e53fcb34ab3290c076d52da4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.8894962
+      objectReference: {fileID: 0}
+    - target: {fileID: 7625877599100606909, guid: e2da4992e53fcb34ab3290c076d52da4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.45694265
+      objectReference: {fileID: 0}
+    - target: {fileID: 7625877599100606909, guid: e2da4992e53fcb34ab3290c076d52da4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 54.38
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -44,6 +44,9 @@ namespace ProphetAR
 
         public void EditorNotifyCellDimensionsChanged(Vector2 newDimensions)
         {
+            OnCellDimensionsChanged();
+            EditorUtility.SetDirty(this);
+            
             EditorOnCellDimensionsChanged?.Invoke(newDimensions);
         }
 
@@ -71,13 +74,27 @@ namespace ProphetAR
             _lastCellContentPrefab = _cellContentPrefab; 
         }
 
+        private void OnCellDimensionsChanged()
+        {
+            Vector3 scale = new Vector3(Dimensions.x, 1f, Dimensions.y);
+            
+            if (_cellPainter != null)
+            {
+                _cellPainter.transform.position = Middle;
+                _cellPainter.transform.localScale = scale;
+            }
+            
+            if (_cellCollider != null)
+            {
+                _cellCollider.transform.position = Middle;
+                _cellCollider.transform.localScale = scale;
+            }
+        }
+
         private void OnValidate()
         {
             CheckCellContentChange();
-            if (_gridSection != null)
-            {
-                _cellPainter.transform.position = Middle;   
-            }
+            OnCellDimensionsChanged();
         }
     }
 }

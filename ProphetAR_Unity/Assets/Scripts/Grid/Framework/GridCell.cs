@@ -38,6 +38,9 @@ namespace ProphetAR
         [SerializeField]
         private GridCellPainter _cellPainter;
 
+        [SerializeField]
+        private BoxCollider _cellCollider;
+
         public GridSection GridSection => _gridSection;
         
         public GridCellContent Content => _cellContent;
@@ -51,18 +54,18 @@ namespace ProphetAR
 
         public Vector2Int Coordinates => _coordinates;
 
-        public Vector2 Dimensions => _gridSection.CellDimensions;
+        public Vector2 Dimensions => _gridSection != null ? _gridSection.CellDimensions : Vector2.one;
 
         // World corners
         public Vector3 BotLeft => transform.position;
 
-        public Vector3 BotRight => transform.parent.TransformPoint(transform.localPosition + Vector3.right * Dimensions.x);
+        public Vector3 BotRight => transform.position + Vector3.right * Dimensions.x;
 
-        public Vector3 Middle => transform.parent.TransformPoint(transform.localPosition + Vector3.right * (Dimensions.x / 2f) + Vector3.forward * (Dimensions.y / 2f));
+        public Vector3 Middle => transform.position + Vector3.right * (Dimensions.x / 2f) + Vector3.forward * (Dimensions.y / 2f);
 
-        public Vector3 TopLeft => transform.parent.TransformPoint(transform.localPosition + Vector3.forward * Dimensions.y);
+        public Vector3 TopLeft => transform.position + Vector3.forward * Dimensions.y;
 
-        public Vector3 TopRight => transform.parent.TransformPoint(transform.localPosition + Vector3.right * Dimensions.x + Vector3.forward * Dimensions.y);
+        public Vector3 TopRight => transform.position + Vector3.right * Dimensions.x + Vector3.forward * Dimensions.y;
         
         // Adjacent cells
         public GridCell LeftCell { get; private set; }

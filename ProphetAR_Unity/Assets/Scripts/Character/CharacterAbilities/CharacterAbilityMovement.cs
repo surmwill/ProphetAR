@@ -30,7 +30,11 @@ namespace ProphetAR
             {
                 _waitForMovementCellSelection = ARManager.Instance.ARGridCellSelector.StartObjectSelection(
                     onHovered: OnGridCellHovered, 
-                    isValidForSelection: gridCell => area.ContainsCoordinates(gridCell.Coordinates),
+                    isValidForSelection: gridCell =>
+                    {
+                        Debug.Log(gridCell.Coordinates);
+                        return area.ContainsCoordinates(gridCell.Coordinates);
+                    },
                     onSelected: _ => StopCellHover(),
                     onCancelled: StopCellHover);
                 
