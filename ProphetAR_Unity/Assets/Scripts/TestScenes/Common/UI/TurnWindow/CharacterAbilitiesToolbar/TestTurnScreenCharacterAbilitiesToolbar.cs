@@ -63,8 +63,19 @@ namespace ProphetAR
             
             _characterAbilitiesRecycler.ShowAbilitiesForCharacter(data);
             
-            _abilityPointsText.text = data.CharacterStats.ActionPoints.ToString();
+            _abilityPointsText.text = $"Action points: {data.CharacterStats.ActionPoints.ToString()}";
             _currCharacterText.text = _currCharacter.name;
+            
+            ShowText(true);
+        }
+        
+        // Cleanup
+        void IGameEventWithoutDataListener<IGameEventOnPostGameTurnListener>.OnEvent()
+        {
+            _characterAbilitiesRecycler.Clear();
+            _currCharacter = null;
+            
+            ShowText(false);
         }
 
         // Show character action points as they decrease
@@ -72,15 +83,14 @@ namespace ProphetAR
         {
             if (data.Character == _currCharacter)
             {
-                _abilityPointsText.text = data.CharacterStats.ActionPoints.ToString();   
+                _abilityPointsText.text = $"Action points: {data.CharacterStats.ActionPoints.ToString()}";   
             }
         }
 
-        // Cleanup
-        void IGameEventWithoutDataListener<IGameEventOnPostGameTurnListener>.OnEvent()
+        private void ShowText(bool show)
         {
-            _characterAbilitiesRecycler.Clear();
-            _currCharacter = null;
+            _currCharacterText.gameObject.SetActive(show);
+            _abilityPointsText.gameObject.SetActive(show);
         }
     }
 }
