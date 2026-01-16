@@ -28,6 +28,11 @@ namespace ProphetAR
 
         public virtual void Execute(Action onComplete = null, Action onCancelled = null)
         {
+            VerifyExecution();
+        }
+
+        private void VerifyExecution()
+        {
             if (AbilityAsCoroutine != null && AbilityAsAction != null)
             {
                 throw new InvalidOperationException("An ability should either be execute by coroutine or action, not both (both are non-null)");
