@@ -68,7 +68,6 @@ namespace ProphetAR
             
             if (currPlayer != null)
             {
-                Debug.Log("Bound build initial game turn");
                 currPlayer.EventProcessor.AddListenerWithoutData<IGameEventOnPreGameTurnListener>(this);
                 currPlayer.EventProcessor.AddListenerWithoutData<IGameEventBuildInitialGameTurnListener>(this);
             }

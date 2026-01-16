@@ -9,8 +9,6 @@ namespace ProphetAR
         public abstract string Uid { get; }
 
         public abstract int MinNumActionPoints { get; }
-        
-        public bool Cancelled { get; protected set; }
 
         public Character Character { get; }
         

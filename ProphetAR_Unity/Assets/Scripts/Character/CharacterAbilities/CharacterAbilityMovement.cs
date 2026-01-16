@@ -40,6 +40,8 @@ namespace ProphetAR
                     onSelected: _ => StopCurrentCellHover(),
                     onCancelled: StopCurrentCellHover);
                 
+                
+                
                 yield return _waitForMovementCellSelection;
             }
             
