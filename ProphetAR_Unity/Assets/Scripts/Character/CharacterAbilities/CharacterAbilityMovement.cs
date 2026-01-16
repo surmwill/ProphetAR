@@ -14,6 +14,8 @@ namespace ProphetAR
 
         protected override AbilityCoroutine AbilityAsCoroutine => ExecuteAbility;
         
+        private ARGridCellSelector GridCellSelector => ARManager.Instance.ARGridCellSelector;
+        
         private const float OnSelectedGridCellRaise = 0.3f;
         private const float OnSelectedGridCellScale = 1.3f;
         private const float OnSelectedGridCellAnimTime = 1.4f; 
@@ -28,19 +30,16 @@ namespace ProphetAR
             (NavigationDestinationSet destinations, GridSlice area) = Character.GetMovementArea();
 
             using (Character.Grid.GridPainter.ShowMovementArea(destinations, area))
+            using (new ShowARObjectSelectionUI(Character.Level, 
+                       ARObjectSelectionUIOptionDataFactory.Cancel("Cancel", () => TryCancel()), 
+                       ARObjectSelectionUIOptionDataFactory.Default("Select", SelectCurrentCell)))
             {
-                _waitForMovementCellSelection = ARManager.Instance.ARGridCellSelector.StartObjectSelection(
+                _waitForMovementCellSelection = GridCellSelector.StartObjectSelection(
                     onHovered: OnNewGridCellHovered, 
                     getObjectFromCollision: hitTransform => hitTransform.GetComponentInParent<GridCell>(),
-                    isValidObject: gridCell =>
-                    {
-                        Debug.Log(gridCell.Coordinates);
-                        return area.ContainsCoordinates(gridCell.Coordinates);
-                    },
+                    isValidObject: gridCell => area.ContainsCoordinates(gridCell.Coordinates),
                     onSelected: _ => StopCurrentCellHover(),
                     onCancelled: StopCurrentCellHover);
-                
-                
                 
                 yield return _waitForMovementCellSelection;
             }
@@ -78,6 +77,17 @@ namespace ProphetAR
             
             _currHoveredGridCell.transform.localPosition = _currHoveredGridCell.transform.localPosition.WithY(0f);
             _currHoveredGridCell.transform.localScale = Vector3.one;
+        }
+
+        private void SelectCurrentCell()
+        {
+            if (GridCellSelector.LastHovered == null)
+            {
+                Debug.LogError("No grid cell has been hovered for selection");
+                return;
+            }
+
+            GridCellSelector.Select();
         }
 
         public override bool TryCancel()

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -17,9 +15,8 @@ namespace ProphetAR
         [SerializeField]
         private TestTurnScreenActionRequestsRecyclerUI _actionRequestsRecycler = null;
         
-        private IEnumerator Start()
+        public void Initialize()
         {
-            yield return new WaitUntil(() => _testTurnScreenUI.Level.IsInitialized);
             BindListeners(true);
         }
 

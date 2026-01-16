@@ -1,11 +1,15 @@
 ﻿using System.Collections;
+using ProphetAR.Coroutines;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace ProphetAR
 {
-    public class TestTurnScreenUI : MonoBehaviour, IGameEventOnPreGameTurnListener
+    public class TestTurnScreenUI : MonoBehaviour, 
+        IGameEventOnPreGameTurnListener, 
+        IGameEventShowARObjectSelectionUIListener, 
+        IGameEventHideARObjectSelectionUIListener
     {
         [SerializeField]
         private Level _level = null;
@@ -19,6 +23,15 @@ namespace ProphetAR
         [SerializeField]
         private Button _completeManualPartOfTurnButton = null;
 
+        [SerializeField]
+        private TestTurnScreenActionRequestsToolbarUI _actionRequestsToolbar = null;
+
+        [SerializeField]
+        private TestTurnScreenCharacterAbilitiesToolbarUI _characterAbilitiesToolbar = null;
+
+        [SerializeField]
+        private TestTurnScreenARObjectSelectionToolbarUI _arObjectSelectionToolbar = null;
+
         public Level Level => _level;
         
         private GameTurn CurrTurn => _level.TurnManager.CurrTurn;
@@ -26,18 +39,28 @@ namespace ProphetAR
         private void Awake()
         {
             _completeManualPartOfTurnButton.onClick.AddListener(CompleteManualPartOfTurn);
+            ShowARObjectSelectionToolbar(false);
         }
 
         private IEnumerator Start()
         {
-            yield return new WaitUntil(() => _level.IsInitialized);
+            yield return new WaitForLevelInitialization(_level);
+            Initialize();
+        }
+
+        private void Initialize()
+        {
             BindListeners(true);
+            
+            _actionRequestsToolbar.Initialize();
+            _characterAbilitiesToolbar.Initialize();
+            _arObjectSelectionToolbar.Initialize();
         }
         
         private void OnDestroy()
-        {
-            BindListeners(false);
+        { 
             _completeManualPartOfTurnButton.onClick.RemoveListener(CompleteManualPartOfTurn);
+            BindListeners(false);
         }
         
         // Button to go to the next turn
@@ -49,6 +72,17 @@ namespace ProphetAR
         
         private void BindListeners(bool bind)
         {
+            if (bind)
+            {
+                _level.EventProcessor.AddListenerWithData<IGameEventShowARObjectSelectionUIListener, GameEventShowARObjectSelectionUIOptionsData>(this);
+                _level.EventProcessor.AddListenerWithoutData<IGameEventHideARObjectSelectionUIListener>(this);
+            }
+            else
+            {
+                _level.EventProcessor.RemoveListenerWithData<IGameEventShowARObjectSelectionUIListener>(this);
+                _level.EventProcessor.RemoveListenerWithoutData<IGameEventHideARObjectSelectionUIListener>(this);
+            }
+            
             foreach (GamePlayer player in _level.Players)
             {
                 if (bind)
@@ -68,6 +102,24 @@ namespace ProphetAR
             _currPlayerText.text = $"Player: {CurrTurn.Player.Index.ToString()}";
             _currTurnText.text = $"Turn: {CurrTurn.TurnNumber.ToString()}";
             _completeManualPartOfTurnButton.enabled = true;
+        }
+
+        // Show AR object selection UI
+        void IGameEventWithTypedDataListener<IGameEventShowARObjectSelectionUIListener, GameEventShowARObjectSelectionUIOptionsData>.OnEvent(GameEventShowARObjectSelectionUIOptionsData data)
+        {
+            ShowARObjectSelectionToolbar(true);
+        }
+
+        // Hide AR object selection UI
+        void IGameEventWithoutDataListener<IGameEventHideARObjectSelectionUIListener>.OnEvent()
+        {
+            ShowARObjectSelectionToolbar(false);
+        }
+
+        private void ShowARObjectSelectionToolbar(bool show)
+        {
+            _arObjectSelectionToolbar.gameObject.SetActive(show);
+            _characterAbilitiesToolbar.gameObject.SetActive(!show);
         }
     }
 }

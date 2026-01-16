@@ -116,7 +116,11 @@ namespace ProphetAR
             {
                 for (int col = TopLeft.x; col <= BotRight.x; col++)
                 {
-                    yield return this[(row, col).ToVector2Int()];
+                    GridCell gridCell = this[(row, col).ToVector2Int()];
+                    if (gridCell != null)
+                    {
+                        yield return gridCell;   
+                    }
                 }
             }
         }

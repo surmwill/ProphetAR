@@ -3,8 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-using static ProphetAR.GameEventShowARObjectSelectionUIOptionsData;
-
 namespace ProphetAR
 {
     public class TestTurnScreenARObjectSelectionRecyclerUIEntry : RecyclerScrollRectEntry<string, TestTurnScreenARObjectSelectionRecyclerUIData>
@@ -14,15 +12,13 @@ namespace ProphetAR
 
         [SerializeField]
         private Button _button = null;
-        
-        public Button Button { get; }
 
-        private ARObjectSelectionUIOptionData SelectionOptionData => Data.SelectionOptionData;
+        private ARObjectSelectionUIOptionData OptionData => Data.OptionData;
         
         protected override void OnBind(TestTurnScreenARObjectSelectionRecyclerUIData entryData)
         {
+            _text.text = entryData.Key;
             _button.onClick.AddListener(OnOption);  
-            _text.text = SelectionOptionData.Uid;
         }
 
         protected override void OnRecycled()
@@ -32,7 +28,7 @@ namespace ProphetAR
 
         private void OnOption()
         {
-            SelectionOptionData.OnSelect?.Invoke();
+            OptionData.OnSelect?.Invoke();
         }
     }
 }

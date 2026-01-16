@@ -1,23 +1,66 @@
-﻿using UnityEngine;
-
-using static ProphetAR.GameEventShowARObjectSelectionUIOptionsData;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace ProphetAR
 {
-    public class TestTurnScreenARObjectSelectionToolbarUI : MonoBehaviour, IGameEventShowARObjectSelectionUIListener
+    public class TestTurnScreenARObjectSelectionToolbarUI : MonoBehaviour, IGameEventShowARObjectSelectionUIListener, IGameEventHideARObjectSelectionUIListener
     {
+        [SerializeField]
+        private TestTurnScreenUI _testTurnScreenUI = null;
+        
         [SerializeField]
         private TestTurnScreenARObjectSelectionRecyclerUI _selectionRecycler = null;
 
-        // On start selection
+        private Level Level => _testTurnScreenUI.Level;
+
+        public void Initialize()
+        {
+            BindListeners(true);
+        }
+
+        private void OnDestroy()
+        {
+            BindListeners(false);
+        }
+
+        private void BindListeners(bool bind)
+        {
+            if (bind)
+            {
+                Level.EventProcessor.AddListenerWithData<IGameEventShowARObjectSelectionUIListener, GameEventShowARObjectSelectionUIOptionsData>(this);
+                Level.EventProcessor.AddListenerWithoutData<IGameEventHideARObjectSelectionUIListener>(this);
+            }
+            else
+            {
+                Level.EventProcessor.RemoveListenerWithData<IGameEventShowARObjectSelectionUIListener>(this);
+                Level.EventProcessor.RemoveListenerWithoutData<IGameEventHideARObjectSelectionUIListener>(this);
+            }
+        }
+
+        // Selection started
         void IGameEventWithTypedDataListener<IGameEventShowARObjectSelectionUIListener, GameEventShowARObjectSelectionUIOptionsData>.OnEvent(GameEventShowARObjectSelectionUIOptionsData data)
         {
-            
-            
-            foreach (ARObjectSelectionUIOptionData selectionData in data.OptionsData)
+            bool foundCancel = false;
+
+            List<TestTurnScreenARObjectSelectionRecyclerUIData> optionsRecyclerData = new List<TestTurnScreenARObjectSelectionRecyclerUIData>();
+            foreach (ARObjectSelectionUIOptionData optionData in data.OptionsData)
             {
-                
+                optionsRecyclerData.Add(new TestTurnScreenARObjectSelectionRecyclerUIData(optionData));
+                foundCancel = foundCancel || optionData.IsCancelOption;
             }
+
+            if (!foundCancel)
+            {
+                Debug.LogWarning("No cancel option provided!");
+            }
+            
+            _selectionRecycler.AppendEntries(optionsRecyclerData);
+        }
+
+        // Selection completed or cancelled
+        void IGameEventWithoutDataListener<IGameEventHideARObjectSelectionUIListener>.OnEvent()
+        {
+            _selectionRecycler.Clear();
         }
     }
 }

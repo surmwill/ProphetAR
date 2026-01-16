@@ -147,6 +147,11 @@ namespace ProphetAR
 
         public T Select(bool keepSelecting = false)
         {
+            if ((SelectingUnityObject && _lastHoveredUnityObject == null) || (!SelectingUnityObject && LastHovered == null))
+            {
+                throw new InvalidOperationException("Nothing to select (last hover is null)");
+            }
+            
             T selected = LastHovered;
             _onSelected?.Invoke(selected);
 

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ProphetAR
 {
@@ -14,18 +14,10 @@ namespace ProphetAR
         {
             OptionsData = optionsData;
         }
-
-        public class ARObjectSelectionUIOptionData
+        
+        public GameEventShowARObjectSelectionUIOptionsData(params ARObjectSelectionUIOptionData[] optionsData)
         {
-            public Action OnSelect { get; }
-            
-            public string Uid { get; }
-
-            public ARObjectSelectionUIOptionData(string uid, Action onSelect)
-            {
-                Uid = uid;
-                OnSelect = onSelect;
-            }
+            OptionsData = optionsData.ToList();
         }
     }
 }

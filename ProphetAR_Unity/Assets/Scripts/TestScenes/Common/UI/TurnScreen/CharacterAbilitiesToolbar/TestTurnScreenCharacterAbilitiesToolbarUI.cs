@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 namespace ProphetAR
@@ -23,9 +22,8 @@ namespace ProphetAR
 
         private Character _currCharacter;
 
-        private IEnumerator Start()
+        public void Initialize()
         {
-            yield return new WaitUntil(() => _testTurnScreenUI.Level.IsInitialized);
             BindListeners(true);
         }
         

@@ -15,7 +15,7 @@ namespace ProphetAR
         
         public DisposableGridPainter ShowMovementArea(NavigationDestinationSet possibleDestinations, GridSlice gridSlice)
         {
-            foreach (GridCell gridCell in gridSlice.Where(gridCell => gridCell != null))
+            foreach (GridCell gridCell in gridSlice)
             {
                 if (possibleDestinations.Destinations.TryGetValue(gridCell.Coordinates.ToTuple(), out NavigationDestination destination))
                 {
