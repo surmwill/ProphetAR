@@ -12,7 +12,7 @@ namespace ProphetAR
 
         public override int MinNumActionPoints => 1;
 
-        protected override CharacterAbilityCoroutine AbilityCoroutine => ExecuteAbility;
+        protected override AbilityCoroutine AbilityAsCoroutine => ExecuteAbility;
         
         private const float OnSelectedGridCellRaise = 0.3f;
         private const float OnSelectedGridCellScale = 1.3f;

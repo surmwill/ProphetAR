@@ -1,58 +1,22 @@
 ﻿using System;
 using System.Collections;
-using UnityEngine;
 
 namespace ProphetAR
 {
-    public abstract class CharacterAbility
+    public abstract class CharacterAbility : Ability
     {
-        public abstract string Uid { get; }
-
-        public abstract int MinNumActionPoints { get; }
-
         public Character Character { get; }
         
-        protected delegate IEnumerator CharacterAbilityCoroutine(Action onComplete, Action onCancelled); 
-        
-        /// <summary>
-        /// The ability can either be a simple callback or a Coroutine performed over time.
-        /// One of these needs to be overriden to non-null.
-        /// </summary>
-        protected virtual CharacterAbilityCoroutine AbilityCoroutine { get; } = null;
-
-        /// <summary>
-        /// The ability can either be a simple callback or a Coroutine performed over time.
-        /// One of these needs to be overriden to non-null.
-        /// </summary>
-        protected virtual Action AbilityAction { get; } = null;
-        
-        /// <summary>
-        /// There's only something to cancel if the ability is a Coroutine.
-        /// It may also be the case that we're too far into the operation to cancel it, hence why we can return false
-        /// </summary>
-        public virtual bool TryCancel()
+        public override void Execute(Action onComplete = null, Action onCancelled = null)
         {
-            return false;
-        }
-        
-        public void Execute(Action onComplete = null, Action onCancelled = null)
-        {
-            if (AbilityCoroutine != null && AbilityAction != null)
-            {
-                throw new InvalidOperationException("An ability should either be execute by coroutine or action, not both (both are non-null)");
-            }
+            base.Execute(onComplete, onCancelled);
             
-            if (AbilityCoroutine == null && AbilityAction == null)
+            if (AbilityAsAction != null)
             {
-                Debug.LogWarning("Missing ability execution method");
-            }
-
-            if (AbilityAction != null)
-            {
-                AbilityAction.Invoke();
+                AbilityAsAction.Invoke();
                 onComplete?.Invoke();
             }
-            else if (AbilityCoroutine != null)
+            else if (AbilityAsCoroutine != null)
             {
                 Character.StartCoroutine(ExecuteInner(onComplete, onCancelled));
             }
@@ -65,7 +29,7 @@ namespace ProphetAR
             
             using (new CharacterAbilityExecutionTracker(this))
             {
-                yield return AbilityCoroutine(() => isComplete = true, () => isCancelled = true);   
+                yield return AbilityAsCoroutine(() => isComplete = true, () => isCancelled = true);   
             }
             
             if (isComplete)

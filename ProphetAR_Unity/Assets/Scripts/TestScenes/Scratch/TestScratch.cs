@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using ProphetAR.Coroutines;
 using UnityEngine;
 
 namespace ProphetAR
@@ -13,19 +12,7 @@ namespace ProphetAR
         private IEnumerator Start()
         {
             Debug.Log("Coroutines started");
-            yield return new WaitForCallback(Foo);
-            Debug.Log("All coroutines done");
-        }
-
-        private void Foo(Action onComplete)
-        {
-            StartCoroutine(FooInner(onComplete));
-        }
-
-        private IEnumerator FooInner(Action onComplete)
-        {
-            yield return new WaitForSeconds(5f);
-            onComplete?.Invoke();
+            yield return null;
         }
     }
 }
