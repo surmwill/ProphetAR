@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
 using UnityEngine;
 
 namespace ProphetAR
 {
-    public class TestTurnScreenCharacterAbilitiesToolbar : MonoBehaviour, 
+    public class TestTurnScreenCharacterAbilitiesToolbarUI : MonoBehaviour, 
         IGameEventShowCharacterActionsUIListener,
         IGameEventCharacterStatsModifiedListener,
         IGameEventOnPostGameTurnListener
@@ -20,7 +19,7 @@ namespace ProphetAR
         private TMP_Text _abilityPointsText = null;
 
         [SerializeField]
-        private TestTurnScreenCharacterAbilitiesRecycler _characterAbilitiesRecycler = null;
+        private TestTurnScreenCharacterAbilitiesRecyclerUI _characterAbilitiesRecycler = null;
 
         private Character _currCharacter;
 
@@ -65,8 +64,6 @@ namespace ProphetAR
             
             _abilityPointsText.text = $"Action points: {data.CharacterStats.ActionPoints.ToString()}";
             _currCharacterText.text = _currCharacter.name;
-            
-            ShowText(true);
         }
         
         // Cleanup
@@ -74,8 +71,6 @@ namespace ProphetAR
         {
             _characterAbilitiesRecycler.Clear();
             _currCharacter = null;
-            
-            ShowText(false);
         }
 
         // Show character action points as they decrease
@@ -85,12 +80,6 @@ namespace ProphetAR
             {
                 _abilityPointsText.text = $"Action points: {data.CharacterStats.ActionPoints.ToString()}";   
             }
-        }
-
-        private void ShowText(bool show)
-        {
-            _currCharacterText.gameObject.SetActive(show);
-            _abilityPointsText.gameObject.SetActive(show);
         }
     }
 }

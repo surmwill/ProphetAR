@@ -3,7 +3,7 @@ using Swill.Recycler;
 
 namespace ProphetAR
 {
-    public class TestTurnScreenCharacterAbilitiesRecycler : RecyclerScrollRect<string, TestTurnScreenCharacterAbilitiesRecyclerUIData>
+    public class TestTurnScreenCharacterAbilitiesRecyclerUI : RecyclerScrollRect<string, TestTurnScreenCharacterAbilitiesRecyclerUIData>
     {
         private Character _currCharacter;
 

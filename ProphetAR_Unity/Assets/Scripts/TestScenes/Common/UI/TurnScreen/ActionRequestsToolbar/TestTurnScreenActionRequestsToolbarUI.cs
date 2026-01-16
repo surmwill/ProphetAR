@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ProphetAR
 {
-    public class TestTurnScreenActionRequestsToolbar : MonoBehaviour,
+    public class TestTurnScreenActionRequestsToolbarUI : MonoBehaviour,
         IGameEventOnInitialGameTurnBuiltListener,
         IGameEventOnPostGameTurnListener,
         IGameEventGameTurnActionsModifiedListener

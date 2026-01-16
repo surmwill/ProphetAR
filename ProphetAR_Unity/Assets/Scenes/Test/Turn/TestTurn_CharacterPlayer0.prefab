@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 9209426569718577995}
   - component: {fileID: 8584503330269934414}
   m_Layer: 0
-  m_Name: TestTurnCharacterMovement_CharacterPlayer0
+  m_Name: TestTurn_CharacterPlayer0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
