@@ -29,7 +29,30 @@ namespace GridPathFinding.Editor
             SerializedGrid grid = new SerializedGrid(gridRaw);
             
             NavigationDestinationSet navigationDestinationSet = GridPathFinder.GetPathsFrom(grid, 0);
-            Assert.IsFalse(navigationDestinationSet.CanMove, "We should not be able to move with zero or negative max steps");
+            Assert.IsTrue(!navigationDestinationSet.CanMove, "We should not be able to move with zero or negative max steps");
+            Assert.IsTrue(navigationDestinationSet.Destinations.Count == 1 && navigationDestinationSet.Destinations.Keys.First() == (0, 0));
+        }
+
+        [Test]
+        public void TestExcludeOrigin()
+        {
+            char[,] gridRaw = new char[2, 2]
+            {
+                { GridPoints.Origin, GridPoints.Clear },
+                { GridPoints.Clear, GridPoints.Clear }
+            };
+            
+            SerializedGrid grid = new SerializedGrid(gridRaw);
+            NavigationDestinationSet navigationDestinationSet = GridPathFinder.GetPathsFrom(grid, 2, true);
+            
+            // We should be able to reach every grid cell, but then we exclude the origin
+            Assert.IsTrue(!navigationDestinationSet.Destinations.ContainsKey((0, 0)));
+            Assert.IsTrue(navigationDestinationSet.Destinations.Count == 3);
+            
+            // If we have 0 steps and exclude the origin, then not even the origin is a valid destination
+            navigationDestinationSet = GridPathFinder.GetPathsFrom(grid, 0, true);
+            Assert.IsTrue(navigationDestinationSet.Destinations.Count == 0);
+            
         }
 
         private static void TestPathsFromWithMaxSteps(string inputFilePath, int maxNumSteps)

@@ -112,9 +112,9 @@ namespace ProphetAR
 
         public IEnumerator<GridCell> GetEnumerator()
         {
-            for (int row = TopLeft.y; row <= BotRight.y; row++)
+            for (int row = TopLeft.x; row <= BotRight.x; row++)
             {
-                for (int col = TopLeft.x; col <= BotRight.x; col++)
+                for (int col = TopLeft.y; col <= BotRight.y; col++)
                 {
                     GridCell gridCell = this[(row, col).ToVector2Int()];
                     if (gridCell != null)

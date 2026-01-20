@@ -10,8 +10,10 @@ namespace GridPathFinding
 
         public (int row, int col)? Target { get; set; }
 
+        // Null if no obstacles
         public List<(int x, int y)> Obstacles { get; set; }
     
+        // Null if no modification steps
         public List<ModificationStep> ModificationSteps { get; set; }
 
         public bool HasObstacles => Obstacles != null;

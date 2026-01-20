@@ -66,7 +66,7 @@ namespace GridPathFinding
             return grid;
         }
 
-        public static NavigationDestinationSet GetPathsFrom(SerializedGrid serializedGrid, int maxNumSteps)
+        public static NavigationDestinationSet GetPathsFrom(SerializedGrid serializedGrid, int maxNumSteps, bool excludeOrigin = false)
         {
             if (!serializedGrid.Origin.HasValue)
             {
@@ -74,7 +74,6 @@ namespace GridPathFinding
             }
             
             (int row, int col) origin = serializedGrid.Origin.Value;
-            
             if (!IsPointInGrid(origin, serializedGrid.Dimensions))
             {
                 throw new ArgumentException("Origin is not in the grid");
@@ -86,7 +85,10 @@ namespace GridPathFinding
             Dictionary<(int row, int col), NavigationDestination> navigationDestinations = new Dictionary<(int row, int col), NavigationDestination>();
         
             NavigationDestination navigationDestination = new NavigationDestination(origin, origin, 0, solvedGrid);
-            navigationDestinations[origin] = navigationDestination;
+            if (!excludeOrigin)
+            {
+                navigationDestinations[origin] = navigationDestination;   
+            }
         
             Queue<(int row, int col, int numSteps)> nextPositions = new Queue<(int row, int col, int numSteps)>();
             nextPositions.Enqueue((origin.row, origin.col, 0));

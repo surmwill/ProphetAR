@@ -13,11 +13,11 @@ namespace ProphetAR
             Grid = grid;
         }
         
-        public DisposableGridPainter ShowMovementArea(NavigationDestinationSet possibleDestinations, GridSlice gridSlice)
+        public DisposableGridPainter ShowMovementArea(NavigationDestinationSet destinations, GridSlice gridSlice)
         {
             foreach (GridCell gridCell in gridSlice)
             {
-                if (possibleDestinations.Destinations.TryGetValue(gridCell.Coordinates.ToTuple(), out NavigationDestination destination))
+                if (destinations.Destinations.TryGetValue(gridCell.Coordinates.ToTuple(), out NavigationDestination destination))
                 {
                     gridCell.GridCellPainter.ShowIsNavigable(true, destination.StepsRequired);
                 }

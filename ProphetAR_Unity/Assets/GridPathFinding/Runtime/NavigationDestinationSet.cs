@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GridPathFinding
 {
@@ -13,7 +14,7 @@ namespace GridPathFinding
         public Dictionary<(int row, int col), NavigationDestination> Destinations { get; }
 
         // Can we move further than the origin?
-        public bool CanMove => Destinations.Count > 1;
+        public bool CanMove => Destinations.Count > 1 || (Destinations.Count == 1 && Destinations.Keys.First() != Origin);
 
         public NavigationDestinationSet((int row, int col) origin, int maxNumSteps, Dictionary<(int row, int col), NavigationDestination> destinations)
         {
