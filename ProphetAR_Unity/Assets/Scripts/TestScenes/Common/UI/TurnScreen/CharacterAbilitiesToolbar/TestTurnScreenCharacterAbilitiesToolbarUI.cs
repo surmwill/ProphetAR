@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Linq;
+using TMPro;
 using UnityEngine;
 
 namespace ProphetAR
@@ -56,9 +57,13 @@ namespace ProphetAR
         // Show the character's abilities
         void IGameEventWithTypedDataListener<IGameEventShowCharacterActionsUIListener, Character>.OnEvent(Character data)
         {
+            if (_currCharacter == data)
+            {
+                return;
+            }
             _currCharacter = data;
-            
-            _characterAbilitiesRecycler.ShowAbilitiesForCharacter(data);
+
+            _characterAbilitiesRecycler.AppendEntries(data.Abilities.Select(ability => new TestTurnScreenCharacterAbilitiesRecyclerUIData(ability)));
             
             _abilityPointsText.text = $"Action points: {data.CharacterStats.ActionPoints.ToString()}";
             _currCharacterText.text = _currCharacter.name;

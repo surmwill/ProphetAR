@@ -170,16 +170,19 @@ namespace ProphetAR
 
         private void CancelInner(bool fromSelectionSuccess)
         {
+            // Previously cancelled
             if (_gridCellSelectionCoroutine == null)
             {
                 return;
             }
             
+            // Reset state
             StopCoroutine(_gridCellSelectionCoroutine);
             _gridCellSelectionCoroutine = null;
-
+            
             T selected = LastHovered;
             LastHovered = null;
+            _lastHoveredUnityObject = null;
             
             if (fromSelectionSuccess)
             {
@@ -195,6 +198,7 @@ namespace ProphetAR
             _onCancelled = null;
             _onSelected = null;
 
+            // Callback
             if (!fromSelectionSuccess)
             {
                 onCancelled?.Invoke();   
