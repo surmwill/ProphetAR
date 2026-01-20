@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GridPathFinding;
+using UnityEngine;
 
 namespace ProphetAR
 {
@@ -8,7 +9,7 @@ namespace ProphetAR
     {
         /// <summary>
         /// Breaks the instruction set up into segments, each segment ending on the splitOn coordinate. The start of each segment begins on the
-        /// end of the previous segment. Therefore, the individual segments overlap and can be joined together.
+        /// end of the previous segment. Therefore, the individual segments overlap like hinges and can be joined together.
         /// </summary>
         public static List<NavigationInstructionSet> SplitOnCoordinates(this NavigationInstructionSet instructionSet, IEnumerable<(int row, int col)> splitOn)
         {
@@ -58,7 +59,7 @@ namespace ProphetAR
                     // Found split. Create a new instruction set for getting to that split
                     if (pathCoordinates == currSplitOn)
                     {
-                        currSplitInstructions.Add(new NavigationInstruction(currDirection, currMagnitude - lastDirectionSplitMagnitude));       
+                        currSplitInstructions.Add(new NavigationInstruction(currDirection, currMagnitude - lastDirectionSplitMagnitude)); 
                         splitInstructionSets.Add(new NavigationInstructionSet(currSplitOrigin, currSplitOn, currSplitInstructions));
                         
                         // Nothing left for splitting

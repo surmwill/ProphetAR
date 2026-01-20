@@ -45,7 +45,7 @@ namespace GridPathPathFinding.Editor
                     {
                         char[,] gridWithPath = DrawPathOnGrid(instructionSet, grid);
                         
-                        Debug.Log(GridParser.ShowGrid(gridWithPath));
+                        Debug.Log(GridPathFinder.PrintGrid(gridWithPath));
                         Debug.Log(instructionSet.ListInstructionsString());
                         Debug.Log(instructionSet.ListPathCoordinatesString());
                         

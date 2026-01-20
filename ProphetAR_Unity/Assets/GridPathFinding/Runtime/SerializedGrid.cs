@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 namespace GridPathFinding
 {
@@ -11,7 +12,7 @@ namespace GridPathFinding
         public (int row, int col)? Target { get; set; }
 
         // Null if no obstacles
-        public List<(int x, int y)> Obstacles { get; set; }
+        public List<(int row, int col)> Obstacles { get; set; }
     
         // Null if no modification steps
         public List<ModificationStep> ModificationSteps { get; set; }
@@ -24,7 +25,7 @@ namespace GridPathFinding
             (int numRows, int numCols) dimensions, 
             (int row, int col)? origin = null, 
             (int row, int col)? target = null, 
-            List<(int x, int y)> obstacles = null, 
+            List<(int row, int col)> obstacles = null, 
             List<ModificationStep> modificationSteps = null)
         {
             Dimensions = dimensions;
@@ -46,42 +47,111 @@ namespace GridPathFinding
             Origin = null;
             Target = null;
         
-            for (int row = 0; row < grid.GetLength(0); row++)
+            for (int row = 0; row < Dimensions.numRows; row++)
             {
-                for (int col = 0; col < grid.GetLength(1); col++)
+                for (int col = 0; col < Dimensions.numCols; col++)
                 {
-                    char point = grid[row, col];
+                    char gridPoint = grid[row, col];
                     
-                    if (point == GridPoints.Origin)
+                    switch (gridPoint)
                     {
-                        Origin = (row, col);
-                    }
-                    else if (point == GridPoints.Target)
-                    {
-                        Target = (row, col);
-                    }
-                    else if (point == GridPoints.Obstacle)
-                    {
-                        (Obstacles ??= new List<(int x, int y)>()).Add((row, col));
-                    }
-                    else if (GridPoints.IsModificationStep(point, out int numSteps))
-                    {
-                        (ModificationSteps ??= new List<ModificationStep>()).Add(new ModificationStep((row, col), numSteps));
+                        case GridPoints.Origin:
+                            Origin = (row, col);
+                            break;
+                        
+                        case GridPoints.Target:
+                            Target = (row, col);
+                            break;
+                        
+                        case GridPoints.Obstacle:
+                            (Obstacles ??= new List<(int row, int col)>()).Add((row, col));
+                            break;
+                        
+                        default:
+                        {
+                            if (GridPoints.IsModificationStep(gridPoint, out int numSteps))
+                            {
+                                (ModificationSteps ??= new List<ModificationStep>()).Add(new ModificationStep((row, col), numSteps));
+                            }
+
+                            break;
+                        }
                     }
                 }
             }
         }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            
+            for (int row = 0; row < Dimensions.numRows; row++)
+            {
+                for (int col = 0; col < Dimensions.numCols; col++)
+                {
+                    (int row, int col) coordinates = (row, col);
+
+                    if (coordinates == Origin)
+                    {
+                        sb.Append(GridPoints.Origin);
+                        continue;
+                    }
+                    
+                    if (coordinates == Target)
+                    {
+                        sb.Append(GridPoints.Target);
+                        continue;
+                    }
+                    
+                    if (Obstacles.Contains(coordinates))
+                    {
+                        sb.Append(GridPoints.Obstacle);
+                        continue;
+                    }
+                    
+                    int modificationStepIndex = ModificationSteps.FindIndex(modificationStep => coordinates == modificationStep.Coordinates);
+                    if (modificationStepIndex >= 0)
+                    {
+                        sb.Append(GridPoints.ModificationStepValueToGridPoint(ModificationSteps[modificationStepIndex].Value));
+                        continue;
+                    }
+
+                    sb.Append(GridPoints.DEBUG_PRINT_CLEAR);
+                }
+
+                sb.AppendLine();
+            }
+
+            return sb.ToString();
+        }
+
         public SerializedGrid WithOrigin((int row, int col) origin)
         {
+            ClearCoordinate(origin);
             Origin = origin;
             return this;
         }
 
         public SerializedGrid WithTarget((int row, int col) target)
         {
+            ClearCoordinate(target);
             Target = target;
             return this;
+        }
+
+        private void ClearCoordinate((int row, int col) coordinate)
+        {
+            if (Obstacles.Remove(coordinate))
+            {
+                return;
+            }
+            
+            int modificationStepIndex = ModificationSteps.FindIndex(modificationStep => coordinate == modificationStep.Coordinates);
+            if (modificationStepIndex >= 0)
+            {
+                ModificationSteps.RemoveAt(modificationStepIndex);
+                return;
+            }
         }
     }
 }

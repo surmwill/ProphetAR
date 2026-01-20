@@ -136,7 +136,7 @@ namespace ProphetAR
         {
             if (!area.ContainsCoordinates(Coordinates))
             {
-                throw new ArgumentException($"The transform at {Coordinates} is not contained in the grid slice with properties: (${area.SliceDescription()})");
+                throw new ArgumentException($"The transform at {Coordinates} is not contained in the grid slice with properties: (${area.PrintSliceDescription()})");
             }
 
             SerializedGrid serializedGrid = area.GetSerializedGrid().WithOrigin(Coordinates.ToTuple());
@@ -147,12 +147,12 @@ namespace ProphetAR
         {
             if (!area.ContainsCoordinates(Coordinates))
             {
-                throw new ArgumentException($"The transform at {Coordinates} is not contained in the grid slice with properties: (${area.SliceDescription()})");
+                throw new ArgumentException($"The transform at {Coordinates} is not contained in the grid slice with properties: (${area.PrintSliceDescription()})");
             }
             
             if (!area.ContainsCoordinates(target))
             {
-                throw new ArgumentException($"The target {target} is not contained in the grid slice with properties: (${area.SliceDescription()})");
+                throw new ArgumentException($"The target {target} is not contained in the grid slice with properties: (${area.PrintSliceDescription()})");
             }
 
             SerializedGrid serializedGrid = area.GetSerializedGrid()

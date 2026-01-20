@@ -19,9 +19,11 @@ namespace ProphetAR
         
         public Vector2Int TopLeft { get; }
         
-        public Vector2 TopRight { get; }
+        public Vector2Int TopRight { get; }
         
         public Vector2Int BotRight { get; }
+        
+        public Vector2Int Middle { get; }
         
         public Vector2Int Dimensions { get; }
         
@@ -43,13 +45,15 @@ namespace ProphetAR
 
             TopRight = topLeft + new Vector2Int(0, dimensions.y - 1);
             BotRight = topLeft + (dimensions - Vector2Int.one);
-
+            
+            Middle = new Vector2Int((BotLeft.x - TopLeft.x) / 2, (TopRight.y - TopLeft.y) / 2);
+            
             Dimensions = dimensions;
         }
 
-        public string SliceDescription()
+        public string PrintSliceDescription()
         {
-            return $"Top left/Origin: {TopLeft}, Bot right: {BotRight}, Dimensions: {Dimensions}";
+            return $"Top left/Origin: {TopLeft}, Bot right: {BotRight}, Middle: {Middle}, Dimensions: {Dimensions}";
         }
 
         public bool ContainsCoordinates(Vector2Int coordinates)
@@ -102,7 +106,7 @@ namespace ProphetAR
             {
                 if (!ContainsCoordinates(coordinates))
                 {
-                    Debug.LogWarning($"Given coordinates {coordinates} are not contained within the slice. {SliceDescription()}");
+                    Debug.LogWarning($"Given coordinates {coordinates} are not contained within the slice. {PrintSliceDescription()}");
                     return null;
                 }
                 

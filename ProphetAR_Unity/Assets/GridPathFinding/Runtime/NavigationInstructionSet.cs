@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace GridPathFinding
 {
@@ -12,7 +13,8 @@ namespace GridPathFinding
     
         public (int row, int col) Target { get; }
     
-        // Non-null. If the origin and the target are the same then this is empty. If a path cannot be made then no instruction set will be returned in the first place
+        // Non-null. If no navigation is possible, the entire instruction set will be null.
+        // If we can only navigate to where we currently stand (i.e. Origin == Target), this will be empty and non-null.
         public List<NavigationInstruction> PathToTarget { get; }
         
         public List<(int row, int col)> PathCoordinates { get; } = new();

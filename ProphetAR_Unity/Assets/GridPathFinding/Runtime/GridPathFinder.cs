@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using UnityEngine;
 
 namespace GridPathFinding
 {
@@ -52,9 +54,9 @@ namespace GridPathFinding
 
             if (serializedGrid.HasModificationSteps)
             {
-                foreach (ModificationStep modificationStep in serializedGrid.ModificationSteps.Where(modificationStep => IsPointInGrid(modificationStep.Position, gridDimensions)))
+                foreach (ModificationStep modificationStep in serializedGrid.ModificationSteps.Where(modificationStep => IsPointInGrid(modificationStep.Coordinates, gridDimensions)))
                 {
-                    grid[modificationStep.Position.row, modificationStep.Position.col] = GridPoints.ModificationStepValueToGridPoint(modificationStep.Value);
+                    grid[modificationStep.Coordinates.row, modificationStep.Coordinates.col] = GridPoints.ModificationStepValueToGridPoint(modificationStep.Value);
                 }   
             }
         }
@@ -234,18 +236,18 @@ namespace GridPathFinding
                     nextPositions.Enqueue((currentPosition.row - 1, currentPosition.col));   
                 }
             }
-
+            
             return found ? ReverseBuildPathToOrigin(target, solvedGrid) : null;
         }
 
-        public static NavigationInstructionSet ReverseBuildPathToOrigin((int row, int col) currentPosition, char[,] solvedGrid)
+        public static NavigationInstructionSet ReverseBuildPathToOrigin((int row, int col) fromPosition, char[,] solvedGrid)
         {
             int totalMagnitude = 0;
             List<NavigationInstruction> navigationInstructions = new List<NavigationInstruction>();
             (int row, int col) foundOrigin = default;
-        
-            ReverseAndRememberDirectionBack(currentPosition, navigationInstructions, ref totalMagnitude, ref foundOrigin, solvedGrid);
-            return new NavigationInstructionSet(foundOrigin, currentPosition, navigationInstructions, totalMagnitude);
+            
+            ReverseAndRememberDirectionBack(fromPosition, navigationInstructions, ref totalMagnitude, ref foundOrigin, solvedGrid);
+            return new NavigationInstructionSet(foundOrigin, fromPosition, navigationInstructions, totalMagnitude);
         }
 
         private static void ReverseAndRememberDirectionBack(
@@ -334,6 +336,24 @@ namespace GridPathFinding
                     break;   
                 }
             }
+        }
+        
+        public static string PrintGrid(char[,] grid)
+        {
+            StringBuilder sb = new StringBuilder();
+            
+            for (int x = 0; x < grid.GetLength(0); x++)
+            {
+                for (int y = 0; y < grid.GetLength(1); y++)
+                {
+                    char point = grid[x, y];
+                    sb.Append(point == GridPoints.Clear ? GridPoints.DEBUG_PRINT_PATH : point); // Null (clear) doesn't show up
+                }
+            
+                sb.AppendLine();
+            }
+            
+            return sb.ToString();
         }
     }
 }

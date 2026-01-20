@@ -139,7 +139,7 @@ namespace ProphetAR
                 Vector2Int stopCoordinates = instructionsToNextStop.Target.ToVector2Int();
                 NavigationInstruction.NavigationDirection direction = instructionsToNextStop.PathToTarget.First().Direction;
 
-                // (Previous stops might have reduced our action points)
+                // Previous stops might have reduced our action points and affected our stop position
                 if (CharacterStats.ActionPoints < distanceToStop)
                 {
                     int missingDistance = distanceToStop - CharacterStats.ActionPoints;

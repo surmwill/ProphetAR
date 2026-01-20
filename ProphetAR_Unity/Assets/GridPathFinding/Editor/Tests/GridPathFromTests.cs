@@ -70,13 +70,13 @@ namespace GridPathFinding.Editor
                 if (navigationDestinationSet.CanMove)
                 {
                     Debug.Log("Original grid");
-                    Debug.Log(GridParser.ShowGrid(grid));
+                    Debug.Log(GridPathFinder.PrintGrid(grid));
                     
                     Debug.Log("Drawing all paths");
-                    Debug.Log(GridParser.ShowGrid(DrawDestinationsOnGrid(navigationDestinationSet, grid)));
+                    Debug.Log(GridPathFinder.PrintGrid(DrawDestinationsOnGrid(navigationDestinationSet, grid)));
 
                     Debug.Log("Drawing furthest path");
-                    Debug.Log(GridParser.ShowGrid(DrawFurthestDestinationOnGrid(navigationDestinationSet, grid)));
+                    Debug.Log(GridPathFinder.PrintGrid(DrawFurthestDestinationOnGrid(navigationDestinationSet, grid)));
                 }
                 else
                 {
