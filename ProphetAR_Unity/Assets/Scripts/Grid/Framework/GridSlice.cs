@@ -12,8 +12,6 @@ namespace ProphetAR
     public readonly struct GridSlice : IEnumerable<GridCell>
     {
         public CustomGrid Grid { get; }
-
-        public Vector2Int Origin => TopLeft;
         
         public Vector2Int BotLeft { get; }
         
@@ -67,14 +65,19 @@ namespace ProphetAR
             List<(int row, int col)> obstacles = new List<(int row, int col)>();
             List<ModificationStep> modificationSteps = new List<ModificationStep>();
             
-            for (int row = TopLeft.y; row <= BotRight.y; row++)
+            for (int row = TopLeft.x; row <= BotRight.x; row++)
             {
-                for (int col = TopLeft.x; col <= BotRight.x; col++)
+                for (int col = TopLeft.y; col <= BotRight.y; col++)
                 {
-                    GridCell gridCell = Grid[new Vector2Int(row, col)];
+                    // The serialized grid slice is only a small section of the entire grid.
+                    // Therefore, its top-left origin is offset from that of the entire grid.
+                    (int row, int col) coordinates = (row, col);
+                    (int row, int col) serializedSliceCoordinates = ((row, col).ToVector2Int() - TopLeft).ToTuple();
+                    
+                    GridCell gridCell = Grid[coordinates.ToVector2Int()];
                     if (gridCell == null)
                     {
-                        obstacles.Add((row, col));
+                        obstacles.Add(serializedSliceCoordinates);
                         continue;
                     }
                     
@@ -82,17 +85,17 @@ namespace ProphetAR
                     switch (gridPointProperties.GridPointType)
                     {
                         case GridPointType.Obstacle:
-                            obstacles.Add((row, col));
+                            obstacles.Add(serializedSliceCoordinates);
                             break;
 
                         case GridPointType.ModificationStep:
-                            modificationSteps.Add(new ModificationStep((row, col), gridPointProperties.ModificationStep));
+                            modificationSteps.Add(new ModificationStep(serializedSliceCoordinates, gridPointProperties.ModificationStep));
                             break;
                     }
 
                     if (gridCell.Content.HasCharacters)
                     {
-                        obstacles.Add((row, col));
+                        obstacles.Add(serializedSliceCoordinates);
                     }
                 }
             }

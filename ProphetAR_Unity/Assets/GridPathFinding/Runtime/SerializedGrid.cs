@@ -10,16 +10,12 @@ namespace GridPathFinding
         public (int row, int col)? Origin { get; set; }
 
         public (int row, int col)? Target { get; set; }
-
-        // Null if no obstacles
+        
+        // Non-null
         public List<(int row, int col)> Obstacles { get; set; }
-    
-        // Null if no modification steps
+        
+        // Non-null
         public List<ModificationStep> ModificationSteps { get; set; }
-
-        public bool HasObstacles => Obstacles != null;
-    
-        public bool HasModificationSteps => ModificationSteps != null;
 
         public SerializedGrid(
             (int numRows, int numCols) dimensions, 
@@ -33,16 +29,16 @@ namespace GridPathFinding
             Origin = origin;
             Target = target;
         
-            Obstacles = obstacles;
-            ModificationSteps = modificationSteps;
+            Obstacles = obstacles ?? new List<(int row, int col)>();
+            ModificationSteps = modificationSteps ?? new List<ModificationStep>();
         }
 
         public SerializedGrid(char[,] grid)
         {
             Dimensions = (grid.GetLength(0), grid.GetLength(1));
             
-            Obstacles = null;
-            ModificationSteps = null;
+            Obstacles = new List<(int row, int col)>();
+            ModificationSteps = new List<ModificationStep>();
 
             Origin = null;
             Target = null;
@@ -64,14 +60,14 @@ namespace GridPathFinding
                             break;
                         
                         case GridPoints.Obstacle:
-                            (Obstacles ??= new List<(int row, int col)>()).Add((row, col));
+                            Obstacles.Add((row, col));
                             break;
                         
                         default:
                         {
                             if (GridPoints.IsModificationStep(gridPoint, out int numSteps))
                             {
-                                (ModificationSteps ??= new List<ModificationStep>()).Add(new ModificationStep((row, col), numSteps));
+                                ModificationSteps.Add(new ModificationStep((row, col), numSteps));
                             }
 
                             break;
@@ -103,13 +99,13 @@ namespace GridPathFinding
                         continue;
                     }
                     
-                    if (Obstacles.Contains(coordinates))
+                    if (Obstacles?.Contains(coordinates) ?? false)
                     {
                         sb.Append(GridPoints.Obstacle);
                         continue;
                     }
                     
-                    int modificationStepIndex = ModificationSteps.FindIndex(modificationStep => coordinates == modificationStep.Coordinates);
+                    int modificationStepIndex = ModificationSteps?.FindIndex(modificationStep => coordinates == modificationStep.Coordinates) ?? -1;
                     if (modificationStepIndex >= 0)
                     {
                         sb.Append(GridPoints.ModificationStepValueToGridPoint(ModificationSteps[modificationStepIndex].Value));

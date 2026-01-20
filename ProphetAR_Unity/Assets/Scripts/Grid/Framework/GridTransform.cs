@@ -139,7 +139,8 @@ namespace ProphetAR
                 throw new ArgumentException($"The transform at {Coordinates} is not contained in the grid slice with properties: (${area.PrintSliceDescription()})");
             }
 
-            SerializedGrid serializedGrid = area.GetSerializedGrid().WithOrigin(Coordinates.ToTuple());
+            SerializedGrid serializedGrid = area.GetSerializedGrid().WithOrigin((Coordinates - area.TopLeft).ToTuple());
+            Debug.Log(serializedGrid);
             return GridPathFinder.GetPathsFrom(serializedGrid, maxNumSteps, true);
         }
         
@@ -156,7 +157,7 @@ namespace ProphetAR
             }
 
             SerializedGrid serializedGrid = area.GetSerializedGrid()
-                .WithOrigin(Coordinates.ToTuple())
+                .WithOrigin((Coordinates - area.TopLeft).ToTuple())
                 .WithTarget(target.ToTuple());
 
             return GridPathFinder.GetPathTo(serializedGrid);

@@ -44,7 +44,7 @@ namespace GridPathFinding
                 grid[serializedGrid.Target.Value.row, serializedGrid.Target.Value.col] = GridPoints.Target;
             }
 
-            if (serializedGrid.HasObstacles)
+            if (serializedGrid.Obstacles.Count > 0)
             {
                 foreach ((int row, int col) in serializedGrid.Obstacles.Where(obstacle => IsPointInGrid(obstacle, gridDimensions)))
                 {
@@ -52,7 +52,7 @@ namespace GridPathFinding
                 }   
             }
 
-            if (serializedGrid.HasModificationSteps)
+            if (serializedGrid.ModificationSteps.Count > 0)
             {
                 foreach (ModificationStep modificationStep in serializedGrid.ModificationSteps.Where(modificationStep => IsPointInGrid(modificationStep.Coordinates, gridDimensions)))
                 {
@@ -78,7 +78,7 @@ namespace GridPathFinding
             (int row, int col) origin = serializedGrid.Origin.Value;
             if (!IsPointInGrid(origin, serializedGrid.Dimensions))
             {
-                throw new ArgumentException("Origin is not in the grid");
+                throw new ArgumentException($"Origin is not in the grid: {origin}");
             }
 
             maxNumSteps = Math.Max(maxNumSteps, 0);
