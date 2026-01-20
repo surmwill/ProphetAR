@@ -10,7 +10,7 @@
         public const char DIR_BACK_TO_ORIGIN_LEFT = 'L';
         public const char DIR_BACK_TO_ORIGIN_RIGHT = 'R';
         public const char DIR_BACK_TO_ORIGIN_UP = 'U';
-        public const char DIR_BACK_TO_ORIGIN_DOWN = 'B';
+        public const char DIR_BACK_TO_ORIGIN_DOWN = 'D';
 
         public const char DEBUG_PRINT_PATH = '.';
     

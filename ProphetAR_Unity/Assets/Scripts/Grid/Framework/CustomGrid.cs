@@ -56,6 +56,33 @@ namespace ProphetAR
         {
             GridPainter = new GridPainter(this);
         }
+        
+        // Query the structure of the built grid
+        #region GridQuerying
+        
+        public GridCell this[Vector2Int coordinates] => Cells.GetValueOrDefault(coordinates);
+
+        public Vector2Int ClampCoordinate(Vector2Int coordinate)
+        {
+            return new Vector2Int(
+                Mathf.Clamp(coordinate.x, _topLeftCoordinate.x, _botRightCoordinate.x),
+                Mathf.Clamp(coordinate.y, _topLeftCoordinate.y, _botRightCoordinate.y));
+        }
+        
+        public GridSlice GetSlice(Vector2Int botLeft, Vector2Int dimensions)
+        {
+            return new GridSlice(this, botLeft, dimensions);
+        }
+
+        /// <summary>
+        /// A grid slice containing entire level. This is likely very large, operating on it is inefficient, and should only be used for testing or specific thought-out cases
+        /// </summary>
+        public GridSlice GetGlobalSliceExpensive()
+        {
+            return new GridSlice(this, _topLeftCoordinate, _gridDimensions);
+        }
+        
+        #endregion
 
         // Keep track of what objects are on the grid
         #region GridObjectManagement
@@ -105,26 +132,6 @@ namespace ProphetAR
         public IEnumerable<GridObject> GetGridObjects()
         {
             return _gridObjects;
-        }
-        
-        #endregion
-
-        // Query the structure of the built grid
-        #region GridQuerying
-        
-        public GridCell this[Vector2Int coordinates] => Cells.GetValueOrDefault(coordinates);
-        
-        public GridSlice GetSlice(Vector2Int botLeft, Vector2Int dimensions)
-        {
-            return new GridSlice(this, botLeft, dimensions);
-        }
-
-        /// <summary>
-        /// A grid slice containing entire level. This is likely very large, operating on it is inefficient, and should only be used for testing or specific thought-out cases
-        /// </summary>
-        public GridSlice GetGlobalSliceExpensive()
-        {
-            return new GridSlice(this, _topLeftCoordinate, _gridDimensions);
         }
         
         #endregion

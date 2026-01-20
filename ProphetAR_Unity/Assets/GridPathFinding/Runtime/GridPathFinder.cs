@@ -163,7 +163,7 @@ namespace GridPathFinding
                     }
                 }
             }
-
+            
             return new NavigationDestinationSet(origin, maxNumSteps, navigationDestinations);
         }
 
@@ -184,7 +184,7 @@ namespace GridPathFinding
 
             if (!IsPointInGrid(origin, serializedGrid.Dimensions))
             {
-                throw new ArgumentException("Origin is not in the grid");
+                throw new ArgumentException($"Origin is not in the grid: {origin}");
             }
         
             if (!IsPointInGrid(target, serializedGrid.Dimensions))

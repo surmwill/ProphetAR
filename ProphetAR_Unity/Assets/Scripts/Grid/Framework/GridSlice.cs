@@ -39,16 +39,16 @@ namespace ProphetAR
             }
             
             Grid = grid;
-
-            TopLeft = topLeft;
-            BotLeft = topLeft + new Vector2Int(dimensions.x - 1, 0);
-
-            TopRight = topLeft + new Vector2Int(0, dimensions.y - 1);
-            BotRight = topLeft + (dimensions - Vector2Int.one);
             
-            Middle = new Vector2Int((BotLeft.x - TopLeft.x) / 2, (TopRight.y - TopLeft.y) / 2);
+            TopLeft = Grid.ClampCoordinate(topLeft);
+            BotLeft = Grid.ClampCoordinate(topLeft + new Vector2Int(dimensions.x - 1, 0));
+
+            TopRight = Grid.ClampCoordinate(topLeft + new Vector2Int(0, dimensions.y - 1));
+            BotRight = Grid.ClampCoordinate(topLeft + (dimensions - Vector2Int.one));
             
-            Dimensions = dimensions;
+            Middle = new Vector2Int((int) Mathf.Lerp(BotLeft.x, TopLeft.x, 0.5f), (int) Mathf.Lerp(TopRight.y, TopLeft.y, 0.5f));
+            
+            Dimensions = new Vector2Int(BotRight.x - TopLeft.x + 1, BotRight.y - TopLeft.y + 1);
         }
 
         public string PrintSliceDescription()
