@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using GridPathFinding;
 
 namespace ProphetAR
@@ -17,7 +16,7 @@ namespace ProphetAR
         {
             foreach (GridCell gridCell in gridSlice)
             {
-                if (destinations.Destinations.TryGetValue(gridCell.Coordinates.ToTuple(), out NavigationDestination destination))
+                if (destinations.Destinations.TryGetValue((gridCell.Coordinates - gridSlice.TopLeft).ToTuple(), out NavigationDestination destination))
                 {
                     gridCell.GridCellPainter.ShowIsNavigable(true, destination.StepsRequired);
                 }

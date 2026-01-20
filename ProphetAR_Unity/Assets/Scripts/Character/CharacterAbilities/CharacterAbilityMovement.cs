@@ -37,7 +37,7 @@ namespace ProphetAR
                 _waitForMovementCellSelection = GridCellSelector.StartObjectSelection(
                     onHovered: OnNewGridCellHovered, 
                     getObjectFromCollision: hitTransform => hitTransform.GetComponentInParent<GridCell>(),
-                    isValidObject: gridCell => destinationSet.Destinations.ContainsKey(gridCell.Coordinates.ToTuple()),
+                    isValidObject: gridCell => destinationSet.Destinations.ContainsKey((gridCell.Coordinates - area.TopLeft).ToTuple()),
                     onSelected: _ => StopCurrentCellHover(),
                     onCancelled: StopCurrentCellHover);
                 
