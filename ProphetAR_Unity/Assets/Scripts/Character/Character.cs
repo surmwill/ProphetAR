@@ -102,10 +102,10 @@ namespace ProphetAR
         
         #region Movement
 
-        public (NavigationDestinationSet Destinations, GridSlice Area) GetMovementArea()
+        public (NavigationDestinationSet DestinationSet, GridSlice Area) GetMovementArea()
         {
             int maxSteps = _characterStats.ActionPoints;
-            GridSlice area = GridSlice.CreateFromCenter(Grid, GridTransform.Coordinates, maxSteps);
+            GridSlice area = GridSlice.ExtendFromCenter(Grid, GridTransform.Coordinates, maxSteps);
             return (GridTransform.GetPathsFrom(maxSteps, area), area);
         }
         

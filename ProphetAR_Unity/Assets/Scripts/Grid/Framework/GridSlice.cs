@@ -130,7 +130,7 @@ namespace ProphetAR
             return GetEnumerator();
         }
         
-        public static GridSlice CreateFromCenter(CustomGrid grid, Vector2Int origin, int magnitudeInEachDirection)
+        public static GridSlice ExtendFromCenter(CustomGrid grid, Vector2Int origin, int magnitudeInEachDirection)
         {
             Vector2Int topLeft = origin - magnitudeInEachDirection * Vector2Int.one;
             Vector2Int dimensions = (magnitudeInEachDirection * 2 + 1) * Vector2Int.one;

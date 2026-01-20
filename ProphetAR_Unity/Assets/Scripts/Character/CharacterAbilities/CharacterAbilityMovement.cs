@@ -27,9 +27,9 @@ namespace ProphetAR
 
         private IEnumerator ExecuteAbility(Action onComplete, Action onCancelled)
         {
-            (NavigationDestinationSet destinations, GridSlice area) = Character.GetMovementArea();
+            (NavigationDestinationSet destinationSet, GridSlice area) = Character.GetMovementArea();
 
-            using (Character.Grid.GridPainter.ShowMovementArea(destinations, area))
+            using (Character.Grid.GridPainter.ShowMovementArea(destinationSet, area))
             using (new ShowARObjectSelectionUI(Character.Level, 
                        ARObjectSelectionUIOptionDataFactory.Cancel("Cancel", () => TryCancel()), 
                        ARObjectSelectionUIOptionDataFactory.Default("Select", SelectCurrentCell)))
@@ -37,7 +37,7 @@ namespace ProphetAR
                 _waitForMovementCellSelection = GridCellSelector.StartObjectSelection(
                     onHovered: OnNewGridCellHovered, 
                     getObjectFromCollision: hitTransform => hitTransform.GetComponentInParent<GridCell>(),
-                    isValidObject: gridCell => area.ContainsCoordinates(gridCell.Coordinates),
+                    isValidObject: gridCell => destinationSet.Destinations.ContainsKey(gridCell.Coordinates.ToTuple()),
                     onSelected: _ => StopCurrentCellHover(),
                     onCancelled: StopCurrentCellHover);
                 
