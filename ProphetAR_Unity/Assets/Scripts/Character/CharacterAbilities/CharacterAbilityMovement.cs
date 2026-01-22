@@ -46,7 +46,7 @@ namespace ProphetAR
             
             if (_waitForMovementCellSelection.ResolvedCancelled)
             {
-                onCancelled?.Invoke();
+                onCancelled?.Invoke(); 
                 yield break;
             }
 
