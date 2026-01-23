@@ -300,6 +300,7 @@ MonoBehaviour:
   _anchorManager: {fileID: 884452982070009470}
   _cameraManager: {fileID: 9099171476053670473}
   _arSession: {fileID: 7888618215937193668}
+  _planeManager: {fileID: 9034370049575777163}
   _groundPlaneManager: {fileID: 2585684113496497725}
   _arGridCellSelector: {fileID: 5980849721112567023}
 --- !u!114 &2585684113496497725

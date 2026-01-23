@@ -13,6 +13,9 @@ public class TestARSetup : MonoBehaviour
 
     [SerializeField]
     private TMP_Text _statusText = null;
+
+    [SerializeField]
+    private GameObject _groundPlaneContentPrefab = null;
     
     private void Start()
     {
@@ -35,7 +38,7 @@ public class TestARSetup : MonoBehaviour
             {
                 SetStatusText("placing ground plane");
                 _placeGroundPlaneButton.gameObject.SetActive(true);
-                ARManager.Instance.GroundPlaneManager.StartPlacingGroundPlane();
+                ARManager.Instance.GroundPlaneManager.StartGroundPlanePlacement(_groundPlaneContentPrefab);
             },
             true);
     }

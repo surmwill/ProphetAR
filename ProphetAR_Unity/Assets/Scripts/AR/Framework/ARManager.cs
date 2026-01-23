@@ -17,6 +17,9 @@ namespace ProphetAR
         
         [SerializeField]
         private ARSession _arSession = null;
+
+        [SerializeField]
+        private ARPlaneManager _planeManager = null;
         
         [SerializeField]
         private GroundPlaneManager _groundPlaneManager = null;
@@ -32,6 +35,8 @@ namespace ProphetAR
         public ARCameraManager CameraManager => _cameraManager;
         
         public ARSession ARSession => _arSession;
+
+        public ARPlaneManager PlaneManager => _planeManager;
         
         public GroundPlaneManager GroundPlaneManager => _groundPlaneManager;
 

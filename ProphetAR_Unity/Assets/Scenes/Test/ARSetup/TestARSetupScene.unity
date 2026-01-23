@@ -1095,6 +1095,7 @@ MonoBehaviour:
   _placeGroundPlaneButton: {fileID: 385973571}
   _resetToScanRoomButton: {fileID: 579816475}
   _statusText: {fileID: 443242242}
+  _groundPlaneContentPrefab: {fileID: 6681848220111784550, guid: d4ca20f2c93d3f044bff42405d52fbd9, type: 3}
 --- !u!4 &1003731327
 Transform:
   m_ObjectHideFlags: 0

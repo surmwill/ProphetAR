@@ -20,16 +20,19 @@ namespace ProphetAR
         [SerializeField]
         private GameObject _debugHitTestIndicatorPrefab = null;
         
-        public Transform Content => _groundPlane.Content;
-
         private GroundPlane _groundPlane;
-        private Transform _prevContent;
+        private Transform _prevGroundPlaneContent;
+        
+        private GameObject _initialContentPrefab;
 
         private Coroutine _scanRoomCoroutine;
         private Coroutine _updateGroundPlanePlacementCoroutine;
-        
+
+        private ARRaycastHit _lastPlacementRaycast;
         private GameObject _placementIndicator;
         private readonly List<GameObject> _debugScanRoomHitIndicators = new();
+
+        private ARAnchor _groundPlaneAnchor;
 
         public void ScanRoomForPlanes(Action<float> onProgress, Action onComplete, bool debugShowHits = false)
         {
@@ -85,47 +88,27 @@ namespace ProphetAR
             _debugScanRoomHitIndicators.Clear();
         }
         
-        public void StartPlacingGroundPlane(bool preservePreviousContent = false, GameObject customPlacementIndicatorPrefab = null)
+        // Begins raycasting on the ground and showing where the ground plane would be placed. The user can then move around and decide the exact location
+        public void StartGroundPlanePlacement(GameObject initialContentPrefab = null, GameObject customPlacementIndicatorPrefab = null, bool preservePreviousContent = false)
         {
+            CancelGroundPlanePlacement();
+            
             if (preservePreviousContent && _groundPlane != null)
             {
-                _prevContent = Content;
-            }
-            else if (!preservePreviousContent)
-            {
-                _prevContent = null;
+                _prevGroundPlaneContent = _groundPlane.Content;
+                _prevGroundPlaneContent.SetParent(null);
+                _prevGroundPlaneContent.gameObject.SetActive(false);
             }
 
-            if (_groundPlane != null)
-            {
-                Destroy(_groundPlane.gameObject);
-                _groundPlane = null;
-            }
+            DestroyGroundPlane();
             
             GameObject placementIndicator = customPlacementIndicatorPrefab == null ? _defaultGroundPlanePlacementIndicatorPrefab : customPlacementIndicatorPrefab;
-            CancelPlacingGroundPlane();
+            _initialContentPrefab = initialContentPrefab;
+            
             _updateGroundPlanePlacementCoroutine = StartCoroutine(UpdateGroundPlanePlacement(placementIndicator));
         }
         
-        public bool TryPlaceGroundPlane()
-        {
-            if (_placementIndicator == null)
-            {
-                return false;
-            }
-
-            _groundPlane = Instantiate(_groundPlanePrefab, _placementIndicator.transform.position, _placementIndicator.transform.rotation);
-            if (_prevContent != null)
-            {
-                ParentToGround(_prevContent, false);
-                _prevContent.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-            }
-            
-            CancelPlacingGroundPlane();
-            return true;
-        }
-        
-        public void CancelPlacingGroundPlane()
+        public void CancelGroundPlanePlacement()
         {
             if (_updateGroundPlanePlacementCoroutine != null)
             {
@@ -138,8 +121,51 @@ namespace ProphetAR
                 Destroy(_placementIndicator);
                 _placementIndicator = null;
             }
-        }
 
+            if (_prevGroundPlaneContent != null && _groundPlane != null)
+            {
+                _prevGroundPlaneContent.SetParent(_groundPlane.Content);  
+            }
+            
+            _initialContentPrefab = null;
+        }
+        
+        // Places the ground plane in the currently indicated position
+        public bool TryPlaceGroundPlane()
+        {
+            if (_placementIndicator == null)
+            {
+                Debug.LogWarning("Ground plane placement requires at least one successful hit test");
+                return false;
+            }
+
+            Quaternion placementOrientation = _placementIndicator.transform.rotation;
+            CancelGroundPlanePlacement();
+
+            ARPlane hitPlane = ARManager.Instance.PlaneManager.GetPlane(_lastPlacementRaycast.trackableId);
+            Pose hitPose = _lastPlacementRaycast.pose;
+            
+            _groundPlaneAnchor = ARManager.Instance.AnchorManager.AttachAnchor(hitPlane, hitPose);
+            _groundPlane = Instantiate(_groundPlanePrefab, _groundPlaneAnchor.transform);
+            
+            _groundPlane.transform.localPosition = Vector3.zero;
+            _groundPlane.transform.rotation = placementOrientation;
+            
+            if (_prevGroundPlaneContent != null)
+            {
+                ParentToGround(_prevGroundPlaneContent);
+                _prevGroundPlaneContent.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                _prevGroundPlaneContent.gameObject.SetActive(true);
+            }
+
+            if (_initialContentPrefab != null)
+            {
+                GroundedInstantiate(_initialContentPrefab, Vector3.zero, Quaternion.identity);
+            }
+            
+            return true;
+        }
+        
         private IEnumerator UpdateGroundPlanePlacement(GameObject placementIndicatorPrefab)
         {
             List<ARRaycastHit> hits = new List<ARRaycastHit>();
@@ -148,18 +174,35 @@ namespace ProphetAR
             {
                 if (ARManager.Instance.RaycastManager.Raycast(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f), hits, TrackableType.PlaneWithinPolygon))
                 {
-                    Pose hit = hits[0].pose;
-                    Vector3 faceAwayFromUser = Vector3.ProjectOnPlane(hit.position - ARManager.Instance.ARCamera.transform.position, hit.up);
+                    ARRaycastHit hit = hits[0];
+                    Pose hitPose = hit.pose;
+                    Vector3 faceAwayFromUser = Vector3.ProjectOnPlane(hitPose.position - ARManager.Instance.ARCamera.transform.position, hitPose.up);
                     
                     if (_placementIndicator == null)
                     {
                         _placementIndicator = Instantiate(placementIndicatorPrefab);
                     }
                     
-                    _placementIndicator.transform.SetPositionAndRotation(hit.position, Quaternion.LookRotation(faceAwayFromUser, hit.up));
+                    _placementIndicator.transform.SetPositionAndRotation(hitPose.position, Quaternion.LookRotation(faceAwayFromUser, hitPose.up));
+                    _lastPlacementRaycast = hit;
                 }
                 
                 yield return null;
+            }
+        }
+
+        public void DestroyGroundPlane()
+        {
+            if (_groundPlane != null)
+            {
+                Destroy(_groundPlane.gameObject);
+                _groundPlane = null;   
+            }
+
+            if (_groundPlaneAnchor != null)
+            {
+                ARManager.Instance.AnchorManager.TryRemoveAnchor(_groundPlaneAnchor);
+                _groundPlaneAnchor = null;
             }
         }
 
@@ -194,7 +237,7 @@ namespace ProphetAR
             return Instantiate(prefab, _groundPlane.Content, instantiateInWorldSpace);
         }
 
-        public void ParentToGround(Transform t, bool worldPositionStays)
+        public void ParentToGround(Transform t, bool worldPositionStays = true)
         {
             if (_groundPlane == null)
             {
@@ -207,7 +250,7 @@ namespace ProphetAR
         private void OnDestroy()
         {
             CancelScanningRoom();
-            CancelPlacingGroundPlane();
+            CancelGroundPlanePlacement();
         }
     }
 }
