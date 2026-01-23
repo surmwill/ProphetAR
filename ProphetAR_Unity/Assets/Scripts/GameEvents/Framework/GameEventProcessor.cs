@@ -9,6 +9,10 @@ namespace ProphetAR
     public class GameEventProcessor
     {
         public Action<GameEvent> OnGameEventRaised;
+
+        public const string DebugPrintGameEventsPlayerPrefKey = "DebugPrintGameEvents";
+        
+        private bool DebugShouldPrintGameEvents => PlayerPrefs.GetInt(DebugPrintGameEventsPlayerPrefKey) != 0;
         
         // These two interfaces are what each listener should derive from
         private const string InterfaceNameTypedGameEventListener = "IGameEventWithTypedDataListener";
@@ -28,8 +32,11 @@ namespace ProphetAR
         // Track the number of listener instances
         private readonly Dictionary<IGameEventListener, int> _listenerInstances = new();
         
+        // Every event (the Type) has a list of listeners we are currently iterating through (the int).
+        // But events can raise themselves, which means halfway through the first iteration, we might need to complete a second iteration (the long)
         private readonly Dictionary<Type, Dictionary<long, int>> _currentEventRaiseIterations = new();
-        private long _numEventRaises = 0;
+        
+        private long _numEventRaises;
         
         public void AddListenerWithoutData<TListener>(IGameEventListener listenerInstance) where TListener : IGameEventListener
         {
@@ -192,8 +199,13 @@ namespace ProphetAR
             Type gameEventWithDataType = gameEventWithData.GetType();  
             if (!_gameEventWithDataListeners.TryGetValue(gameEventWithDataType, out List<IGameEventListener> listenersWithData))
             {
-                Debug.LogWarning($"Raised event `{gameEventWithDataType}` with no listeners");
+                Debug.LogWarning(GetDebugStringGameEventRaised(gameEventWithData));
                 return;
+            }
+
+            if (DebugShouldPrintGameEvents)
+            {
+                Debug.Log(GetDebugStringGameEventRaised(gameEventWithData, listenersWithData));   
             }
 
             if (!_currentEventRaiseIterations.TryGetValue(gameEventWithDataType, out Dictionary<long, int> iterations))
@@ -219,8 +231,13 @@ namespace ProphetAR
             Type gameEventWithoutDataType = gameEventWithoutData.GetType();  
             if (!_gameEventWithoutDataListeners.TryGetValue(gameEventWithoutDataType, out List<IGameEventListener> listenersWithoutData))
             {
-                Debug.LogWarning($"Raised event `{gameEventWithoutDataType}` with no listeners");
+                Debug.LogWarning(GetDebugStringGameEventRaised(gameEventWithoutData));
                 return;
+            }
+
+            if (DebugShouldPrintGameEvents)
+            {
+                Debug.Log(GetDebugStringGameEventRaised(gameEventWithoutData, listenersWithoutData));   
             }
 
             if (!_currentEventRaiseIterations.TryGetValue(gameEventWithoutDataType, out Dictionary<long, int> iterations))
@@ -284,6 +301,14 @@ namespace ProphetAR
                     iterations[iterationKey] = newIteration;
                 }   
             }
+        }
+
+        private string GetDebugStringGameEventRaised(GameEvent gameEvent, List<IGameEventListener> listeners = null)
+        {
+            string listenersString = listeners == null ? string.Empty : listeners.Aggregate(
+                string.Empty, (acc, listener) => acc == string.Empty ? $"{listener.GetType()}" : $"{acc}\n{listener.GetType()}");
+            
+            return $"[Game Event] raised \"{gameEvent.GetType()}\" with ({listeners?.Count ?? 0}) listeners:\n{listenersString}\n";
         }
         
         private static Type GetTypeOfImplementedGenericInterface(Type type, string interfaceName)

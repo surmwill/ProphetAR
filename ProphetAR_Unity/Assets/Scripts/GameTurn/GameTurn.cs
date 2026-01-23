@@ -8,7 +8,7 @@ namespace ProphetAR
 {
     public class GameTurn
     {
-        public delegate void CompleteManualPartOfTurnCallback(bool hasMoreManualRequests);
+        public delegate void CompleteManualPartOfTurnCallback(bool generatedMoreManualRequests);
         
         public int TurnNumber { get; }
         
@@ -24,7 +24,7 @@ namespace ProphetAR
         // The key is the type of game event that fulfills the action request
         private readonly Dictionary<Type, List<GameTurnActionRequest>> _actionRequestsForFulfillment = new();
         
-        private bool _initialBuildComplete;
+        private bool _isInitialBuildComplete;
         
         public GameTurn(Level level, GamePlayer player, int turnNumber)
         {
@@ -39,22 +39,21 @@ namespace ProphetAR
             _level.EventProcessor.OnGameEventRaised += OnAllGameEvents;
             Player.EventProcessor.OnGameEventRaised += OnAllGameEvents;
             
+            ActionRequests.OnAdded += OnAddedActionRequest;
+            ActionRequests.OnRemoved += OnRemovedActionRequest;
+            ActionRequests.OnPriorityChanged += OnChangedActionRequestPriority;
+            
             Player.EventProcessor.RaiseEventWithoutData(new GameEventOnPreGameTurn());
         }
 
         // Query what actions the player will need to take this turn. These actions might propagate into further actions
         public void InitialBuild()
         {
-            // Anyone else can also add actions to the player through this event
+            // Anyone can add actions for the player through this event
             Player.EventProcessor.RaiseEventWithoutData(new GameEventBuildInitialGameTurn());
+
+            _isInitialBuildComplete = true;
             
-            // Once we have the initial actions built, we'll update any changes in the list 
-            ActionRequests.OnAdded += OnAddedActionRequest;
-            ActionRequests.OnRemoved += OnRemovedActionRequest;
-            ActionRequests.OnPriorityChanged += OnChangedActionRequestPriority;
-            
-            // The starting state of the turn is now finalized.
-            // (Certain actions might trigger further actions, altering the turn. The turn's state changes can be monitored through the above events)
             Player.EventProcessor.RaiseEventWithData(new GameEventOnInitialGameTurnBuilt(ActionRequests));
         }
         
@@ -67,7 +66,7 @@ namespace ProphetAR
         /// <summary>
         /// Called by the player once they've completed all turn actions that require manual input
         /// </summary>
-        public IEnumerator CompleteManualPartOfTurnCoroutine(CompleteManualPartOfTurnCallback onComplete = null)
+        public IEnumerator TryCompleteManualPartOfTurnCoroutine(CompleteManualPartOfTurnCallback onComplete = null)
         {
             if (ActionRequests.Any())
             {
@@ -77,14 +76,15 @@ namespace ProphetAR
             yield return AutomaticPartOfTurnCoroutine();
             
             // If any automatic actions couldn't be executed they will turn into manual actions. Once those are completed, we'll have to call this method again. This loops indefinitely
-            if (!ActionRequests.Any())
+            if (ActionRequests.Any())
             {
-                // All automatic actions executed and there are no actions left to perform this turn
-                OnComplete();
-                onComplete?.Invoke(false);
+                 onComplete?.Invoke(true);
+                 yield break;
             }
             
-            onComplete?.Invoke(true);
+            // All automatic actions executed successfully and there are no manual actions left to perform this turn
+            OnComplete();
+            onComplete?.Invoke(false);
         }
 
         /// <summary>
@@ -219,19 +219,16 @@ namespace ProphetAR
         private void OnAddedActionRequest(CustomPriorityQueueItem<GameTurnActionRequest> addedActionRequestItem)
         {
             GameTurnActionRequest addedActionRequest = addedActionRequestItem.Data;
+            
             if (!_actionRequestsForFulfillment.TryGetValue(addedActionRequest.CompletedByGameEventType, out List<GameTurnActionRequest> requestsToFufill))
             {
                 requestsToFufill = new List<GameTurnActionRequest>();
                 _actionRequestsForFulfillment[addedActionRequest.CompletedByGameEventType] = requestsToFufill;
             }
-            
             requestsToFufill.Add(addedActionRequest);
             
-            if (_initialBuildComplete)
-            {
-                Player.EventProcessor.RaiseEventWithData(
-                    new GameEventGameTurnActionsModified(new GameEventGameTurnActionsModifiedData(addedActionRequest, GameEventGameTurnActionsModifiedData.ModificationType.Added)));   
-            }
+            Player.EventProcessor.RaiseEventWithData(
+                new GameEventGameTurnActionsModified(new GameEventGameTurnActionsModifiedData(_isInitialBuildComplete, addedActionRequest, GameEventGameTurnActionsModifiedData.ModificationType.Added)));   
         }
         
         private void OnRemovedActionRequest(CustomPriorityQueueItem<GameTurnActionRequest> removedActionRequestItem, bool fromDequeue)
@@ -246,20 +243,14 @@ namespace ProphetAR
                 }
             }
             
-            if (_initialBuildComplete)
-            {
-                Player.EventProcessor.RaiseEventWithData(new GameEventGameTurnActionsModified(
-                    new GameEventGameTurnActionsModifiedData(removedActionRequest, GameEventGameTurnActionsModifiedData.ModificationType.Removed, removedByDequeue:fromDequeue)));   
-            }
+            Player.EventProcessor.RaiseEventWithData(new GameEventGameTurnActionsModified(
+                new GameEventGameTurnActionsModifiedData(_isInitialBuildComplete, removedActionRequest, GameEventGameTurnActionsModifiedData.ModificationType.Removed, removedByDequeue:fromDequeue)));   
         }
 
         private void OnChangedActionRequestPriority(CustomPriorityQueueItem<GameTurnActionRequest> changedActionRequestItem, int prevPriority, int newPriority)
         {
-            if (_initialBuildComplete)
-            {
-                Player.EventProcessor.RaiseEventWithData(new GameEventGameTurnActionsModified(
-                    new GameEventGameTurnActionsModifiedData(changedActionRequestItem.Data, GameEventGameTurnActionsModifiedData.ModificationType.PriorityChanged, priorityChanged:(prevPriority, newPriority))));   
-            }
+            Player.EventProcessor.RaiseEventWithData(new GameEventGameTurnActionsModified(
+                new GameEventGameTurnActionsModifiedData(_isInitialBuildComplete, changedActionRequestItem.Data, GameEventGameTurnActionsModifiedData.ModificationType.PriorityChanged, priorityChanged:(prevPriority, newPriority))));   
         }
         
         private void OnAllGameEvents(GameEvent gameEvent)

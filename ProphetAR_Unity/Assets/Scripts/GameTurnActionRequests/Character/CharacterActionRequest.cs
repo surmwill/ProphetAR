@@ -19,7 +19,7 @@ namespace ProphetAR
         }
 
         public override bool IsCompletedByGameEvent(GameEvent gameEvent)
-        {
+        {   
             return gameEvent is GameEventCharacterStatsModified characterOutOfActions && 
                    characterOutOfActions.Data.Character == Character &&
                    characterOutOfActions.Data.CharacterStats.ActionPoints == 0;

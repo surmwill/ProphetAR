@@ -7,8 +7,14 @@ namespace ProphetAR
     {
         public abstract string Uid { get; }
 
-        public abstract int MinNumActionPoints { get; }
-        
+        protected abstract int DefaultMinNumActionPoints { get; }
+
+        public int MinNumActionPoints
+        {
+            get => _customMinNumActionPoints ?? DefaultMinNumActionPoints;
+            set => _customMinNumActionPoints = value;
+        }
+
         protected delegate IEnumerator AbilityCoroutine(Action onComplete, Action onCancelled); 
         
         // The ability can either be a simple callback or a Coroutine performed over time. One of these needs to be overriden to non-null.
@@ -16,6 +22,8 @@ namespace ProphetAR
 
         // The ability can either be a simple callback or a Coroutine performed over time. One of these needs to be overriden to non-null.
         protected virtual Action AbilityAsAction { get; } = null;
+
+        private int? _customMinNumActionPoints;
         
         /// <summary>
         /// There's only something to cancel if the ability is a Coroutine.
@@ -24,6 +32,11 @@ namespace ProphetAR
         public virtual bool TryCancel()
         {
             return false;
+        }
+
+        public virtual bool CanExecute()
+        {
+            return true;
         }
 
         public virtual void Execute(Action onComplete = null, Action onCancelled = null)

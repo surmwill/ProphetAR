@@ -10,7 +10,7 @@ namespace ProphetAR
     {
         public override string Uid => nameof(CharacterAbilityMovement);
 
-        public override int MinNumActionPoints => 1;
+        protected override int DefaultMinNumActionPoints => 1;
 
         protected override AbilityCoroutine AbilityAsCoroutine => ExecuteAbility;
         

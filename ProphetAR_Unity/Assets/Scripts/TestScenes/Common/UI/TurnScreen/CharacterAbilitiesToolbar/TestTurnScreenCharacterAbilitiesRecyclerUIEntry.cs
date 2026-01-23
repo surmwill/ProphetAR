@@ -12,6 +12,10 @@ namespace ProphetAR
 
         [SerializeField]
         private Button _abilityButton = null;
+
+        private Character Character => Data.CharacterAbility.Character;
+        
+        private CharacterAbility Ability => Data.CharacterAbility;
         
         protected override void OnBind(TestTurnScreenCharacterAbilitiesRecyclerUIData entryData)
         {
@@ -31,7 +35,7 @@ namespace ProphetAR
 
         private void Update()
         {
-            _abilityButton.interactable = !Data.CharacterAbility.Character.IsExecutingAbility;
+            _abilityButton.interactable = Ability.CanExecute();
         }
     }
 }

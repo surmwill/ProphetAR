@@ -140,7 +140,6 @@ namespace ProphetAR
             }
 
             SerializedGrid serializedGrid = area.GetSerializedGrid().WithOrigin((Coordinates - area.TopLeft).ToTuple());
-            Debug.Log(serializedGrid);
             return GridPathFinder.GetPathsFrom(serializedGrid, maxNumSteps, true);
         }
         

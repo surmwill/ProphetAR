@@ -7,27 +7,27 @@ namespace ProphetAR
 {
     /// <summary>
     /// Priority queue using a SortDictionary as we don't have the built-in priority queue in this c# version.
-    /// Not as performant, but suitable for small collections (< 50 elements)
+    /// Not as performant, but suitable for small collections (say < 50 elements)
     /// </summary>
-    public class CustomPriorityQueue<TItem> : ICustomPriorityQueue<TItem>, IEnumerable<TItem> where TItem : CustomPriorityQueueItem<TItem>
+    public class CustomPriorityQueue<TConcreteItem> : ICustomPriorityQueue<TConcreteItem>, IEnumerable<TConcreteItem> where TConcreteItem : CustomPriorityQueueItem<TConcreteItem>
     {
-        private readonly SortedDictionary<int, LinkedList<CustomPriorityQueueItem<TItem>>> _data = new();
+        private readonly SortedDictionary<int, LinkedList<CustomPriorityQueueItem<TConcreteItem>>> _data = new();
 
-        public event Action<TItem> OnAdded;
-        public event Action<TItem, bool> OnRemoved;
-        public event Action<TItem, int, int> OnPriorityChanged;
+        public event Action<TConcreteItem> OnAdded;
+        public event Action<TConcreteItem, bool> OnRemoved;
+        public event Action<TConcreteItem, int, int> OnPriorityChanged;
 
         public bool Any()
         {
             return _data.Count > 0;
         }
 
-        public TItem Peek()
+        public TConcreteItem Peek()
         {
-            return (TItem) ((ICustomPriorityQueue<TItem>) this).Peek();
+            return (TConcreteItem) ((ICustomPriorityQueue<TConcreteItem>) this).Peek();
         }
         
-        CustomPriorityQueueItem<TItem> ICustomPriorityQueue<TItem>.Peek()
+        CustomPriorityQueueItem<TConcreteItem> ICustomPriorityQueue<TConcreteItem>.Peek()
         {
             if (_data.Count == 0)
             {
@@ -35,20 +35,20 @@ namespace ProphetAR
             }
             
             int highestPriority = _data.Keys.First();
-            LinkedList<CustomPriorityQueueItem<TItem>> itemQueue = _data[highestPriority];
-            CustomPriorityQueueItem<TItem> item = itemQueue.First.Value;
+            LinkedList<CustomPriorityQueueItem<TConcreteItem>> itemQueue = _data[highestPriority];
+            CustomPriorityQueueItem<TConcreteItem> item = itemQueue.First.Value;
 
             return item;
         }
         
-        public TItem Dequeue()
+        public TConcreteItem Dequeue()
         {
-            TItem item = (TItem) ((ICustomPriorityQueue<TItem>) this).Dequeue();
+            TConcreteItem item = (TConcreteItem) ((ICustomPriorityQueue<TConcreteItem>) this).Dequeue();
             OnItemRemoved(item, true);
             return item;
         }
         
-        CustomPriorityQueueItem<TItem> ICustomPriorityQueue<TItem>.Dequeue()
+        CustomPriorityQueueItem<TConcreteItem> ICustomPriorityQueue<TConcreteItem>.Dequeue()
         {
             if (_data.Count == 0)
             {
@@ -57,25 +57,25 @@ namespace ProphetAR
 
             int highestPriority = _data.Keys.First();
             
-            LinkedList<CustomPriorityQueueItem<TItem>> itemQueue = _data[highestPriority];
-            CustomPriorityQueueItem<TItem> item = itemQueue.First.Value;
+            LinkedList<CustomPriorityQueueItem<TConcreteItem>> itemQueue = _data[highestPriority];
+            CustomPriorityQueueItem<TConcreteItem> item = itemQueue.First.Value;
             
-            ((ICustomPriorityQueue<TItem>) this).Remove(item);
+            ((ICustomPriorityQueue<TConcreteItem>) this).Remove(item);
             return item;
         }
 
-        public void Enqueue(TItem item)
+        public void Enqueue(TConcreteItem item)
         {
-            ((ICustomPriorityQueue<TItem>) this).Enqueue(item);
+            ((ICustomPriorityQueue<TConcreteItem>) this).Enqueue(item);
             item.OnPriorityChanged += OnItemPriorityChanged;
             OnAdded?.Invoke(item);
         }
         
-        void ICustomPriorityQueue<TItem>.Enqueue(CustomPriorityQueueItem<TItem> item, bool isPriorityChange)
+        void ICustomPriorityQueue<TConcreteItem>.Enqueue(CustomPriorityQueueItem<TConcreteItem> item, bool isPriorityChange)
         {
-            if (!_data.TryGetValue(item.Priority, out LinkedList<CustomPriorityQueueItem<TItem>> itemQueue))
+            if (!_data.TryGetValue(item.Priority, out LinkedList<CustomPriorityQueueItem<TConcreteItem>> itemQueue))
             {
-                itemQueue = new LinkedList<CustomPriorityQueueItem<TItem>>();
+                itemQueue = new LinkedList<CustomPriorityQueueItem<TConcreteItem>>();
                 _data[item.Priority] = itemQueue;
             }
 
@@ -86,20 +86,20 @@ namespace ProphetAR
             }
         }
 
-        public void Remove(TItem item)
+        public void Remove(TConcreteItem item)
         {
-            ((ICustomPriorityQueue<TItem>) this).Remove(item);
+            ((ICustomPriorityQueue<TConcreteItem>) this).Remove(item);
             OnItemRemoved(item, false);
         }
         
-        void ICustomPriorityQueue<TItem>.Remove(CustomPriorityQueueItem<TItem> item, bool isPriorityChange)
+        void ICustomPriorityQueue<TConcreteItem>.Remove(CustomPriorityQueueItem<TConcreteItem> item, bool isPriorityChange)
         {
-            if (!_data.TryGetValue(item.Priority, out LinkedList<CustomPriorityQueueItem<TItem>> itemQueue))
+            if (!_data.TryGetValue(item.Priority, out LinkedList<CustomPriorityQueueItem<TConcreteItem>> itemQueue))
             {
                 throw new InvalidOperationException("There is nothing in the priority queue to remove");
             }
 
-            LinkedListNode<CustomPriorityQueueItem<TItem>> itemNode = itemQueue.Find(item);
+            LinkedListNode<CustomPriorityQueueItem<TConcreteItem>> itemNode = itemQueue.Find(item);
             if (itemNode == null)
             {
                 throw new InvalidOperationException("Item with given priority was not found");
@@ -117,24 +117,24 @@ namespace ProphetAR
             }
         }
 
-        private void OnItemRemoved(TItem item, bool fromDequeue)
+        private void OnItemRemoved(TConcreteItem item, bool fromDequeue)
         {
             item.OnPriorityChanged -= OnItemPriorityChanged; 
             OnRemoved?.Invoke(item, fromDequeue);
         }
         
-        private void OnItemPriorityChanged(CustomPriorityQueueItem<TItem> item, int prevPriority, int newPriority)
+        private void OnItemPriorityChanged(CustomPriorityQueueItem<TConcreteItem> item, int prevPriority, int newPriority)
         {
-            OnPriorityChanged?.Invoke((TItem) item, prevPriority, newPriority);
+            OnPriorityChanged?.Invoke((TConcreteItem) item, prevPriority, newPriority);
         }
 
-        public IEnumerator<TItem> GetEnumerator()
+        public IEnumerator<TConcreteItem> GetEnumerator()
         {
-            foreach (LinkedList<CustomPriorityQueueItem<TItem>> itemQueue in _data.Values)
+            foreach (LinkedList<CustomPriorityQueueItem<TConcreteItem>> itemQueue in _data.Values)
             {
-                foreach (CustomPriorityQueueItem<TItem> item in itemQueue)
+                foreach (CustomPriorityQueueItem<TConcreteItem> item in itemQueue)
                 {
-                    yield return (TItem) item;
+                    yield return (TConcreteItem) item;
                 }
             }
         }

@@ -6,7 +6,12 @@ namespace ProphetAR
     public abstract class CharacterAbility : Ability
     {
         public Character Character { get; }
-        
+
+        public override bool CanExecute()
+        {
+            return !Character.IsExecutingAbility && Character.CharacterStats.ActionPoints >= MinNumActionPoints;
+        }
+
         public override void Execute(Action onComplete = null, Action onCancelled = null)
         {
             base.Execute(onComplete, onCancelled);

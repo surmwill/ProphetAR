@@ -3,11 +3,9 @@ using System.Collections.Generic;
 
 namespace ProphetAR
 {
-    public abstract class CustomPriorityQueueItem<TData>
+    public abstract class CustomPriorityQueueItem<TConcreteItem> where TConcreteItem : CustomPriorityQueueItem<TConcreteItem>
     {
-        public TData Data { get; }
-
-        public event Action<CustomPriorityQueueItem<TData>, int, int> OnPriorityChanged; 
+        public event Action<CustomPriorityQueueItem<TConcreteItem>, int, int> OnPriorityChanged; 
         
         public int Priority
         {
@@ -19,7 +17,7 @@ namespace ProphetAR
                     return;
                 }
                 
-                foreach (ICustomPriorityQueue<TData> priorityQueue in _partOfPriorityQueues)
+                foreach (ICustomPriorityQueue<TConcreteItem> priorityQueue in _partOfPriorityQueues)
                 {
                     priorityQueue.Remove(this, true);
                 }
@@ -27,7 +25,7 @@ namespace ProphetAR
                 int prevPriority = PriorityOrDefault;
                 PriorityOrDefault = value;
                 
-                foreach (ICustomPriorityQueue<TData> priorityQueue in _partOfPriorityQueues)
+                foreach (ICustomPriorityQueue<TConcreteItem> priorityQueue in _partOfPriorityQueues)
                 {
                     priorityQueue.Enqueue(this, true);
                 }
@@ -35,6 +33,8 @@ namespace ProphetAR
                 OnPriorityChanged?.Invoke(this, prevPriority, PriorityOrDefault);
             }
         }
+
+        public TConcreteItem Data => _data ??= (TConcreteItem) this;
         
         protected virtual int DefaultPriority { get; } = 1000;
 
@@ -44,15 +44,17 @@ namespace ProphetAR
             set => _priorityBacking = value;
         }
         
-        private int? _priorityBacking;
+        private readonly HashSet<ICustomPriorityQueue<TConcreteItem>> _partOfPriorityQueues = new();
         
-        private readonly HashSet<ICustomPriorityQueue<TData>> _partOfPriorityQueues = new();
+        private TConcreteItem _data;
+        
+        private int? _priorityBacking;
 
         /// <summary>
         /// Called by the internals of the custom priority queue. The user shouldn't worry about calling this
         /// </summary>
         [CalledByCustomPriorityQueue]
-        public void OnRemovedFromPriorityQueue(ICustomPriorityQueue<TData> removedFromQueue)
+        public void OnRemovedFromPriorityQueue(ICustomPriorityQueue<TConcreteItem> removedFromQueue)
         {
             _partOfPriorityQueues.Remove(removedFromQueue);
         }
@@ -61,7 +63,7 @@ namespace ProphetAR
         /// Called by the internals of the custom priority queue. The user shouldn't worry about calling this
         /// </summary>
         [CalledByCustomPriorityQueue]
-        public void OnAddedToPriorityQueue(ICustomPriorityQueue<TData> addToQueue)
+        public void OnAddedToPriorityQueue(ICustomPriorityQueue<TConcreteItem> addToQueue)
         {
             _partOfPriorityQueues.Add(addToQueue);
         }

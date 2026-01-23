@@ -61,6 +61,11 @@ namespace ProphetAR
         // Turn actions modified
         void IGameEventWithTypedDataListener<IGameEventGameTurnActionsModifiedListener, GameEventGameTurnActionsModifiedData>.OnEvent(GameEventGameTurnActionsModifiedData data)
         {
+            if (!data.HasInitialTurnBeenBuilt)
+            {
+                return;
+            }
+            
             switch (data.ModificationReason)
             {
                 case GameEventGameTurnActionsModifiedData.ModificationType.Added:

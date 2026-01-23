@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
-
+﻿
 namespace ProphetAR
 {
-    public interface ICustomPriorityQueue<TItemData>
+    public interface ICustomPriorityQueue<TConcreteItem> where TConcreteItem : CustomPriorityQueueItem<TConcreteItem>
     {
-        public CustomPriorityQueueItem<TItemData> Peek();
+        public CustomPriorityQueueItem<TConcreteItem> Peek();
         
         public bool Any();
         
-        public CustomPriorityQueueItem<TItemData> Dequeue();
+        public CustomPriorityQueueItem<TConcreteItem> Dequeue();
         
-        public void Enqueue(CustomPriorityQueueItem<TItemData> item, bool isPriorityChange = false);
+        public void Enqueue(CustomPriorityQueueItem<TConcreteItem> item, bool isPriorityChange = false);
 
-        public void Remove(CustomPriorityQueueItem<TItemData> item, bool isPriorityChange = false);
+        public void Remove(CustomPriorityQueueItem<TConcreteItem> item, bool isPriorityChange = false);
     }
 }
