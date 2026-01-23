@@ -16,6 +16,8 @@ public class TestARSetup : MonoBehaviour
 
     [SerializeField]
     private GameObject _groundPlaneContentPrefab = null;
+
+    private GroundPlaneManager GroundPlaneManager => ARManager.Instance.GroundPlaneManager;
     
     private void Start()
     {
@@ -32,20 +34,21 @@ public class TestARSetup : MonoBehaviour
         _placeGroundPlaneButton.gameObject.SetActive(false);
         _resetToScanRoomButton.gameObject.SetActive(false);
         
-        ARManager.Instance.GroundPlaneManager.ScanRoomForPlanes(
+        GroundPlaneManager.DestroyGroundPlane();
+        GroundPlaneManager.ScanRoomForPlanes(
             progress => Debug.Log($"TODELETE: {progress}"),
             () =>
             {
                 SetStatusText("placing ground plane");
                 _placeGroundPlaneButton.gameObject.SetActive(true);
-                ARManager.Instance.GroundPlaneManager.StartGroundPlanePlacement(_groundPlaneContentPrefab);
+                GroundPlaneManager.StartGroundPlanePlacement(_groundPlaneContentPrefab);
             },
             true);
     }
 
     private void TryPlaceGroundPlane()
     {
-        if (ARManager.Instance.GroundPlaneManager.TryPlaceGroundPlane())
+        if (GroundPlaneManager.TryPlaceGroundPlane())
         {
             SetStatusText("placed ground plane");
             _placeGroundPlaneButton.gameObject.SetActive(false);
