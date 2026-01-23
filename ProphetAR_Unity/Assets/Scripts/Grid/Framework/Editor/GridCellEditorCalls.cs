@@ -10,26 +10,6 @@ namespace ProphetAR
     {
         public event Action<Vector2> EditorOnCellDimensionsChanged;
         public event Action<Vector2> EditorOnCellCoordinatesChanged;
-        
-        public void SetLeftCell(GridCell cell)
-        {
-            LeftCell = cell;
-        }
-        
-        public void SetRightCell(GridCell cell)
-        {
-            LeftCell = cell;
-        }
-        
-        public void SetUpCell(GridCell cell)
-        {
-            LeftCell = cell;
-        }
-        
-        public void SetDownCell(GridCell cell)
-        {
-            LeftCell = cell;
-        }
 
         public void SetGridSection(GridSection gridSection)
         {

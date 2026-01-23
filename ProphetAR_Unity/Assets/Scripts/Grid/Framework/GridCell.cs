@@ -76,6 +76,26 @@ namespace ProphetAR
         
         public GridCell DownCell { get; private set; }
         
+        public void SetLeftCell(GridCell cell)
+        {
+            LeftCell = cell;
+        }
+        
+        public void SetRightCell(GridCell cell)
+        {
+            LeftCell = cell;
+        }
+        
+        public void SetUpCell(GridCell cell)
+        {
+            LeftCell = cell;
+        }
+        
+        public void SetDownCell(GridCell cell)
+        {
+            LeftCell = cell;
+        }
+        
         public void SetContent(GridCellContent contentPrefab)
         {
             if (_cellContentParent == null)

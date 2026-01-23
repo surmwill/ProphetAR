@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 namespace ProphetAR
@@ -108,3 +109,4 @@ namespace ProphetAR
         }
     }
 }
+#endif

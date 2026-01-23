@@ -50,6 +50,7 @@ namespace ProphetAR
             #endif
         }
 
+        #if UNITY_EDITOR
         private bool TryBindEditModeListeners()
         {
             if (!_areEditModeListenersBound && _gridCellContent != null && _gridCellContent.Cell != null)
@@ -63,7 +64,9 @@ namespace ProphetAR
 
             return false;
         }
+        #endif
 
+        #if UNITY_EDITOR
         private void UnbindEditorListeners()
         {
             if (_areEditModeListenersBound)
@@ -73,6 +76,7 @@ namespace ProphetAR
                 _areEditModeListenersBound = false;
             }
         }
+        #endif
 
         private void EditorOnCellDimensionsChanged(Vector2 dimensions)
         {
