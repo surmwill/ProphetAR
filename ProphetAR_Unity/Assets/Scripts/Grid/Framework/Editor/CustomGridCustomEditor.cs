@@ -46,8 +46,6 @@ namespace ProphetAR
             EditorGUILayout.PropertyField(_gridDimensions);
             EditorGUILayout.PropertyField(_topLeftCoordinate);
             EditorGUILayout.PropertyField(_botRightCoordinate);
-            
-            
 
             // Toggle grid point type indicators
             bool prevShowGridPointTypeIndicators = _showGridPointTypeIndicators.boolValue;
@@ -59,6 +57,7 @@ namespace ProphetAR
                     if (gridCell.Content != null)
                     {
                         gridCell.Content.DebugShowGridPointTypeIndicator(_showGridPointTypeIndicators.boolValue);
+                        EditorUtility.SetDirty(gridCell.Content);
                     }
                 }
             }

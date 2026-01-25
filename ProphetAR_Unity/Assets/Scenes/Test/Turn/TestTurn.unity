@@ -365,6 +365,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 776783992}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -563,6 +571,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 798420985}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -648,6 +664,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1669238462}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -959,6 +983,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 246538116}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -1044,6 +1076,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 506721245}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -1170,6 +1210,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1541757776}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -1398,7 +1446,7 @@ MonoBehaviour:
   _topLeftCoordinate: {x: 0, y: 0}
   _botRightCoordinate: {x: 9, y: 9}
   _originGridSection: {fileID: 1915682626}
-  _showGridPointTypeIndicators: 0
+  _showGridPointTypeIndicators: 1
   _showSpawnPoints: 1
   _savedGrid:
   - _gridCell: {fileID: 1649849526}
@@ -1734,6 +1782,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 498194586}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -1819,6 +1875,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 617472174}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -1904,6 +1968,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1112230433}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -2102,6 +2174,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 332993429}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -2187,6 +2267,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 863606456}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -2385,6 +2473,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 604300175}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -2470,6 +2566,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 2090578939}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -2555,6 +2659,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1881607389}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -2640,6 +2752,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 995676937}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -2951,6 +3071,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 2011224096}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -3077,6 +3205,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1837773978}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -3162,6 +3298,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1217783201}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -3247,6 +3391,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 731837979}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -3445,6 +3597,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 145495887}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -3530,6 +3690,18 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 396086293}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _gridPointProperties._gridPoint
+      value: 42
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _gridPointProperties._gridPointType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -3576,7 +3748,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 774716377180950597, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1953803494}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
 --- !u!4 &298574566 stripped
@@ -3595,6 +3770,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49aba9b4b79a438a932f5959d3cf1268, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &298574568 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 774716377180950597, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+  m_PrefabInstance: {fileID: 298574565}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &310413351
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3615,6 +3795,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1493428839}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -3680,6 +3868,92 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49aba9b4b79a438a932f5959d3cf1268, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &327918128
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 327918129}
+  - component: {fileID: 327918131}
+  - component: {fileID: 327918130}
+  m_Layer: 0
+  m_Name: Model
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &327918129
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 327918128}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 851315897}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &327918130
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 327918128}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: b52c5df98bdcce64a94bd811eff37af7, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &327918131
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 327918128}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &328738425
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4035,6 +4309,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 2097864114}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -4120,6 +4402,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 171198875}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -4318,6 +4608,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 469977767}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -4496,6 +4794,92 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b954c5dc22f4e3b82f09b7a2ca3570e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &387846355
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 387846356}
+  - component: {fileID: 387846358}
+  - component: {fileID: 387846357}
+  m_Layer: 0
+  m_Name: Model
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &387846356
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 387846355}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 882024658}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &387846357
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 387846355}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: b52c5df98bdcce64a94bd811eff37af7, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &387846358
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 387846355}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &393354488
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4516,6 +4900,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 387798429}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -4714,6 +5106,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1758888865}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -4799,6 +5199,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1832226816}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -4884,6 +5292,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 949599686}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -5119,6 +5535,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 984803732}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -5245,6 +5669,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1008907480}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -5330,6 +5762,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 785365438}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -5528,6 +5968,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1572351214}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -5960,6 +6408,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1096374997}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -6158,6 +6614,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1732183207}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -6243,6 +6707,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1649849526}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -6328,6 +6800,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1916971491}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -6526,6 +7006,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1566239598}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -6611,6 +7099,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1588427484}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -6914,6 +7410,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1054007433}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -7225,6 +7729,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 608805621}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -7649,6 +8161,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 863034853}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -7960,6 +8480,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1895580673}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -8271,6 +8799,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1820309668}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -8667,6 +9203,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 2010047531}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -9697,6 +10241,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 692965722}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -10097,6 +10649,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b954c5dc22f4e3b82f09b7a2ca3570e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &851315896
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 851315897}
+  - component: {fileID: 851315898}
+  m_Layer: 0
+  m_Name: TestCharacterMovement_Obstacle(Clone)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &851315897
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851315896}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.75, y: 0.4, z: 0.75}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 327918129}
+  m_Father: {fileID: 1898492913}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &851315898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851315896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b12bfda5a80243dc9b8e207ce7bd6ca3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &863034850
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10415,6 +11012,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 562668904}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -10500,6 +11105,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1836385579}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -10563,6 +11176,51 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49aba9b4b79a438a932f5959d3cf1268, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &882024657
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 882024658}
+  - component: {fileID: 882024659}
+  m_Layer: 0
+  m_Name: TestCharacterMovement_Obstacle(Clone)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &882024658
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882024657}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.75, y: 0.4, z: 0.75}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 387846356}
+  m_Father: {fileID: 1724907706}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &882024659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882024657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b12bfda5a80243dc9b8e207ce7bd6ca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &882838377
@@ -10698,6 +11356,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 272848894}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -10896,6 +11562,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1598343915}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -10961,6 +11635,92 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49aba9b4b79a438a932f5959d3cf1268, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &932819265
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 932819266}
+  - component: {fileID: 932819268}
+  - component: {fileID: 932819267}
+  m_Layer: 0
+  m_Name: Model
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &932819266
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932819265}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1953803494}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &932819267
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932819265}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: b52c5df98bdcce64a94bd811eff37af7, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &932819268
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932819265}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &933951446
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11207,6 +11967,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 576960711}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -11292,6 +12060,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 596835691}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -11486,6 +12262,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 959980717}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -11571,6 +12355,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 51251446}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -11878,6 +12670,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 602559546}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -12117,6 +12917,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 236701121}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -12643,6 +13451,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1801323851}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -12841,6 +13657,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 89426195}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -12926,6 +13750,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 480001070}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -13120,6 +13952,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 574661535}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -13318,6 +14158,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 720016469}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -13403,6 +14251,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 834964434}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -13488,6 +14344,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1137133148}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -13686,6 +14550,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1643577716}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -13884,6 +14756,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1643027090}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -14078,6 +14958,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 715116757}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -14204,6 +15092,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 564045895}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -14346,6 +15242,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 916849259}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -14472,6 +15376,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1627108058}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -14670,6 +15582,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1754781430}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -14755,6 +15675,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1099689}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -14840,6 +15768,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1165826832}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -14925,6 +15861,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 882838380}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -15051,6 +15995,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 687921120}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -15362,6 +16314,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1531511044}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -15560,6 +16520,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1241884108}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -15758,6 +16726,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 339250909}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -15956,6 +16932,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1296709015}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -16598,6 +17582,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1690022036}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -16788,6 +17780,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 779860548}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -17095,6 +18095,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 812981828}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -17293,6 +18301,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 383914930}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -17378,6 +18394,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 540916240}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -17463,6 +18487,18 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 777617774}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _gridPointProperties._gridPoint
+      value: 42
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _gridPointProperties._gridPointType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -17509,7 +18545,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 774716377180950597, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 882024658}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
 --- !u!4 &1724907704 stripped
@@ -17528,6 +18567,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49aba9b4b79a438a932f5959d3cf1268, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1724907706 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 774716377180950597, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+  m_PrefabInstance: {fileID: 1724907703}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1732183204
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17661,6 +18705,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1777504745}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -17746,6 +18798,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 2075508725}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -18094,6 +19154,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1417556064}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -18857,6 +19925,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1933385745}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -19168,6 +20244,18 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 328738428}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _gridPointProperties._gridPoint
+      value: 42
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _gridPointProperties._gridPointType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -19214,7 +20302,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 774716377180950597, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 851315897}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
 --- !u!4 &1898492911 stripped
@@ -19233,6 +20324,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49aba9b4b79a438a932f5959d3cf1268, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1898492913 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 774716377180950597, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+  m_PrefabInstance: {fileID: 1898492910}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1908710027 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2914700381022008457, guid: d508ffec8fd4a8b49b8c2296b25a1c31, type: 3}
@@ -19424,6 +20520,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 2026061965}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -19602,6 +20706,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b954c5dc22f4e3b82f09b7a2ca3570e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1953803493
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1953803494}
+  - component: {fileID: 1953803495}
+  m_Layer: 0
+  m_Name: TestCharacterMovement_Obstacle(Clone)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1953803494
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953803493}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.75, y: 0.4, z: 0.75}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 932819266}
+  m_Father: {fileID: 298574568}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1953803495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953803493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b12bfda5a80243dc9b8e207ce7bd6ca3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1974434204
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19622,6 +20771,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1686404411}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -19707,6 +20864,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 757240210}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -20010,6 +21175,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 198569823}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -20204,6 +21377,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 933951449}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -20402,6 +21583,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 138416023}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -20600,6 +21789,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 23843374}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -20685,6 +21882,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 22204118}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -20883,6 +22088,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 779778504}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -20968,6 +22181,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 1093566137}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -21053,6 +22274,14 @@ PrefabInstance:
       propertyPath: _cell
       value: 
       objectReference: {fileID: 785099212}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _lastGridPointType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087715041275641875, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
+      propertyPath: _debugShowGridPointTypeIndicator
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2937902506245931015, guid: 6cb3e0fe72a74b8439260f925dcc9760, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
