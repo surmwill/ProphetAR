@@ -9,6 +9,7 @@ using UnityEngine.UI;
 namespace ProphetAR
 {
     public class TestTurnScreenUI : MonoBehaviour, 
+        ILevelLifecycleListener,
         IGameEventOnPreGameTurnListener, 
         IGameEventOnInitialGameTurnBuiltListener,
         IGameEventShowARObjectSelectionUIListener, 
@@ -126,10 +127,21 @@ namespace ProphetAR
             ShowARObjectSelectionToolbar(false);
         }
 
+        // Show selection toolbar instead of character abilities one 
         private void ShowARObjectSelectionToolbar(bool show)
         {
             _arObjectSelectionToolbar.gameObject.SetActive(show);
             _characterAbilitiesToolbar.gameObject.SetActive(!show);
+        }
+
+        public void OnLevelLifecycleChanged(LevelLifecycleState lifecycleState, Level prevLevel, Level currLevel)
+        {
+            if (lifecycleState == LevelLifecycleState.Destroyed)
+            {
+                _actionRequestsToolbar.Clear();
+                _characterAbilitiesToolbar.Clear();
+                _arObjectSelectionToolbar.Clear();
+            }
         }
     }
 }

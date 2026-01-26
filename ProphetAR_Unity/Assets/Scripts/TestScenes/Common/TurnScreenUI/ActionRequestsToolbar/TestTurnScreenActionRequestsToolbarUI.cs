@@ -55,6 +55,11 @@ namespace ProphetAR
         // Post turn
         void IGameEventWithoutDataListener<IGameEventOnPostGameTurnListener>.OnEvent()
         {
+            Clear();
+        }
+
+        public void Clear()
+        {
             _actionRequestsRecycler.Clear();
         }
 

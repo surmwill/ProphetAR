@@ -10,19 +10,7 @@ namespace ProphetAR
         [SerializeField]
         private CustomGrid _grid = null;
 
-        public static Level Current
-        {
-            get => _currentLevel;
-            set
-            {
-                if (_currentLevel != null)
-                {
-                    throw new InvalidOperationException("A level currently exists");
-                }
-
-                _currentLevel = value;
-            }
-        }
+        public static Level Current { get; private set; }
 
         public CustomGrid Grid => _grid;
         
@@ -38,9 +26,7 @@ namespace ProphetAR
 
         public bool IsInitialized => Current != null;
         
-        private static Level _currentLevel;
-
-        private static readonly List<Action<Level>> OnLevelInitializedCallbacks = new();
+        private static readonly List<ILevelLifecycleListener> LevelLifecycleListeners = new();
 
         private readonly List<ILevelConfigContributor> _levelConfigContributors = new();
         
@@ -53,6 +39,11 @@ namespace ProphetAR
 
         public IEnumerator InitializeCoroutine(LevelConfig levelConfig, GamePlayerConfig[] playerConfigs)
         {
+            if (Current != null)
+            {
+                throw new InvalidOperationException("A level currently exists");
+            }
+            
             // Initialize the data needed to create the level
             InitializeData(levelConfig, playerConfigs);
             
@@ -61,7 +52,10 @@ namespace ProphetAR
             
             // The game is ready for its first turn
             Current = this;
-            OnLevelInitializedCallbacks.ForEach(callback => callback(this));
+            foreach (ILevelLifecycleListener lifecycleListener in LevelLifecycleListeners)
+            {
+                lifecycleListener.OnLevelLifecycleChanged(LevelLifecycleState.Initialized, null, Current);
+            }
 
             // Allow any coroutines waiting on level initialization to complete
             yield return null;
@@ -178,24 +172,25 @@ namespace ProphetAR
 
         private void OnDestroy()
         {
-            OnLevelInitializedCallbacks.Clear();
-        }
-
-        public static void RegisterOnLevelInitializedCallback(Action<Level> callback)
-        {
-            if (Current == null || !Current.IsInitialized)
+            foreach (ILevelLifecycleListener lifecycleListener in LevelLifecycleListeners)
             {
-                OnLevelInitializedCallbacks.Add(callback);
-            }
-            else if (Current != null && Current.IsInitialized)
-            {
-                callback?.Invoke(Current);
+                lifecycleListener.OnLevelLifecycleChanged(LevelLifecycleState.Destroyed, Current, null);
             }
         }
 
-        public static void UnregisterOnLevelInitializedCallback(Action<Level> callback)
+        public static void RegisterLevelLifecycleListener(ILevelLifecycleListener listener)
         {
-            OnLevelInitializedCallbacks.Remove(callback);
+            LevelLifecycleListeners.Add(listener);
+            
+            if (Current != null)
+            {
+                listener.OnLevelLifecycleChanged(LevelLifecycleState.Initialized, null, Current);
+            }
+        }
+
+        public static void UnregisterLevelLifecycleListener(ILevelLifecycleListener listener)
+        {
+            LevelLifecycleListeners.Remove(listener);
         }
     }
 }

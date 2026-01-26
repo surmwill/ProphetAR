@@ -72,8 +72,7 @@ namespace ProphetAR
         // Cleanup
         void IGameEventWithoutDataListener<IGameEventOnPostGameTurnListener>.OnEvent()
         {
-            _characterAbilitiesRecycler.Clear();
-            _currCharacter = null;
+            Clear();
         }
 
         // Show character action points as they decrease
@@ -83,6 +82,12 @@ namespace ProphetAR
             {
                 _abilityPointsText.text = $"Action points: {data.CharacterStats.ActionPoints.ToString()}";   
             }
+        }
+
+        public void Clear()
+        {
+            _characterAbilitiesRecycler.Clear();
+            _currCharacter = null;
         }
     }
 }

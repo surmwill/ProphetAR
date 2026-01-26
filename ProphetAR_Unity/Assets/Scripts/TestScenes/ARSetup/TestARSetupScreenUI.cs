@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace ProphetAR
 {
-    public class TestARSetupScreenUI : MonoBehaviour, IGameEventOnReanchorListener
+    public class TestARSetupScreenUI : MonoBehaviour, IGameEventOnReanchorListener, ILevelLifecycleListener
     {
         [SerializeField]
         private Button _placeGroundPlaneButton = null;
@@ -28,9 +28,9 @@ namespace ProphetAR
         private void Awake()
         {
             _placeGroundPlaneButton.onClick.AddListener(TryPlaceGroundPlane);
-            _resetToScanRoomButton.onClick.AddListener(ResetScanRoom);   
+            _resetToScanRoomButton.onClick.AddListener(ResetScanRoom);
             
-            Level.RegisterOnLevelInitializedCallback(OnLevelInitialized);
+            Level.RegisterLevelLifecycleListener(this);
         }
 
         private void Start()
@@ -38,15 +38,8 @@ namespace ProphetAR
             ResetScanRoom();
         }
 
-        private void OnLevelInitialized(Level level)
-        {
-            level.EventProcessor.AddListenerWithoutData<IGameEventOnReanchorListener>(this);
-        }
-
         private void ResetScanRoom()
         {
-            gameObject.SetActive(true);
-
             _placeGroundPlaneButton.gameObject.SetActive(false);
             _resetToScanRoomButton.gameObject.SetActive(false);
 
@@ -91,11 +84,23 @@ namespace ProphetAR
         {
             _placeGroundPlaneButton.onClick.RemoveListener(TryPlaceGroundPlane);
             _resetToScanRoomButton.onClick.RemoveListener(ResetScanRoom);
+
+            Level.UnregisterLevelLifecycleListener(this);
         }
 
+        // Re-anchor event
         void IGameEventWithoutDataListener<IGameEventOnReanchorListener>.OnEvent()
         {
+            gameObject.SetActive(true);
             ResetScanRoom();
+        }
+
+        public void OnLevelLifecycleChanged(LevelLifecycleState lifecycleState, Level prevLevel, Level currLevel)
+        {
+            if (lifecycleState == LevelLifecycleState.Initialized)
+            {
+                currLevel.EventProcessor.AddListenerWithoutData<IGameEventOnReanchorListener>(this);
+            }
         }
     }
 }

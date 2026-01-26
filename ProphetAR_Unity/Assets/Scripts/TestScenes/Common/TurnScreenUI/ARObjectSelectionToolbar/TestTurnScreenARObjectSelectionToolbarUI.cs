@@ -58,6 +58,11 @@ namespace ProphetAR
         // Selection completed or cancelled
         void IGameEventWithoutDataListener<IGameEventHideARObjectSelectionUIListener>.OnEvent()
         {
+            Clear();
+        }
+
+        public void Clear()
+        {
             _selectionRecycler.Clear();
         }
     }
