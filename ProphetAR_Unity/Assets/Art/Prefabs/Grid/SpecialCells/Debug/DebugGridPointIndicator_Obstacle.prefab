@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4913524323328907171}
   - component: {fileID: 408977478914957520}
   m_Layer: 0
-  m_Name: TestCharacterMovement_Obstacle
+  m_Name: DebugGridPointIndicator_Obstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.4, z: 0.75}
+  m_LocalScale: {x: 0.75, y: 0.225, z: 0.75}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4922948563072707396}

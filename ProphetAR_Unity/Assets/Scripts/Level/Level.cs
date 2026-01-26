@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,12 +15,12 @@ namespace ProphetAR
             get => _currentLevel;
             set
             {
-                if (_currentLevel != null && !_currentLevel.destroyCancellationToken.IsCancellationRequested)
+                if (_currentLevel != null)
                 {
                     throw new InvalidOperationException("A level currently exists");
                 }
 
-                Current = value;
+                _currentLevel = value;
             }
         }
 
@@ -34,21 +35,23 @@ namespace ProphetAR
         public GameEventProcessor EventProcessor { get; } = new();
         
         public GameTurnManager TurnManager { get; private set; }
-        
-        public bool IsInitialized { get; private set; }
+
+        public bool IsInitialized => Current != null;
         
         private static Level _currentLevel;
+
+        private static readonly List<Action<Level>> OnLevelInitializedCallbacks = new();
 
         private readonly List<ILevelConfigContributor> _levelConfigContributors = new();
         
         private Coroutine _nextTurnCoroutine;
 
-        public void Initialize(GamePlayerConfig[] playerConfigs)
+        public IEnumerator InitializeCoroutine(GamePlayerConfig[] playerConfigs)
         {
-            Initialize(new LevelConfig(), playerConfigs);
+            yield return InitializeCoroutine(new LevelConfig(), playerConfigs);
         }
 
-        public void Initialize(LevelConfig levelConfig, GamePlayerConfig[] playerConfigs)
+        public IEnumerator InitializeCoroutine(LevelConfig levelConfig, GamePlayerConfig[] playerConfigs)
         {
             // Initialize the data needed to create the level
             InitializeData(levelConfig, playerConfigs);
@@ -57,7 +60,11 @@ namespace ProphetAR
             InitializeLevel();
             
             // The game is ready for its first turn
-            IsInitialized = true;
+            Current = this;
+            OnLevelInitializedCallbacks.ForEach(callback => callback(this));
+
+            // Allow any coroutines waiting on level initialization to complete
+            yield return null;
         }
         
         private void InitializeData(LevelConfig levelConfig, GamePlayerConfig[] playerConfigs)
@@ -166,6 +173,28 @@ namespace ProphetAR
             }
             
             _nextTurnCoroutine = StartCoroutine(TurnManager.NextTurnCoroutine(() => _nextTurnCoroutine = null));
+        }
+
+        private void OnDestroy()
+        {
+            OnLevelInitializedCallbacks.Clear();
+        }
+
+        public static void RegisterOnLevelInitializedCallback(Action<Level> callback)
+        {
+            if (Current == null || !Current.IsInitialized)
+            {
+                OnLevelInitializedCallbacks.Add(callback);
+            }
+            else if (Current != null && Current.IsInitialized)
+            {
+                callback?.Invoke(Current);
+            }
+        }
+
+        public static void UnregisterOnLevelInitializedCallback(Action<Level> callback)
+        {
+            OnLevelInitializedCallbacks.Remove(callback);
         }
     }
 }

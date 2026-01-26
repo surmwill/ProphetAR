@@ -25,14 +25,11 @@ namespace ProphetAR
 
         private IEnumerator Start()
         {
-            _level.Initialize(new []
+            yield return _level.InitializeCoroutine(new []
             {
                 new GamePlayerConfig("Player0", false, _player0CharacterPrefabs, _player0CharacterStats),
                 new GamePlayerConfig("Player1", false, _player1CharacterPrefabs, _player1CharacterStats)
             });
-            
-            // Allow anything yield waiting for level initialization to complete before starting the first turn
-            yield return null;
 
             _level.StartFirstTurn();
         }

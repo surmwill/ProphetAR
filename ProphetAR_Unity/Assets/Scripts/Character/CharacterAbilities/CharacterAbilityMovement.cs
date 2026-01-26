@@ -16,7 +16,7 @@ namespace ProphetAR
         
         private ARGridCellSelector GridCellSelector => ARManager.Instance.ARGridCellSelector;
         
-        private const float OnSelectedGridCellRaise = 0.3f;
+        private const float OnSelectedGridCellRaise = 0.1f;
         private const float OnSelectedGridCellScale = 1.3f;
         private const float OnSelectedGridCellAnimTime = 1.4f; 
 

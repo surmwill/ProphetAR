@@ -14,6 +14,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Test/GameEvents/TestGameEventsScene.unity
     guid: c2ee738309b77274c99bb26f0efe2ac8
+  - enabled: 0
+    path: Assets/Scenes/Test/Turn_AR/TestTurnARScene.unity
+    guid: cd180248d659fc449958d76842da19f9
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 6ea10e84bb9aa2c47873c4a081eb5610, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 7f4c467f6a96e0c46a86ce6634d61322, type: 2}
