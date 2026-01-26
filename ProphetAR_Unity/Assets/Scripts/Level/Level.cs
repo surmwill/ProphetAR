@@ -65,6 +65,7 @@ namespace ProphetAR
 
             // Allow any coroutines waiting on level initialization to complete
             yield return null;
+            yield return null;
         }
         
         private void InitializeData(LevelConfig levelConfig, GamePlayerConfig[] playerConfigs)
