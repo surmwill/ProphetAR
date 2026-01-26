@@ -4,6 +4,6 @@ namespace ProphetAR
 {
     public interface IARContentPlacementPositioner
     {
-        Vector3 GetPosition();
+        void PositionContent();
     }
 }

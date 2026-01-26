@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ProphetAR
 {
@@ -9,10 +7,12 @@ namespace ProphetAR
     /// </summary>
     public class TestScratch : MonoBehaviour
     {
-        private IEnumerator Start()
+        [SerializeField]
+        private ARContentPlacementCenterOnGridCell _placement = null;
+
+        private void Start()
         {
-            Debug.Log("Coroutines started");
-            yield return null;
+            _placement.PositionContent();
         }
     }
 }

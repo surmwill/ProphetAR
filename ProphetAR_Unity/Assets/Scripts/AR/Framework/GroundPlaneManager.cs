@@ -162,7 +162,7 @@ namespace ProphetAR
                 IARContentPlacementPositioner contentPositioner = initialContent.GetComponent<IARContentPlacementPositioner>();
                 if (contentPositioner != null)
                 {
-                    initialContent.transform.position = contentPositioner.GetPosition();
+                    contentPositioner.PositionContent();
                 }
                 
                 _initialContentPrefab = null;

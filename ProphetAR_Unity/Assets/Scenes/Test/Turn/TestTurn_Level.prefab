@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 692823878373621898}
   - component: {fileID: 3204096885368522553}
   - component: {fileID: 4940849121850502673}
+  - component: {fileID: 2210219629461987122}
   m_Layer: 0
   m_Name: TestTurn_Level
   m_TagString: Untagged
@@ -195,6 +196,20 @@ MonoBehaviour:
   - _actionPoints: 10
     _maxActionPoints: 10
     _actionPointsRegenPerTurn: 5
+--- !u!114 &2210219629461987122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1736088205140590850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 735c5d55d0dc43cd819083ad348274ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _level: {fileID: 3204096885368522553}
+  _gridCell: {fileID: 1276839880360582281}
 --- !u!1 &1795200670584324357
 GameObject:
   m_ObjectHideFlags: 0
