@@ -23,7 +23,12 @@ namespace ProphetAR
         [SerializeField]
         private List<CharacterStats> _player1CharacterStats = null;
 
-        private IEnumerator Start()
+        private void OnEnable()
+        {
+            StartCoroutine(InitializeLevel());
+        }
+
+        private IEnumerator InitializeLevel()
         {
             yield return _level.InitializeCoroutine(new []
             {

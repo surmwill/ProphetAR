@@ -157,7 +157,14 @@ namespace ProphetAR
 
             if (_initialContentPrefab != null)
             {
-                GroundedInstantiate(_initialContentPrefab);
+                GameObject initialContent = GroundedInstantiate(_initialContentPrefab);
+                
+                IARContentPlacementPositioner contentPositioner = initialContent.GetComponent<IARContentPlacementPositioner>();
+                if (contentPositioner != null)
+                {
+                    initialContent.transform.position = contentPositioner.GetPosition();
+                }
+                
                 _initialContentPrefab = null;
             }
             

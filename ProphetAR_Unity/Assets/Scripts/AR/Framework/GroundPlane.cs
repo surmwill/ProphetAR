@@ -18,6 +18,8 @@ namespace ProphetAR
                     _content = null;
                 }
                 
+                // The content parent should always have an identity transform.
+                // Any of our (child) custom content can have their own transform values relative to this.
                 _content = value;
                 _content.SetParent(transform);
                 _content.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);

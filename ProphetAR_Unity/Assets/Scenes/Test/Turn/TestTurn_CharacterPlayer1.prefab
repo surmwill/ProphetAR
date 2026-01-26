@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6479286613030574492, guid: 6d33e3ca8203f0247a8f97a8a03b6a98, type: 3}
       propertyPath: m_Name
-      value: TestTurnCharacterMovement_CharacterPlayer1
+      value: TestTurn_CharacterPlayer1
       objectReference: {fileID: 0}
     - target: {fileID: 7240621087604293617, guid: 6d33e3ca8203f0247a8f97a8a03b6a98, type: 3}
       propertyPath: m_LocalPosition.x
