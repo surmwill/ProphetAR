@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProphetAR
@@ -7,6 +8,20 @@ namespace ProphetAR
     {
         [SerializeField]
         private CustomGrid _grid = null;
+
+        public static Level Current
+        {
+            get => _currentLevel;
+            set
+            {
+                if (_currentLevel != null && !_currentLevel.destroyCancellationToken.IsCancellationRequested)
+                {
+                    throw new InvalidOperationException("A level currently exists");
+                }
+
+                Current = value;
+            }
+        }
 
         public CustomGrid Grid => _grid;
         
@@ -21,6 +36,8 @@ namespace ProphetAR
         public GameTurnManager TurnManager { get; private set; }
         
         public bool IsInitialized { get; private set; }
+        
+        private static Level _currentLevel;
 
         private readonly List<ILevelConfigContributor> _levelConfigContributors = new();
         
@@ -42,7 +59,7 @@ namespace ProphetAR
             // The game is ready for its first turn
             IsInitialized = true;
         }
-
+        
         private void InitializeData(LevelConfig levelConfig, GamePlayerConfig[] playerConfigs)
         {
             // Initialize the players and their state given the configurations

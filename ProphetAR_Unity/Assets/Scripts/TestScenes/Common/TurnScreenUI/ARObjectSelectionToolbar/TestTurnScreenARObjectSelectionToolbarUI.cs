@@ -11,8 +11,6 @@ namespace ProphetAR
         [SerializeField]
         private TestTurnScreenARObjectSelectionRecyclerUI _selectionRecycler = null;
 
-        private Level Level => _testTurnScreenUI.Level;
-
         public void Initialize()
         {
             BindListeners(true);
@@ -27,13 +25,13 @@ namespace ProphetAR
         {
             if (bind)
             {
-                Level.EventProcessor.AddListenerWithData<IGameEventShowARObjectSelectionUIListener, GameEventShowARObjectSelectionUIOptionsData>(this);
-                Level.EventProcessor.AddListenerWithoutData<IGameEventHideARObjectSelectionUIListener>(this);
+                Level.Current.EventProcessor.AddListenerWithData<IGameEventShowARObjectSelectionUIListener, GameEventShowARObjectSelectionUIOptionsData>(this);
+                Level.Current.EventProcessor.AddListenerWithoutData<IGameEventHideARObjectSelectionUIListener>(this);
             }
             else
             {
-                Level.EventProcessor.RemoveListenerWithData<IGameEventShowARObjectSelectionUIListener>(this);
-                Level.EventProcessor.RemoveListenerWithoutData<IGameEventHideARObjectSelectionUIListener>(this);
+                Level.Current.EventProcessor.RemoveListenerWithData<IGameEventShowARObjectSelectionUIListener>(this);
+                Level.Current.EventProcessor.RemoveListenerWithoutData<IGameEventHideARObjectSelectionUIListener>(this);
             }
         }
 

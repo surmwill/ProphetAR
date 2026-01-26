@@ -49,6 +49,7 @@ namespace ProphetAR
             List<Pose> prevHitTests = new List<Pose>();
             List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
+            onProgress?.Invoke(0f);
             while (prevHitTests.Count < NumHitsRequired)
             {
                 if (ARManager.Instance.RaycastManager.Raycast(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f), hits, TrackableType.PlaneWithinPolygon))

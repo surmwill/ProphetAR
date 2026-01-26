@@ -1,9 +1,10 @@
 using ProphetAR;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class TestARSetup : MonoBehaviour
+public class TestARSetupScreenUI : MonoBehaviour
 {
     [SerializeField]
     private Button _placeGroundPlaneButton = null;
@@ -17,6 +18,9 @@ public class TestARSetup : MonoBehaviour
     [SerializeField]
     private GameObject _groundPlaneContentPrefab = null;
 
+    [SerializeField]
+    private UnityEvent _onGroundPlanePlaced = null;
+
     private GroundPlaneManager GroundPlaneManager => ARManager.Instance.GroundPlaneManager;
     
     private void Start()
@@ -29,18 +33,19 @@ public class TestARSetup : MonoBehaviour
 
     private void ResetToScanRoom()
     {
-        SetStatusText("scanning room");
-        
         _placeGroundPlaneButton.gameObject.SetActive(false);
         _resetToScanRoomButton.gameObject.SetActive(false);
         
         GroundPlaneManager.DestroyGroundPlane();
         GroundPlaneManager.ScanRoomForPlanes(
-            progress => Debug.Log($"TODELETE: {progress}"),
+            progress => SetStatusText($"scanning room: {progress}%"),
             () =>
             {
                 SetStatusText("placing ground plane");
+                
                 _placeGroundPlaneButton.gameObject.SetActive(true);
+                _resetToScanRoomButton.gameObject.SetActive(false);
+                
                 GroundPlaneManager.StartGroundPlanePlacement(_groundPlaneContentPrefab);
             },
             true);
@@ -51,12 +56,15 @@ public class TestARSetup : MonoBehaviour
         if (GroundPlaneManager.TryPlaceGroundPlane())
         {
             SetStatusText("placed ground plane");
+            
             _placeGroundPlaneButton.gameObject.SetActive(false);
             _resetToScanRoomButton.gameObject.SetActive(true);
+            
+            _onGroundPlanePlaced?.Invoke();
         }
         else
         {
-            Debug.Log($"TODELETE: failed to place ground plane");  
+            SetStatusText("failed to place ground plane");  
         }
     }
 
@@ -68,5 +76,6 @@ public class TestARSetup : MonoBehaviour
     private void OnDestroy()
     {
         _placeGroundPlaneButton.onClick.RemoveListener(TryPlaceGroundPlane);
+        _resetToScanRoomButton.onClick.RemoveListener(ResetToScanRoom);
     }
 }

@@ -35,7 +35,7 @@ namespace ProphetAR
 
         private void BindListeners(bool bind)
         {
-            foreach (GamePlayer gamePlayer in _testTurnScreenUI.Level.Players)
+            foreach (GamePlayer gamePlayer in Level.Current.Players)
             {
                 if (bind)
                 {

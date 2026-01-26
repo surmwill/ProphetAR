@@ -15,9 +15,6 @@ namespace ProphetAR
         IGameEventHideARObjectSelectionUIListener
     {
         [SerializeField]
-        private Level _level = null;
-
-        [SerializeField]
         private TMP_Text _currPlayerText = null;
 
         [SerializeField]
@@ -34,10 +31,8 @@ namespace ProphetAR
 
         [SerializeField]
         private TestTurnScreenARObjectSelectionToolbarUI _arObjectSelectionToolbar = null;
-
-        public Level Level => _level;
         
-        private GameTurn CurrTurn => _level.TurnManager.CurrTurn;
+        private GameTurn CurrTurn => Level.Current.TurnManager.CurrTurn;
 
         private void Awake()
         {
@@ -47,7 +42,7 @@ namespace ProphetAR
 
         private IEnumerator Start()
         {
-            yield return new WaitForLevelInitialization(_level);
+            yield return new WaitForInitializedLevel();
             Initialize();
         }
 
@@ -74,7 +69,7 @@ namespace ProphetAR
                 _completeManualPartOfTurnButton.enabled = generatedMoreManualRequests;
                 if (!generatedMoreManualRequests)
                 {
-                    StartCoroutine(Level.TurnManager.NextTurnCoroutine());
+                    StartCoroutine(Level.Current.TurnManager.NextTurnCoroutine());
                 }
             }));
         }
@@ -83,16 +78,16 @@ namespace ProphetAR
         {
             if (bind)
             {
-                _level.EventProcessor.AddListenerWithData<IGameEventShowARObjectSelectionUIListener, GameEventShowARObjectSelectionUIOptionsData>(this);
-                _level.EventProcessor.AddListenerWithoutData<IGameEventHideARObjectSelectionUIListener>(this);
+                Level.Current.EventProcessor.AddListenerWithData<IGameEventShowARObjectSelectionUIListener, GameEventShowARObjectSelectionUIOptionsData>(this);
+                Level.Current.EventProcessor.AddListenerWithoutData<IGameEventHideARObjectSelectionUIListener>(this);
             }
             else
             {
-                _level.EventProcessor.RemoveListenerWithData<IGameEventShowARObjectSelectionUIListener>(this);
-                _level.EventProcessor.RemoveListenerWithoutData<IGameEventHideARObjectSelectionUIListener>(this);
+                Level.Current.EventProcessor.RemoveListenerWithData<IGameEventShowARObjectSelectionUIListener>(this);
+                Level.Current.EventProcessor.RemoveListenerWithoutData<IGameEventHideARObjectSelectionUIListener>(this);
             }
             
-            foreach (GamePlayer player in _level.Players)
+            foreach (GamePlayer player in Level.Current.Players)
             {
                 if (bind)
                 {

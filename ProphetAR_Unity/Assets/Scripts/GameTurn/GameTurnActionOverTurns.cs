@@ -18,7 +18,7 @@ namespace ProphetAR
         public GameTurnActionOverTurns(int? startAtTurnNum = null)
         {
             // Default start on the next turn
-            StartAtTurnNum = startAtTurnNum ?? LevelManager.Instance.CurrLevel.TurnManager.TurnNum + 1;  
+            StartAtTurnNum = startAtTurnNum ?? Level.Current.TurnManager.TurnNum + 1;  
         }
 
         public void Reset()
