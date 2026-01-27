@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ProphetAR.Coroutines;
@@ -38,28 +39,34 @@ namespace ProphetAR
         private void Awake()
         {
             _completeManualPartOfTurnButton.onClick.AddListener(CompleteManualPartOfTurn);
-            ShowARObjectSelectionToolbar(false);
-        }
-
-        private IEnumerator Start()
-        {
-            yield return new WaitForInitializedLevel();
-            Initialize();
-        }
-
-        private void Initialize()
-        {
-            BindListeners(true);
             
-            _actionRequestsToolbar.Initialize();
-            _characterAbilitiesToolbar.Initialize();
-            _arObjectSelectionToolbar.Initialize();
+            ShowARObjectSelectionToolbar(false);
+            
+            Level.RegisterLevelLifecycleListener(this);
         }
-        
+
         private void OnDestroy()
         { 
             _completeManualPartOfTurnButton.onClick.RemoveListener(CompleteManualPartOfTurn);
+            Level.UnregisterLevelLifecycleListener(this);
+        }
+
+        private void InitLevel()
+        {
+            BindListeners(true);
+            
+            _actionRequestsToolbar.InitLevel();
+            _characterAbilitiesToolbar.InitLevel();
+            _arObjectSelectionToolbar.InitLevel();
+        }
+
+        private void DeInitLevel()
+        {
             BindListeners(false);
+            
+            _actionRequestsToolbar.DeInitLevel();
+            _characterAbilitiesToolbar.DeInitLevel();
+            _arObjectSelectionToolbar.DeInitLevel();
         }
         
         // Button to go to the next turn
@@ -134,13 +141,25 @@ namespace ProphetAR
             _characterAbilitiesToolbar.gameObject.SetActive(!show);
         }
 
+        public void Clear()
+        {
+            _actionRequestsToolbar.Clear();
+            _characterAbilitiesToolbar.Clear();
+            _arObjectSelectionToolbar.Clear();
+            
+            ShowARObjectSelectionToolbar(false);
+        }
+
         public void OnLevelLifecycleChanged(LevelLifecycleState lifecycleState, Level prevLevel, Level currLevel)
         {
-            if (lifecycleState == LevelLifecycleState.Destroyed)
+            if (lifecycleState == LevelLifecycleState.Initialized)
             {
-                _actionRequestsToolbar.Clear();
-                _characterAbilitiesToolbar.Clear();
-                _arObjectSelectionToolbar.Clear();
+               InitLevel();
+            }
+            else if (lifecycleState == LevelLifecycleState.Destroyed)
+            {
+                DeInitLevel();
+                Clear();
             }
         }
     }

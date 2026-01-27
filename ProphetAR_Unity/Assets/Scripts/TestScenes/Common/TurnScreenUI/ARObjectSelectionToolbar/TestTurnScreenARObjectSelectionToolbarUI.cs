@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProphetAR
 {
-    public class TestTurnScreenARObjectSelectionToolbarUI : MonoBehaviour, IGameEventShowARObjectSelectionUIListener, IGameEventHideARObjectSelectionUIListener
+    public class TestTurnScreenARObjectSelectionToolbarUI : MonoBehaviour, 
+        IGameEventShowARObjectSelectionUIListener, 
+        IGameEventHideARObjectSelectionUIListener
     {
         [SerializeField]
         private TestTurnScreenUI _testTurnScreenUI = null;
@@ -11,12 +14,12 @@ namespace ProphetAR
         [SerializeField]
         private TestTurnScreenARObjectSelectionRecyclerUI _selectionRecycler = null;
 
-        public void Initialize()
+        public void InitLevel()
         {
-            BindListeners(true);
+            BindListeners(true);   
         }
 
-        private void OnDestroy()
+        public void DeInitLevel()
         {
             BindListeners(false);
         }
@@ -51,6 +54,7 @@ namespace ProphetAR
             {
                 Debug.LogWarning("No cancel option provided!");
             }
+                
             
             _selectionRecycler.AppendEntries(optionsRecyclerData);
         }

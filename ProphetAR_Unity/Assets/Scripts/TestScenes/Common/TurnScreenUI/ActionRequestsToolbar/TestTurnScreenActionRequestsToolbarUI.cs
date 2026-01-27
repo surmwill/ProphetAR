@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -14,13 +15,13 @@ namespace ProphetAR
 
         [SerializeField]
         private TestTurnScreenActionRequestsRecyclerUI _actionRequestsRecycler = null;
-        
-        public void Initialize()
+
+        public void InitLevel()
         {
-            BindListeners(true);
+            BindListeners(true);   
         }
 
-        private void OnDestroy()
+        public void DeInitLevel()
         {
             BindListeners(false);
         }

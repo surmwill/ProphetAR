@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -23,14 +24,14 @@ namespace ProphetAR
 
         private Character _currCharacter;
 
-        public void Initialize()
+        public void InitLevel()
         {
-            BindListeners(true);
+            BindListeners(true);   
         }
-        
-        private void OnDestroy()
+
+        public void DeInitLevel()
         {
-            BindListeners(false);   
+            BindListeners(false);
         }
 
         private void BindListeners(bool bind)
