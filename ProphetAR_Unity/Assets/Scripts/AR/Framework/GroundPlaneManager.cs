@@ -19,6 +19,8 @@ namespace ProphetAR
         [Header("Debug")]
         [SerializeField]
         private GameObject _debugHitTestIndicatorPrefab = null;
+
+        public Transform Content => _groundPlane == null ? null : _groundPlane.Content;
         
         private GroundPlane _groundPlane;
         private Transform _prevGroundPlaneContent;
@@ -182,7 +184,7 @@ namespace ProphetAR
                 {
                     ARRaycastHit hit = hits[0];
                     Pose hitPose = hit.pose;
-                    Vector3 faceAwayFromUser = Vector3.ProjectOnPlane(hitPose.position - ARManager.Instance.ARCamera.transform.position, hitPose.up);
+                    Vector3 faceAwayFromUser = Vector3.ProjectOnPlane(hitPose.position - ARManager.Instance.Camera.transform.position, hitPose.up);
                     
                     if (_placementIndicator == null)
                     {
@@ -231,7 +233,7 @@ namespace ProphetAR
                 throw new InvalidOperationException("Ground plane does not exist");
             }
 
-            Ray ray = ARManager.Instance.ARCamera.ScreenPointToRay(new Vector2(Screen.width * normalizedScreenPosition.x, Screen.height * normalizedScreenPosition.y));
+            Ray ray = ARManager.Instance.Camera.ScreenPointToRay(new Vector2(Screen.width * normalizedScreenPosition.x, Screen.height * normalizedScreenPosition.y));
             return Physics.Raycast(ray, out hit, LayerMask.GetMask(GroundPlane.Layer));
         }
         

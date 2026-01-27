@@ -42,7 +42,7 @@ namespace ProphetAR
 
         public ARGridCellSelector ARGridCellSelector => _arGridCellSelector;
 
-        public Camera ARCamera
+        public Camera Camera
         {
             get
             {
@@ -61,7 +61,7 @@ namespace ProphetAR
         {
             base.Awake();
             
-            _arGridCellSelector.Initialize(ARCamera);   
+            _arGridCellSelector.Initialize(Camera);   
         }
     }
 }

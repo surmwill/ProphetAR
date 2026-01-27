@@ -9,8 +9,9 @@ namespace ProphetAR
     {
         [SerializeField]
         private LayerMask _gridObjectLayers = default;
-        
-        
+
+        [SerializeField]
+        private ARRaycastDrawer _defaultRaycastDrawerPrefab = null;
 
         public delegate void OnHovered(T lastHover, T currHover);
         
@@ -22,6 +23,8 @@ namespace ProphetAR
         private Object _lastHoveredUnityObject;
 
         private Camera _arCamera;
+        
+        private ARRaycastDrawer _raycastDrawer;
         
         private Coroutine _gridCellSelectionCoroutine;
         private WaitForARObjectSelection<T> _waitForObjectSelection;
@@ -36,7 +39,7 @@ namespace ProphetAR
         {
             _arCamera = arCamera;
         }
-        
+
         /// <summary>
         /// Begins ray-casting from the AR camera looking for the closest valid object of the supplied type.
         /// The user can select the object, continue looking for another object, or cancel the process.
@@ -46,15 +49,18 @@ namespace ProphetAR
         /// <param name="onCancelled"> Callback if we cancelled the selection process </param>
         /// <param name="getObjectFromCollision"> Gets the object from the collision transform (default is GetComponent) </param>
         /// <param name="isValidObject"> Returns true if the object is valid for selection (default true) </param>
-        /// <param name="debugDrawRays"> Draws the raycast and prints the number of hits </param>
+        /// <param name="drawRaycasts"> Whether to draw the raycast </param>
+        /// <param name="customRaycastDrawer"> How to draw the raycast </param>
         /// <returns> A yield instruction that yields while we're still in the selection process </returns>
         public WaitForARObjectSelection<T> StartObjectSelection(
             OnHovered onHovered = null,
-            Action<T> onSelected = null, 
+            Action<T> onSelected = null,
             Action onCancelled = null,
             Func<Transform, T> getObjectFromCollision = null,
             Func<T, bool> isValidObject = null,
-            bool debugDrawRays = false)
+            bool drawRaycasts = true,
+            ARRaycastDrawer customRaycastDrawer = null,
+            bool outputDebug = false)
         {
             if (_gridCellSelectionCoroutine != null)
             {
@@ -66,8 +72,14 @@ namespace ProphetAR
             _onCancelled = onCancelled;
 
             _waitForObjectSelection = new WaitForARObjectSelection<T>(this);
-            _gridCellSelectionCoroutine = StartCoroutine(GridCellSelection(onHovered, getObjectFromCollision, isValidObject, debugDrawRays));
 
+            ARRaycastDrawer raycastDrawer = null;
+            if (drawRaycasts)
+            {
+                raycastDrawer = customRaycastDrawer != null ? customRaycastDrawer : _defaultRaycastDrawerPrefab;
+            }
+            
+            _gridCellSelectionCoroutine = StartCoroutine(GridCellSelection(onHovered, getObjectFromCollision, isValidObject, raycastDrawer, outputDebug));
             return _waitForObjectSelection;
         }
 
@@ -75,7 +87,8 @@ namespace ProphetAR
             OnHovered onHovered = null, 
             Func<Transform, T> getObjectFromCollision = null, 
             Func<T, bool> isValidObject = null,
-            bool debugDrawRays = false)
+            ARRaycastDrawer raycastDrawerPrefab = null,
+            bool outputDebug = false)
         {
             // Wait one frame to return the custom yield instruction 
             yield return null;
@@ -85,10 +98,9 @@ namespace ProphetAR
                 Ray cameraRay = new Ray(_arCamera.transform.position, _arCamera.transform.forward);
                 int numHits = Physics.RaycastNonAlloc(cameraRay, _raycastHits, Mathf.Infinity, _gridObjectLayers);
 
-                if (debugDrawRays)
+                if (outputDebug)
                 {
-                    Debug.DrawRay(_arCamera.transform.position, _arCamera.transform.forward * 10, Color.green, 10f);   
-                    Debug.Log($"Num hits for {nameof(ARObjectSelector<T>)}: {numHits}");
+                    Debug.Log($"Num hits for {nameof(ARObjectSelector<T>)}: {numHits}");   
                 }
                 
                 Object closestValidUnityObject = null;
@@ -100,6 +112,16 @@ namespace ProphetAR
                     RaycastHit raycastHit = _raycastHits[i];
                     Transform hitTransform = raycastHit.transform;
                     float hitDistance = raycastHit.distance;
+                    
+                    if (raycastDrawerPrefab != null)
+                    {
+                        if (_raycastDrawer == null)
+                        {
+                            _raycastDrawer = Instantiate(raycastDrawerPrefab);   
+                        }
+                    
+                        _raycastDrawer.DrawRaycast(raycastHit);
+                    }
                     
                     T hitGridObject = getObjectFromCollision?.Invoke(hitTransform) ?? hitTransform.GetComponent<T>();
                     
@@ -181,6 +203,12 @@ namespace ProphetAR
             // Reset state
             StopCoroutine(_gridCellSelectionCoroutine);
             _gridCellSelectionCoroutine = null;
+
+            if (_raycastDrawer != null)
+            {
+                Destroy(_raycastDrawer);
+                _raycastDrawer = null;
+            }
             
             T selected = LastHovered;
             LastHovered = null;
