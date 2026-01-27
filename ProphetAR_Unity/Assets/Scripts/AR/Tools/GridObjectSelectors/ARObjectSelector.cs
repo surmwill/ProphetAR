@@ -9,6 +9,8 @@ namespace ProphetAR
     {
         [SerializeField]
         private LayerMask _gridObjectLayers = default;
+        
+        
 
         public delegate void OnHovered(T lastHover, T currHover);
         
