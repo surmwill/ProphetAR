@@ -12,7 +12,6 @@ namespace ProphetAR
     public class TestTurnScreenUI : MonoBehaviour, 
         ILevelLifecycleListener,
         IGameEventOnPreGameTurnListener, 
-        IGameEventOnInitialGameTurnBuiltListener,
         IGameEventShowARObjectSelectionUIListener, 
         IGameEventHideARObjectSelectionUIListener
     {
@@ -33,9 +32,9 @@ namespace ProphetAR
 
         [SerializeField]
         private TestTurnScreenARObjectSelectionToolbarUI _arObjectSelectionToolbar = null;
-        
-        private GameTurn CurrTurn => Level.Current.TurnManager.CurrTurn;
 
+        private bool _executingAutomaticPartOfTurn;
+        
         private void Awake()
         {
             _completeManualPartOfTurnButton.onClick.AddListener(CompleteManualPartOfTurn);
@@ -49,6 +48,17 @@ namespace ProphetAR
         { 
             _completeManualPartOfTurnButton.onClick.RemoveListener(CompleteManualPartOfTurn);
             Level.UnregisterLevelLifecycleListener(this);
+        }
+
+        private void Update()
+        {
+            if (Level.Current == null || !Level.Current.HasStarted)
+            {
+                _completeManualPartOfTurnButton.interactable = false;;
+                return;
+            }
+            
+            _completeManualPartOfTurnButton.interactable = !_executingAutomaticPartOfTurn && !Level.Current.TurnManager.CurrTurn.ActionRequests.Any();
         }
 
         private void InitLevel()
@@ -72,9 +82,10 @@ namespace ProphetAR
         // Button to go to the next turn
         private void CompleteManualPartOfTurn()
         {
-            StartCoroutine(CurrTurn.TryCompleteManualPartOfTurnCoroutine(generatedMoreManualRequests =>
+            _executingAutomaticPartOfTurn = true;
+            StartCoroutine(Level.Current.TurnManager.CurrTurn.TryCompleteManualPartOfTurnCoroutine(generatedMoreManualRequests =>
             {
-                _completeManualPartOfTurnButton.enabled = generatedMoreManualRequests;
+                _executingAutomaticPartOfTurn = false;
                 if (!generatedMoreManualRequests)
                 {
                     StartCoroutine(Level.Current.TurnManager.NextTurnCoroutine());
@@ -111,15 +122,8 @@ namespace ProphetAR
         // Pre-turn
         void IGameEventWithoutDataListener<IGameEventOnPreGameTurnListener>.OnEvent()
         {
-            _currPlayerText.text = $"Player: {CurrTurn.Player.Index.ToString()}";
-            _currTurnText.text = $"Turn: {CurrTurn.TurnNumber.ToString()}";
-            _completeManualPartOfTurnButton.enabled = true;
-        }
-        
-        // Turn built
-        void IGameEventWithTypedDataListener<IGameEventOnInitialGameTurnBuiltListener, IEnumerable<GameTurnActionRequest>>.OnEvent(IEnumerable<GameTurnActionRequest> data)
-        {
-            _completeManualPartOfTurnButton.enabled = !data.Any();
+            _currPlayerText.text = $"Player: {Level.Current.TurnManager.CurrTurn.Player.Index.ToString()}";
+            _currTurnText.text = $"Turn: {Level.Current.TurnManager.CurrTurn.TurnNumber.ToString()}";
         }
 
         // Show AR object selection UI

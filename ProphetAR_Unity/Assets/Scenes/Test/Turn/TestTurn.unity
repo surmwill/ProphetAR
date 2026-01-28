@@ -673,6 +673,10 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1737532401856204357, guid: d508ffec8fd4a8b49b8c2296b25a1c31, type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1999864303273621265, guid: d508ffec8fd4a8b49b8c2296b25a1c31, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

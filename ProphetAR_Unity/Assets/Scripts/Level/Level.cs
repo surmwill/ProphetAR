@@ -25,6 +25,8 @@ namespace ProphetAR
         public GameTurnManager TurnManager { get; private set; }
 
         public bool IsInitialized => Current != null;
+
+        public bool HasStarted => IsInitialized && TurnManager.CurrTurn != null;
         
         private static readonly List<ILevelLifecycleListener> LevelLifecycleListeners = new();
 
