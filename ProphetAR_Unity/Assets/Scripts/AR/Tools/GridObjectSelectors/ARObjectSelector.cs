@@ -106,6 +106,11 @@ namespace ProphetAR
                 Object closestValidUnityObject = null;
                 T closestValidObject = null;
                 float? closestValidDistance = null;
+
+                if (numHits == 0 && _raycastDrawer != null)
+                {
+                    _raycastDrawer.gameObject.SetActive(false);
+                }
                 
                 for (int i = 0; i < numHits; i++)
                 {
@@ -120,6 +125,7 @@ namespace ProphetAR
                             _raycastDrawer = Instantiate(raycastDrawerPrefab);   
                         }
                     
+                        _raycastDrawer.gameObject.SetActive(true);
                         _raycastDrawer.DrawRaycast(raycastHit);
                     }
                     
@@ -206,7 +212,7 @@ namespace ProphetAR
 
             if (_raycastDrawer != null)
             {
-                Destroy(_raycastDrawer);
+                Destroy(_raycastDrawer.gameObject);
                 _raycastDrawer = null;
             }
             
