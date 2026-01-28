@@ -208,8 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 735c5d55d0dc43cd819083ad348274ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _level: {fileID: 3204096885368522553}
-  _gridCell: {fileID: 1276839880360582281}
+  _gridCell: {fileID: 6334546493691658466}
 --- !u!1 &1795200670584324357
 GameObject:
   m_ObjectHideFlags: 0
