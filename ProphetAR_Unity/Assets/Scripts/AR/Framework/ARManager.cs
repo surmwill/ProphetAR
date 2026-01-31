@@ -66,9 +66,11 @@ namespace ProphetAR
             _arGridCellSelector.Initialize(Camera);   
         }
 
-        private void Destroy()
+        protected override void OnDestroy()
         {
             Level.UnregisterLevelLifecycleListener(this);
+            
+            base.OnDestroy();
         }
 
         public void OnLevelLifecycleChanged(LevelLifecycleState lifecycleState, Level prevLevel, Level currLevel)
