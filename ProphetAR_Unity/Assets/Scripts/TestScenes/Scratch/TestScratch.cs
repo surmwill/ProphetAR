@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace ProphetAR
 {
@@ -10,9 +11,29 @@ namespace ProphetAR
         [SerializeField]
         private ARContentPlacementCenterOnGridCell _placement = null;
 
-        private void Start()
+        private IEnumerator Start()
         {
-            _placement.PositionContent();
+            Debug.Log("Started " + Time.frameCount);
+            yield return new WaitForAllCoroutines(new []{ TestA(), TestB() });
+            Debug.Log("Ended " + Time.frameCount);
+        }
+
+        private IEnumerator TestA()
+        {
+            Debug.Log("CoroutineA " + Time.frameCount);
+            yield return null;
+            Debug.Log("CoroutineA " + Time.frameCount);
+            yield return null;
+            Debug.Log("CoroutineA " + Time.frameCount);
+        }
+        
+        private IEnumerator TestB()
+        {
+            Debug.Log("CoroutineB " + Time.frameCount);
+            yield return null;
+            Debug.Log("CoroutineB " + Time.frameCount);
+            yield return null;
+            Debug.Log("CoroutineB " + Time.frameCount);
         }
     }
 }
