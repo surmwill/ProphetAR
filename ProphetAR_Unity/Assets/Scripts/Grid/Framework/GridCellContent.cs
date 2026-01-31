@@ -17,7 +17,10 @@ namespace ProphetAR
         private GridCell _cell = null;
 
         [SerializeField]
-        private GridPointProperties _gridPointProperties = new();
+        private GridPointProperties _gridPointProperties = null;
+
+        [SerializeField]
+        private GridCellPainter _gridCellPainter = null;
 
         [SerializeField]
         private Transform _charactersRoot = null;
@@ -53,7 +56,9 @@ namespace ProphetAR
         /// At the lowest level our grid is just a 2D char array. This defines what char this cell is in that array (an obstacle, a free space, etc...)
         /// </summary>
         public GridPointProperties GridPointProperties => _gridPointProperties;
-        
+
+        public GridCellPainter GridCellPainter => _gridCellPainter;
+
         /// <summary>
         /// Things currently occupying this cell, but could move elsewhere
         /// </summary>

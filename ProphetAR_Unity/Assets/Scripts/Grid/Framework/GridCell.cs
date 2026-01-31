@@ -36,9 +36,6 @@ namespace ProphetAR
         private GridCellContent _cellContent;
 
         [SerializeField]
-        private GridCellPainter _cellPainter;
-
-        [SerializeField]
         private BoxCollider _cellCollider;
 
         public GridSection GridSection => _gridSection;
@@ -46,11 +43,8 @@ namespace ProphetAR
         public GridCellContent Content => _cellContent;
 
         public GridPointProperties GridPointProperties => Content.GridPointProperties;
-
-        /// <summary>
-        /// Paints overlays (ex: green if the cell is navigable, red for being in attack range)
-        /// </summary>
-        public GridCellPainter GridCellPainter => _cellPainter;
+        
+        public GridCellPainter GridCellPainter => Content.GridCellPainter;
 
         public Vector2Int Coordinates => _coordinates;
 

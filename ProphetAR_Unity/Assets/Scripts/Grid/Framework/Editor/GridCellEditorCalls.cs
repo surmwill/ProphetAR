@@ -6,7 +6,7 @@ namespace ProphetAR
 {
     // Editor only calls. Extra functionality is needed for building the grid through the editor
     public partial class GridCell
-    {
+    { 
         public void SetGridSection(GridSection gridSection)
         {
             _gridSection = gridSection;
@@ -26,7 +26,7 @@ namespace ProphetAR
 
         public void SetDimensions(Vector2 newDimensions)
         {
-            OnCellDimensionsChanged();
+            OnDimensionsChanged();
             
             if (_cellContent != null)
             {
@@ -60,27 +60,20 @@ namespace ProphetAR
             _lastCellContentPrefab = _cellContentPrefab; 
         }
 
-        private void OnCellDimensionsChanged()
+        private void OnDimensionsChanged()
         {
-            Vector3 scale = new Vector3(Dimensions.x, 1f, Dimensions.y);
-            
-            if (_cellPainter != null)
-            {
-                _cellPainter.transform.position = Middle;
-                _cellPainter.transform.localScale = scale;
-            }
-            
-            if (_cellCollider != null)
-            {
-                _cellCollider.transform.position = Middle;
-                _cellCollider.transform.localScale = scale;
-            }
+            MatchCellPositionAndDimensions(_cellCollider.transform);
+        }
+        
+        private void MatchCellPositionAndDimensions(Transform t)
+        {
+            t.position = Middle;
+            t.localScale = new Vector3(Dimensions.x, 1f, Dimensions.y);
         }
 
         private void OnValidate()
         {
             CheckCellContentChange();
-            OnCellDimensionsChanged();
         }
     }
 }

@@ -148,6 +148,7 @@ MonoBehaviour:
     _gridPointType: 0
     _gridPoint: 0
     _modificationStep: 1
+  _gridCellPainter: {fileID: 0}
   _charactersRoot: {fileID: 2943226068299056827}
   _debugShowGridPointTypeIndicator: 0
   _debugGridPointIndicatorParent: {fileID: 316569088000836178}
@@ -206,6 +207,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7390514869203964727, guid: 420b9a2d5cdba1d4a98188334c0d62b3, type: 3}
+      propertyPath: _gridCellContent
+      value: 
+      objectReference: {fileID: 1323486943461052932}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
