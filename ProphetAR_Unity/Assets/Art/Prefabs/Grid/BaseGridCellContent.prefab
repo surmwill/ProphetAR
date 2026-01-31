@@ -148,7 +148,7 @@ MonoBehaviour:
     _gridPointType: 0
     _gridPoint: 0
     _modificationStep: 1
-  _gridCellPainter: {fileID: 0}
+  _gridCellPainter: {fileID: 8200220425543154333}
   _charactersRoot: {fileID: 2943226068299056827}
   _debugShowGridPointTypeIndicator: 0
   _debugGridPointIndicatorParent: {fileID: 316569088000836178}
@@ -221,6 +221,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5786549672705783333, guid: 420b9a2d5cdba1d4a98188334c0d62b3, type: 3}
   m_PrefabInstance: {fileID: 1683619595761740202}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8200220425543154333 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7390514869203964727, guid: 420b9a2d5cdba1d4a98188334c0d62b3, type: 3}
+  m_PrefabInstance: {fileID: 1683619595761740202}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb45ed7ad144a8d82f3e15ca93b5b80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6536223194545974676
 PrefabInstance:
   m_ObjectHideFlags: 0

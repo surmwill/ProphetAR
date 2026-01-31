@@ -54,7 +54,8 @@ namespace ProphetAR
             onProgress?.Invoke(0f);
             while (prevHitTests.Count < NumHitsRequired)
             {
-                if (ARManager.Instance.RaycastManager.Raycast(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f), hits, TrackableType.PlaneWithinPolygon))
+                Ray ray = new Ray(ARManager.Instance.Camera.transform.position, ARManager.Instance.Camera.transform.forward);
+                if (ARManager.Instance.RaycastManager.Raycast(ray, hits, TrackableType.PlaneWithinPolygon))
                 {
                     Pose currentHit = hits[0].pose;
                     if (!prevHitTests.Any(prevHit => (prevHit.position - currentHit.position).sqrMagnitude < MinDistance))

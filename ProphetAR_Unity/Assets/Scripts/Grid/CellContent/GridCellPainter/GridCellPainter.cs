@@ -22,14 +22,20 @@ namespace ProphetAR
         private void OnEnable()
         {
             #if UNITY_EDITOR
-            _gridCellContent.RegisterOnDimensionsChangedListener(this);
+            if (_gridCellContent != null)
+            {
+                _gridCellContent.RegisterOnDimensionsChangedListener(this);
+            }
             #endif
         }
 
         private void OnDisable()
         {
             #if UNITY_EDITOR
-            _gridCellContent.UnregisterOnDimensionsChangedListener(this);
+            if (_gridCellContent != null)
+            {
+                _gridCellContent.UnregisterOnDimensionsChangedListener(this);   
+            }
             #endif
         }
 

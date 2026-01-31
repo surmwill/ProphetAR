@@ -364,7 +364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gridObjectLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 65536
   _defaultRaycastDrawerPrefab: {fileID: 7278058380029354283, guid: 94bafc6715132b740afebaf7b52a9242, type: 3}
 --- !u!1 &9195696967005740564
 GameObject:

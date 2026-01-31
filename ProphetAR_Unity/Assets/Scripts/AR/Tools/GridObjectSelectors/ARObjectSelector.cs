@@ -126,7 +126,7 @@ namespace ProphetAR
                         }
                     
                         _raycastDrawer.gameObject.SetActive(true);
-                        _raycastDrawer.DrawRaycast(raycastHit);
+                        _raycastDrawer.DrawRaycast(raycastHit, cameraRay);
                     }
                     
                     T hitGridObject = getObjectFromCollision?.Invoke(hitTransform) ?? hitTransform.GetComponent<T>();

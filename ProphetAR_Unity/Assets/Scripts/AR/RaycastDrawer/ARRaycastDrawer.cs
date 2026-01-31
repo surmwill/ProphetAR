@@ -5,12 +5,12 @@ namespace ProphetAR
 {
     public abstract class ARRaycastDrawer : MonoBehaviour
     {
-        public virtual void DrawRaycast(RaycastHit raycastHit)
+        public virtual void DrawRaycast(RaycastHit raycastHit, Ray fromRay)
         {
             // Empty
         }
 
-        public virtual void DrawRaycast(ARRaycastHit raycastHit)
+        public virtual void DrawRaycast(ARRaycastHit raycastHit, Ray fromRay)
         {
             // Empty
         }

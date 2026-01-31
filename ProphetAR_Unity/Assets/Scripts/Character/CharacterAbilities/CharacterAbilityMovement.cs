@@ -62,8 +62,8 @@ namespace ProphetAR
 
             _currHoveredGridCell = currGridCell;
             _onHoveredGridCellSequence = DOTween.Sequence()
-                .Append(currGridCell.transform.DOLocalMoveY(OnSelectedGridCellRaise, OnSelectedGridCellAnimTime))
-                .Join(currGridCell.transform.DOScale(new Vector3(OnSelectedGridCellScale, OnSelectedGridCellScale, 1f), OnSelectedGridCellAnimTime));
+                .Append(currGridCell.Content.transform.DOLocalMoveY(OnSelectedGridCellRaise, OnSelectedGridCellAnimTime))
+                .Join(currGridCell.Content.transform.DOScale(new Vector3(OnSelectedGridCellScale, OnSelectedGridCellScale, 1f), OnSelectedGridCellAnimTime));
         }
 
         private void StopCurrentCellHover()
@@ -75,8 +75,8 @@ namespace ProphetAR
                 return;
             }
             
-            _currHoveredGridCell.transform.localPosition = _currHoveredGridCell.transform.localPosition.WithY(0f);
-            _currHoveredGridCell.transform.localScale = Vector3.one;
+            _currHoveredGridCell.Content.transform.localPosition = _currHoveredGridCell.Content.transform.localPosition.WithY(0f);
+            _currHoveredGridCell.Content.transform.localScale = Vector3.one;
         }
 
         private void SelectCurrentCell()
