@@ -3,7 +3,7 @@ using UnityEngine.XR.ARFoundation;
 
 namespace ProphetAR
 {
-    public class ARManager : Singleton<ARManager>
+    public class ARManager : Singleton<ARManager>, ILevelLifecycleListener
     {
         [Header("Framework")]
         [SerializeField]
@@ -62,6 +62,14 @@ namespace ProphetAR
             base.Awake();
             
             _arGridCellSelector.Initialize(Camera);   
+        }
+
+        public void OnLevelLifecycleChanged(LevelLifecycleState lifecycleState, Level prevLevel, Level currLevel)
+        {
+            if (lifecycleState == LevelLifecycleState.Destroyed)
+            {
+                _arGridCellSelector.Cancel();
+            }
         }
     }
 }

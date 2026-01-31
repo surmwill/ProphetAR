@@ -153,7 +153,6 @@ namespace ProphetAR
             if (_prevGroundPlaneContent != null)
             {
                 _groundPlane.Content = _prevGroundPlaneContent;
-                _prevGroundPlaneContent.gameObject.SetActive(true);
                 _prevGroundPlaneContent = null;
             }
 
@@ -205,7 +204,6 @@ namespace ProphetAR
             {
                 _prevGroundPlaneContent = _groundPlane.Content;
                 _prevGroundPlaneContent.SetParent(null);
-                _prevGroundPlaneContent.gameObject.SetActive(false);
             }
             else if (!preservePreviousContent && _prevGroundPlaneContent != null)
             {
