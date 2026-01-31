@@ -61,7 +61,14 @@ namespace ProphetAR
         {
             base.Awake();
             
+            Level.RegisterLevelLifecycleListener(this);
+            
             _arGridCellSelector.Initialize(Camera);   
+        }
+
+        private void Destroy()
+        {
+            Level.UnregisterLevelLifecycleListener(this);
         }
 
         public void OnLevelLifecycleChanged(LevelLifecycleState lifecycleState, Level prevLevel, Level currLevel)

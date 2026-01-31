@@ -12,7 +12,7 @@ namespace ProphetAR
 
         public const string DebugPrintGameEventsPlayerPrefKey = "DebugPrintGameEvents";
         
-        private bool DebugShouldPrintGameEvents => PlayerPrefs.GetInt(DebugPrintGameEventsPlayerPrefKey) != 0;
+        private bool DebugShouldPrintGameEvents => !Application.isEditor || PlayerPrefs.GetInt(DebugPrintGameEventsPlayerPrefKey) != 0;
         
         // These two interfaces are what each listener should derive from
         private const string InterfaceNameTypedGameEventListener = "IGameEventWithTypedDataListener";
