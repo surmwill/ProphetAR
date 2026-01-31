@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace ProphetAR
 {
     [ExecuteAlways]
-    public class DebugGridCellBorder : MonoBehaviour
+    public class DebugGridCellBorder : MonoBehaviour, IGridCellContentDimensionsChangedListener, IGridCellContentCoordinatesChangedListener
     {
         [SerializeField]
         private GridCellContent _gridCellContent = null;
@@ -16,74 +16,28 @@ namespace ProphetAR
 
         private bool _areEditModeListenersBound;
 
-        private void Start()
-        {
-            // Run when the cell content has just been instantiated
-            #if UNITY_EDITOR
-            if (ApplicationUtils.IsEditMode && TryBindEditModeListeners())
-            {
-                EditorOnCellDimensionsChanged(_gridCellContent.Cell.Dimensions);
-                EditorOnCellCoordinatesChanged(_gridCellContent.Cell.Coordinates);   
-            }
-            #endif
-        }
-
         private void OnEnable()
         {
-            // Run when the cell content already exists
             #if UNITY_EDITOR
-            if (ApplicationUtils.IsEditMode && TryBindEditModeListeners())
-            {
-                EditorOnCellDimensionsChanged(_gridCellContent.Cell.Dimensions);
-                EditorOnCellCoordinatesChanged(_gridCellContent.Cell.Coordinates);      
-            }
+            _gridCellContent.RegisterOnCoordinatesChangedListener(this);
+            _gridCellContent.RegisterOnDimensionsChangedListener(this);
             #endif
         }
 
         private void OnDisable()
         {
             #if UNITY_EDITOR
-            if (ApplicationUtils.IsEditMode)
-            {
-                UnbindEditorListeners();   
-            }
+            _gridCellContent.UnregisterOnCoordinatesChangedListener(this);
+            _gridCellContent.UnregisterOnCoordinatesChangedListener(this);
             #endif
         }
 
-        #if UNITY_EDITOR
-        private bool TryBindEditModeListeners()
+        public void OnDimensionsChanged(Vector2 newDimensions)
         {
-            if (!_areEditModeListenersBound && _gridCellContent != null && _gridCellContent.Cell != null)
-            {
-                _gridCellContent.Cell.EditorOnCellDimensionsChanged += EditorOnCellDimensionsChanged;
-                _gridCellContent.Cell.EditorOnCellCoordinatesChanged += EditorOnCellCoordinatesChanged;
-                _areEditModeListenersBound = true;
-
-                return true;
-            }
-
-            return false;
-        }
-        #endif
-
-        #if UNITY_EDITOR
-        private void UnbindEditorListeners()
-        {
-            if (_areEditModeListenersBound)
-            {
-                _gridCellContent.Cell.EditorOnCellDimensionsChanged -= EditorOnCellDimensionsChanged;
-                _gridCellContent.Cell.EditorOnCellCoordinatesChanged -= EditorOnCellCoordinatesChanged;
-                _areEditModeListenersBound = false;
-            }
-        }
-        #endif
-
-        private void EditorOnCellDimensionsChanged(Vector2 dimensions)
-        {
-            transform.localScale = new Vector3(ScaleDownForMargin * dimensions.x, 1f, ScaleDownForMargin * dimensions.y);
+            transform.localScale = new Vector3(ScaleDownForMargin * newDimensions.x, 1f, ScaleDownForMargin * newDimensions.y);
         }
 
-        private void EditorOnCellCoordinatesChanged(Vector2 newCoordinates)
+        public void OnCoordinatesChanged(Vector2Int newCoordinates)
         {
             _borderImage.color = newCoordinates == Vector2.zero ? Color.green : Color.white;
         }

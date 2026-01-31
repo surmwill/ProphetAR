@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,9 +7,6 @@ namespace ProphetAR
     // Editor only calls. Extra functionality is needed for building the grid through the editor
     public partial class GridCell
     {
-        public event Action<Vector2> EditorOnCellDimensionsChanged;
-        public event Action<Vector2> EditorOnCellCoordinatesChanged;
-
         public void SetGridSection(GridSection gridSection)
         {
             _gridSection = gridSection;
@@ -19,15 +15,25 @@ namespace ProphetAR
         public void SetCoordinates(Vector2Int coordinates)
         {
             _coordinates = coordinates;
-            EditorOnCellCoordinatesChanged?.Invoke(coordinates);
+            
+            if (_cellContent != null)
+            {
+                _cellContent.OnCellCoordinatesChanged(coordinates);
+            }
+            
+            EditorUtility.SetDirty(this);
         }
 
-        public void EditorNotifyCellDimensionsChanged(Vector2 newDimensions)
+        public void SetDimensions(Vector2 newDimensions)
         {
             OnCellDimensionsChanged();
-            EditorUtility.SetDirty(this);
             
-            EditorOnCellDimensionsChanged?.Invoke(newDimensions);
+            if (_cellContent != null)
+            {
+                _cellContent.OnCellDimensionsChanged(newDimensions);
+            }
+            
+            EditorUtility.SetDirty(this);
         }
 
         private void CheckCellContentChange()

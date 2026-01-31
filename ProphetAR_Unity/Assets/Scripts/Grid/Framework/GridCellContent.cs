@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-#if UNITY_EDITOR
-using ProphetAR.Editor;
-#endif
-
 namespace ProphetAR
 {
     /// <summary>
@@ -88,65 +84,21 @@ namespace ProphetAR
             .Where(character => character != null);
 
         public bool HasCharacters => Characters.Any();
-
-        private bool _areEditModeListenersBound;
-        private bool _lastGridPointTypeDirty;
-
-        private void OnEnable()
-        {
-            // Handles the case where the cell content is already hooked up
-            #if UNITY_EDITOR
-            if (ApplicationUtils.IsEditMode)
-            {
-                BindEditModeListeners();   
-            }
-            #endif
-        }
         
-        private void Start()
-        {
-            // Handles the case when we're instantiating new cell content 
-            #if UNITY_EDITOR
-            if (ApplicationUtils.IsEditMode)
-            {
-                BindEditModeListeners();   
-            }
-            #endif
-        }
+        private bool _lastGridPointTypeDirty;
 
         public void SetGridCell(GridCell cell)
         {
-            #if UNITY_EDITOR
-            if (ApplicationUtils.IsEditMode)
+            if (_cell == cell)
             {
-                UnbindEditModeListeners();
+                return;
             }
-            #endif
             
             _cell = cell;
-            OnCellDimensionsChanged(_cell.Dimensions);
             
             #if UNITY_EDITOR
-            if (ApplicationUtils.IsEditMode)
-            {
-                BindEditModeListeners();
-            }
-            #endif
-        }
-        
-        private void OnCellDimensionsChanged(Vector2 newDimensions)
-        {
-            transform.position = _cell.Middle;
-            _debugGridPointIndicatorParent.localScale = new Vector3(newDimensions.x, 1f, newDimensions.y);
-        }
-
-        private void OnDisable()
-        {
-            #if UNITY_EDITOR
-            if (ApplicationUtils.IsEditMode)
-            {
-                UnbindEditModeListeners();   
-            }
+            OnCellDimensionsChanged(cell.Dimensions);
+            OnCellCoordinatesChanged(cell.Coordinates);   
             #endif
         }
         

@@ -124,7 +124,7 @@ namespace ProphetAR
                 _cellDimensions = newCellDimensions;
                 foreach (GridCell gridCell in GetCells())
                 {
-                    gridCell.EditorNotifyCellDimensionsChanged(newCellDimensions);
+                    gridCell.SetDimensions(newCellDimensions);
                 }
             }
 
