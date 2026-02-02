@@ -6,6 +6,8 @@ namespace ProphetAR
     public abstract class Ability
     {
         public abstract string Uid { get; }
+        
+        public abstract string Name { get; }
 
         protected abstract int DefaultMinNumActionPoints { get; }
 

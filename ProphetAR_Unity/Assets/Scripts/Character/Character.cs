@@ -58,8 +58,8 @@ namespace ProphetAR
             Player = player;
             CharacterStats = characterStats;
             
-            // Temporarily hard-coded: these should be loaded from the player config
-            Abilities.Add(new CharacterAbilityMovement(this));
+            // Temporarily hard-coded: these should be loaded from the player config and change per character
+            Abilities.AddRange(new CharacterAbility[]{ new CharacterAbilityMovement(this), new CharacterAbilityCompleteTurn(this)});
         }
 
         private void OnPlayerChange(GamePlayer prevPlayer, GamePlayer currPlayer)
@@ -75,6 +75,11 @@ namespace ProphetAR
                 currPlayer.EventProcessor.AddListenerWithoutData<IGameEventOnPreGameTurnListener>(this);
                 currPlayer.EventProcessor.AddListenerWithoutData<IGameEventBuildInitialGameTurnListener>(this);
             }
+        }
+
+        public void CompleteTurn()
+        {
+            Player.EventProcessor.RaiseEventWithData(new GameEventCharacterTurnComplete(this));
         }
 
         protected override void OnDestroy()
@@ -229,7 +234,7 @@ namespace ProphetAR
                     }
                 }
 
-                CharacterStats.ReduceActionPoints(this, distanceToStop);
+                CharacterStats.ModifyActionPoints(this, -distanceToStop);
                 if (stoppedEarly || CharacterStats.ActionPoints == 0)
                 {
                     break;

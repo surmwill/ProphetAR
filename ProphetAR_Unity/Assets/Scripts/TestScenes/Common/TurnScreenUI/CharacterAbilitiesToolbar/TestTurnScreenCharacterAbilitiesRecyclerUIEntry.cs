@@ -19,7 +19,7 @@ namespace ProphetAR
         
         protected override void OnBind(TestTurnScreenCharacterAbilitiesRecyclerUIData entryData)
         {
-            _abilityText.text = entryData.CharacterAbility.Uid;
+            _abilityText.text = entryData.CharacterAbility.Name;
             _abilityButton.onClick.AddListener(ExecuteAbility);
         }
 

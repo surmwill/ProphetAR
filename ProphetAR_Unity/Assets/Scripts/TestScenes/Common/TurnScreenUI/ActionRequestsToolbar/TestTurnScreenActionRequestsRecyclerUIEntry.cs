@@ -15,7 +15,7 @@ namespace ProphetAR
         
         protected override void OnBind(TestTurnScreenActionRequestsRecyclerUIData entryData)
         {
-            _actionDescription.text = entryData.ActionRequest.GetType().Name;
+            _actionDescription.text = entryData.ActionRequest.Name;
             _showActionUIButton.onClick.AddListener(ShowActionUI);
         }
 

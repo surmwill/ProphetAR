@@ -37,11 +37,11 @@ namespace ProphetAR
         {
             ActionPoints = Math.Max(ActionPoints + amount, 0);
             character.Player.EventProcessor.RaiseEventWithData(new GameEventCharacterStatsModified(new GameEventCharacterStatsModifiedData(character, this)));
-        }
 
-        public void ReduceActionPoints(Character character, int amount)
-        {
-            ModifyActionPoints(character, -amount);
+            if (amount <= 0)
+            {
+                character.CompleteTurn();
+            }
         }
     }
 }

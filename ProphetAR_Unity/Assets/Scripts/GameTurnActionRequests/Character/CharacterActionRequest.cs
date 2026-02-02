@@ -4,8 +4,10 @@ namespace ProphetAR
 {
     public class CharacterActionRequest : GameTurnActionRequest
     {
-        public override Type CompletedByGameEventType => typeof(GameEventCharacterStatsModified);
-        
+        public override Type CompletedByGameEventType => typeof(GameEventCharacterTurnComplete);
+
+        public override string Name => "Character";
+
         public Character Character { get; }
 
         public CharacterActionRequest(Character character)
@@ -19,10 +21,8 @@ namespace ProphetAR
         }
 
         public override bool IsCompletedByGameEvent(GameEvent gameEvent)
-        {   
-            return gameEvent is GameEventCharacterStatsModified characterOutOfActions && 
-                   characterOutOfActions.Data.Character == Character &&
-                   characterOutOfActions.Data.CharacterStats.ActionPoints == 0;
+        {
+            return ((GameEventCharacterTurnComplete) gameEvent).Data == Character;
         }
     }
 }

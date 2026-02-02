@@ -4,24 +4,26 @@ namespace ProphetAR
 {
     public static class ARObjectSelectionUIOptionDataFactory
     {
-        public static ARObjectSelectionUIOptionData Cancel(string customKey, Action onCancel)
+        public static string NextRandomKey => Guid.NewGuid().ToString();
+        
+        public static ARObjectSelectionUIOptionData Cancel(Action onCancel, string name = "Cancel")
         {
-            return new ARObjectSelectionUIOptionData(customKey, onCancel, null, true);
+            return Cancel(NextRandomKey, name, onCancel);
         }
         
-        public static ARObjectSelectionUIOptionData Cancel(Action onCancel)
+        public static ARObjectSelectionUIOptionData Cancel(string customKey, string name, Action onCancel)
         {
-            return new ARObjectSelectionUIOptionData(Guid.NewGuid().ToString(), onCancel, null, true);
+            return new ARObjectSelectionUIOptionData(customKey, name, onCancel, null, true);
         }
         
-        public static ARObjectSelectionUIOptionData Default(string customKey, Action onSelect, Func<bool> isEnabled = null)
+        public static ARObjectSelectionUIOptionData Default(string name, Action onSelect)
         {
-            return new ARObjectSelectionUIOptionData(customKey, onSelect, isEnabled, false);
+            return Default(NextRandomKey, name, onSelect);
         }
         
-        public static ARObjectSelectionUIOptionData Default(Action onSelect, Func<bool> isEnabled = null)
+        public static ARObjectSelectionUIOptionData Default(string customKey, string name, Action onSelect, Func<bool> isEnabled = null)
         {
-            return new ARObjectSelectionUIOptionData(Guid.NewGuid().ToString(), onSelect, isEnabled, false);
+            return new ARObjectSelectionUIOptionData(customKey, name, onSelect, isEnabled);
         }
     }
 }

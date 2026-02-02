@@ -17,7 +17,7 @@ namespace ProphetAR
         
         protected override void OnBind(TestTurnScreenARObjectSelectionRecyclerUIData entryData)
         {
-            _text.text = entryData.Key;
+            _text.text = entryData.OptionData.Name;
             _button.onClick.AddListener(OnOption);  
         }
 

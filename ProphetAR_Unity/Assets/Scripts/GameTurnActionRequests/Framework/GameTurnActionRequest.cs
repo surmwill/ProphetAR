@@ -13,6 +13,8 @@ namespace ProphetAR
         
         public abstract Type CompletedByGameEventType { get; }
         
+        public abstract string Name { get; }
+        
         public virtual Transform FocusTransform { get; }
 
         public virtual void OnFocusCamera()

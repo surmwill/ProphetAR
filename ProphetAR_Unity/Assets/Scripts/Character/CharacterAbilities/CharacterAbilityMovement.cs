@@ -10,6 +10,8 @@ namespace ProphetAR
     {
         public override string Uid => nameof(CharacterAbilityMovement);
 
+        public override string Name => "Movement";
+
         protected override int DefaultMinNumActionPoints => 1;
 
         protected override AbilityCoroutine AbilityAsCoroutine => ExecuteAbility;
@@ -31,7 +33,7 @@ namespace ProphetAR
 
             using (Character.Grid.GridPainter.ShowMovementArea(destinationSet, area))
             using (new ShowARObjectSelectionUI(Character.Level, 
-                       ARObjectSelectionUIOptionDataFactory.Cancel("Cancel", () => TryCancel()), 
+                       ARObjectSelectionUIOptionDataFactory.Cancel(() => TryCancel()), 
                        ARObjectSelectionUIOptionDataFactory.Default("Select", SelectCurrentCell)))
             {
                 _waitForMovementCellSelection = GridCellSelector.StartObjectSelection(

@@ -8,7 +8,7 @@ namespace ProphetAR
     public class TestTurnScreenCharacterAbilitiesToolbarUI : MonoBehaviour, 
         IGameEventShowCharacterActionsUIListener,
         IGameEventCharacterStatsModifiedListener,
-        IGameEventOnPostGameTurnListener
+        IGameEventCharacterTurnCompleteListener
     {
         [SerializeField]
         private TestTurnScreenUI _testTurnScreenUI;
@@ -41,16 +41,14 @@ namespace ProphetAR
                 if (bind)
                 {
                     gamePlayer.EventProcessor.AddListenerWithData<IGameEventShowCharacterActionsUIListener, Character>(this);
+                    gamePlayer.EventProcessor.AddListenerWithData<IGameEventCharacterTurnCompleteListener, Character>(this);
                     gamePlayer.EventProcessor.AddListenerWithData<IGameEventCharacterStatsModifiedListener, GameEventCharacterStatsModifiedData>(this);
-                
-                    gamePlayer.EventProcessor.AddListenerWithoutData<IGameEventOnPostGameTurnListener>(this);
                 }
                 else
                 {
                     gamePlayer.EventProcessor.RemoveListenerWithData<IGameEventShowCharacterActionsUIListener>(this);
+                    gamePlayer.EventProcessor.RemoveListenerWithData<IGameEventCharacterTurnCompleteListener>(this);
                     gamePlayer.EventProcessor.RemoveListenerWithData<IGameEventCharacterStatsModifiedListener>(this);
-                
-                    gamePlayer.EventProcessor.RemoveListenerWithoutData<IGameEventOnPostGameTurnListener>(this);
                 }   
             }
         }
@@ -70,8 +68,8 @@ namespace ProphetAR
             _currCharacterText.text = _currCharacter.name;
         }
         
-        // Cleanup
-        void IGameEventWithoutDataListener<IGameEventOnPostGameTurnListener>.OnEvent()
+        // Character turn complete
+        void IGameEventWithTypedDataListener<IGameEventCharacterTurnCompleteListener, Character>.OnEvent(Character data)
         {
             Clear();
         }
@@ -90,5 +88,6 @@ namespace ProphetAR
             _characterAbilitiesRecycler.Clear();
             _currCharacter = null;
         }
+        
     }
 }
