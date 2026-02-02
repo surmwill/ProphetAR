@@ -100,12 +100,14 @@ namespace ProphetAR
 
                 if (outputDebug)
                 {
-                    Debug.Log($"Num hits for {nameof(ARObjectSelector<T>)}: {numHits}");   
+                    Debug.Log($"Num hits for {nameof(ARObjectSelector<T>)}: {numHits}");
+                    Debug.DrawRay(_arCamera.transform.position, _arCamera.transform.forward * 10f, Color.yellow, 10f);
                 }
                 
                 Object closestValidUnityObject = null;
                 T closestValidObject = null;
                 float? closestValidDistance = null;
+                RaycastHit? closestHit = null;
 
                 if (numHits == 0 && _raycastDrawer != null)
                 {
@@ -117,16 +119,10 @@ namespace ProphetAR
                     RaycastHit raycastHit = _raycastHits[i];
                     Transform hitTransform = raycastHit.transform;
                     float hitDistance = raycastHit.distance;
-                    
-                    if (raycastDrawerPrefab != null)
+
+                    if (!closestHit.HasValue || hitDistance < closestHit.Value.distance)
                     {
-                        if (_raycastDrawer == null)
-                        {
-                            _raycastDrawer = Instantiate(raycastDrawerPrefab);   
-                        }
-                    
-                        _raycastDrawer.gameObject.SetActive(true);
-                        _raycastDrawer.DrawRaycast(raycastHit, cameraRay);
+                        closestHit = raycastHit;
                     }
                     
                     T hitGridObject = getObjectFromCollision?.Invoke(hitTransform) ?? hitTransform.GetComponent<T>();
@@ -155,6 +151,17 @@ namespace ProphetAR
                         closestValidDistance = hitDistance;
                         break;
                     }
+                }
+                
+                if (closestHit.HasValue && raycastDrawerPrefab != null)
+                {
+                    if (_raycastDrawer == null)
+                    {
+                        _raycastDrawer = Instantiate(raycastDrawerPrefab);   
+                    }
+                    
+                    _raycastDrawer.gameObject.SetActive(true);
+                    _raycastDrawer.DrawRaycast(closestHit.Value, cameraRay);
                 }
                 
                 if (closestValidDistance.HasValue &&

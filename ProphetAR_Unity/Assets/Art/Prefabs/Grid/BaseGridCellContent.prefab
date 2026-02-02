@@ -163,6 +163,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2765618484067979792}
     m_Modifications:
+    - target: {fileID: 835395957246749220, guid: 420b9a2d5cdba1d4a98188334c0d62b3, type: 3}
+      propertyPath: m_Name
+      value: GridCellCollider_Content
+      objectReference: {fileID: 0}
     - target: {fileID: 2625190454706562797, guid: 420b9a2d5cdba1d4a98188334c0d62b3, type: 3}
       propertyPath: m_Name
       value: GridCellPainter
