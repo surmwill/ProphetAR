@@ -194,7 +194,7 @@ namespace ProphetAR
                             break;
                     }
                     
-                    yield return AnimateRotation(localRotation, TurnTime);
+                    yield return AnimateMovementTurn(localRotation, TurnTime);
                     
                     lastDirection = direction;
                 }
@@ -240,7 +240,7 @@ namespace ProphetAR
             onComplete?.Invoke(stoppedEarly, GridTransform.CurrentCell);
         }
 
-        protected virtual IEnumerator AnimateRotation(Vector3 localRotation, float time)
+        protected virtual IEnumerator AnimateMovementTurn(Vector3 localRotation, float time)
         {
             Sequence sequence = DOTween.Sequence()
                 .Append(GridTransform.transform.DOLocalRotate(localRotation, time));
