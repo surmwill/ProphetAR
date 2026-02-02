@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using GridPathFinding;
 using UnityEngine;
+
+using static GridPathFinding.NavigationInstruction;
 
 namespace ProphetAR
 {
@@ -16,6 +17,9 @@ namespace ProphetAR
         
         [SerializeField]
         private CharacterStats _characterStats;
+
+        private const float MovementTime = 0.5f;
+        private const float TurnTime = 0.25f;
         
         public delegate void OnWalkComplete(bool didStopEarly, GridCellContent stoppedAtCell);
 
@@ -129,6 +133,7 @@ namespace ProphetAR
             Level.EventProcessor.RaiseEventWithData(new GameEventCharacterMove(characterMoveData));
 
             List<NavigationInstructionSet> stops = instructionSet.SplitOnDirectionChanges(characterMoveData.IntermediateStops.Select(coord => coord.ToTuple()));
+            NavigationDirection? lastDirection = null;
             bool stoppedEarly = false;
             
             foreach (NavigationInstructionSet instructionsToNextStop in stops)
@@ -137,7 +142,7 @@ namespace ProphetAR
                 
                 // Move to the stop
                 Vector2Int stopCoordinates = instructionsToNextStop.Target.ToVector2Int();
-                NavigationInstruction.NavigationDirection direction = instructionsToNextStop.PathToTarget.First().Direction;
+                NavigationDirection direction = instructionsToNextStop.PathToTarget.First().Direction;
 
                 // Previous stops might have reduced our action points and affected our stop position
                 if (CharacterStats.ActionPoints < distanceToStop)
@@ -147,25 +152,55 @@ namespace ProphetAR
                     
                     switch (direction)
                     {
-                        case NavigationInstruction.NavigationDirection.Up:
+                        case NavigationDirection.Up:
                             stopCoordinates += Vector2Int.up * missingDistance;
                             break;
                         
-                        case NavigationInstruction.NavigationDirection.Down:
+                        case NavigationDirection.Down:
                             stopCoordinates -= Vector2Int.up * missingDistance;
                             break;
                         
-                        case NavigationInstruction.NavigationDirection.Left:
+                        case NavigationDirection.Left:
                             stopCoordinates += Vector2Int.right * missingDistance;
                             break;
                         
-                        case NavigationInstruction.NavigationDirection.Right:
+                        case NavigationDirection.Right:
                             stopCoordinates -= Vector2Int.right * missingDistance;
                             break;
                     }
                 }
+
+                // A new direction means we should turn to face it
+                if (!lastDirection.HasValue || lastDirection != direction)
+                {
+                    Vector3 localRotation = default;
+                    
+                    switch (direction)
+                    {
+                        case NavigationDirection.Up:
+                            localRotation = Vector3.zero;
+                            break;
+                        
+                        case NavigationDirection.Down:
+                            localRotation = Vector3.up * 180f;
+                            break;
+                        
+                        case NavigationDirection.Left:
+                            localRotation = Vector3.up * -90f;
+                            break;
+                        
+                        case NavigationDirection.Right:
+                            localRotation = Vector3.up * 90f;
+                            break;
+                    }
+                    
+                    yield return AnimateRotation(localRotation, TurnTime);
+                    
+                    lastDirection = direction;
+                }
                 
-                yield return GridTransform.MoveToAnimated(stopCoordinates, AnimateMovementToCell);
+                // Move to the stop
+                yield return GridTransform.MoveToAnimated(stopCoordinates, AnimateMovementToCell, MovementTime);
 
                 // Alert that we're there
                 GameEventCharacterStoppedData characterStoppedData = new GameEventCharacterStoppedData(stopCoordinates);
@@ -201,18 +236,26 @@ namespace ProphetAR
                 }
             }
             
-            // We reached the target
+            // We've reached the target
             onComplete?.Invoke(stoppedEarly, GridTransform.CurrentCell);
         }
 
-        protected virtual IEnumerator AnimateMovementToCell(Transform cellParent, Vector3 localCellPosition)
+        protected virtual IEnumerator AnimateRotation(Vector3 localRotation, float time)
+        {
+            Sequence sequence = DOTween.Sequence()
+                .Append(GridTransform.transform.DOLocalRotate(localRotation, time));
+
+            yield return sequence.WaitForCompletion();
+        }
+
+        protected virtual IEnumerator AnimateMovementToCell(Transform cellParent, Vector3 localCellPosition, float time)
         {
             Sequence sequence = DOTween.Sequence().Append(
                     DOTween.To(
                         () => GridTransform.transform.position,
                         nextWorldPosition => GridTransform.transform.position = nextWorldPosition,
                         cellParent.TransformPoint(localCellPosition),
-                        1f));
+                        time));
             
             yield return sequence.WaitForCompletion();
         }

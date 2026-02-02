@@ -87,11 +87,14 @@ namespace ProphetAR
         // Keep track of what objects are on the grid
         #region GridObjectManagement
         
-        public T InstantiateGridObject<T>(T gridObjectOrPrefab, Vector2Int coordinates) where T : GridObject
+        public T InstantiateGridObject<T>(T gridObjectOrPrefab, Vector2Int coordinates, Vector3? localRotation = null) where T : GridObject
         {
             T gridObject = Instantiate(gridObjectOrPrefab);
+            
             gridObject.GridObjectInitialize(this);
             AddGridObject(gridObject, coordinates);
+            gridObject.GridTransform.transform.localRotation = Quaternion.Euler(localRotation ?? Vector3.zero);
+            
             return gridObject;
         }
 

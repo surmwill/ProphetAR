@@ -10,7 +10,7 @@ namespace ProphetAR
     /// </summary>
     public class GridTransform : MonoBehaviour
     {
-        public delegate IEnumerator AnimateMovement(Transform parent, Vector3 localPosition);
+        public delegate IEnumerator AnimateMovement(Transform parent, Vector3 localPosition, float time);
         
         public GridObject GridObject { get; private set; }
         
@@ -74,7 +74,7 @@ namespace ProphetAR
             Grid = grid;
         }
         
-        public IEnumerator MoveToAnimated(Vector2Int moveToCoordinates, AnimateMovement animateMovement)
+        public IEnumerator MoveToAnimated(Vector2Int moveToCoordinates, AnimateMovement animateMovement, float time)
         {
             if (!HasCoordinates)
             {
@@ -97,7 +97,7 @@ namespace ProphetAR
             Transform toParent = CurrentCellPositioner == null ? gridCellContent.transform : CurrentCellPositioner.GetCellParent(gridCellContent);
             Vector3 toLocalPosition = CurrentCellPositioner == null ? Vector3.zero : CurrentCellPositioner.GetLocalPositionInCell(gridCellContent);
             
-            yield return animateMovement(toParent, toLocalPosition);
+            yield return animateMovement(toParent, toLocalPosition, time);
             
             MoveToImmediate(moveToCoordinates);
         }

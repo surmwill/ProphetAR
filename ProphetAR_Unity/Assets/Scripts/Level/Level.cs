@@ -127,7 +127,6 @@ namespace ProphetAR
                         spawnPoint = new CharacterSpawnPoint(player.Index, defaultSpawnCoordinates.Current);
                     }
                     
-                    
                     Character character = Grid.InstantiateGridObject(characterPrefab, spawnPoint.Coordinates);
                     character.Initialize(player, playerConfig.CharacterStats[i]);
                 }
