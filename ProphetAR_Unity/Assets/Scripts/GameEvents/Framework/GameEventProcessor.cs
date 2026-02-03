@@ -14,16 +14,9 @@ namespace ProphetAR
         
         private bool DebugShouldPrintGameEvents => !Application.isEditor || PlayerPrefs.GetInt(DebugPrintGameEventsPlayerPrefKey) != 0;
         
-        // These two interfaces are what each listener should derive from
-        private const string InterfaceNameTypedGameEventListener = "IGameEventWithTypedDataListener";
-        private const string InterfaceNameGameEventWithoutDataListener = "IGameEventWithoutDataListener";
-        
         // Maps the game event type to their corresponding list of listeners
         private readonly Dictionary<Type, List<IGameEventListener>> _gameEventWithoutDataListeners = new();
         private readonly Dictionary<Type, List<IGameEventListener>> _gameEventWithDataListeners = new();
-        
-        // For each type of listener that takes data, store the method that receives that data
-        private static readonly Dictionary<Type, MethodInfo> DataListenerTypeToEventRaiseMethodInfo = new();
         
         // For each concrete listener instance, store the event raise we need to call for each game event type
         private readonly Dictionary<IGameEventListener, Dictionary<Type, Action<object>>> _dataListenerToEventRaises = new();
@@ -38,7 +31,7 @@ namespace ProphetAR
         
         private long _numEventRaises;
         
-        public void AddListenerWithoutData<TListener>(IGameEventListener listenerInstance) where TListener : IGameEventListener
+        public void AddListenerWithoutData<TListener>(IGameEventListener listenerInstance) where TListener : IGameEventWithoutDataListener<TListener>
         {
             // We need to figure out how to raise the event
             if (!_noDataListenerToEventRaises.TryGetValue(listenerInstance, out Dictionary<Type, Action> eventRaises))
@@ -47,22 +40,11 @@ namespace ProphetAR
                 _noDataListenerToEventRaises.Add(listenerInstance, eventRaises);
             }
             
-            Type listenerType = typeof(TListener);
             Type gameEventWithoutDataType = GameEventListenerUtils.GetEventTypeForListenerType<TListener>();
-            
             if (!eventRaises.ContainsKey(gameEventWithoutDataType))
             {
-                if (!DataListenerTypeToEventRaiseMethodInfo.TryGetValue(listenerType, out MethodInfo eventRaiseMethodInfo))
-                {
-                    // Every listener that doesn't receive data should implement IGameEventWithoutDataListener. This contains the base Raise method for all the types of parameterless listeners 
-                    eventRaiseMethodInfo = GetTypeOfImplementedGenericInterface(listenerType, InterfaceNameGameEventWithoutDataListener).GetMethod(IGameEventListener.OnEventMethodName);
-                    DataListenerTypeToEventRaiseMethodInfo.Add(listenerType, eventRaiseMethodInfo);
-                }
-                
-                Type delegateType = typeof(Action);
-                Delegate closedDelegate = eventRaiseMethodInfo.CreateDelegate(delegateType, listenerInstance);
-                
-                eventRaises.Add(gameEventWithoutDataType, () => ((Action) closedDelegate).Invoke());
+                IGameEventWithoutDataListener<TListener> typedListener = (IGameEventWithoutDataListener<TListener>) listenerInstance;
+                eventRaises.Add(gameEventWithoutDataType, typedListener.OnEvent);
             }
             
             // Add the listener
@@ -83,7 +65,7 @@ namespace ProphetAR
             }
         }
         
-        public void AddListenerWithData<TListener, TListenerData>(IGameEventListener listenerInstance) where TListener : IGameEventListener
+        public void AddListenerWithData<TListener, TListenerData>(IGameEventListener listenerInstance) where TListener : IGameEventWithTypedDataListener<TListener, TListenerData>
         {
             // We need to figure out how to raise the event
             if (!_dataListenerToEventRaises.TryGetValue(listenerInstance, out Dictionary<Type, Action<object>> eventRaises))
@@ -92,22 +74,11 @@ namespace ProphetAR
                 _dataListenerToEventRaises.Add(listenerInstance, eventRaises);
             }
             
-            Type listenerType = typeof(TListener);
             Type gameEventWithDataType = GameEventListenerUtils.GetEventTypeForListenerType<TListener>();
-            
             if (!eventRaises.ContainsKey(gameEventWithDataType))
             {
-                if (!DataListenerTypeToEventRaiseMethodInfo.TryGetValue(listenerType, out MethodInfo eventRaiseMethodInfo))
-                {
-                    // Every listener that receives data should be  implementing IGameEventWithTypedDataListener which contains the generic raise call for all the types of data
-                    eventRaiseMethodInfo = GetTypeOfImplementedGenericInterface(listenerType, InterfaceNameTypedGameEventListener).GetMethod(IGameEventListener.OnEventMethodName);
-                    DataListenerTypeToEventRaiseMethodInfo.Add(listenerType, eventRaiseMethodInfo);
-                }
-                
-                Type delegateType = typeof(Action<TListenerData>);
-                Delegate closedDelegate = eventRaiseMethodInfo.CreateDelegate(delegateType, listenerInstance);
-                
-                eventRaises.Add(gameEventWithDataType, data => ((Action<TListenerData>) closedDelegate).Invoke((TListenerData) data));
+                IGameEventWithTypedDataListener<TListener, TListenerData> typedListener = (IGameEventWithTypedDataListener<TListener, TListenerData>) listenerInstance;
+                eventRaises.Add(gameEventWithDataType, data => typedListener.OnEvent((TListenerData) data));
             }
             
             // Add the listener
@@ -309,18 +280,6 @@ namespace ProphetAR
                 string.Empty, (acc, listener) => acc == string.Empty ? $"{listener.GetType()}" : $"{acc}\n{listener.GetType()}");
             
             return $"[Game Event] raised \"{gameEvent.GetType()}\" with ({listeners?.Count ?? 0}) listeners:\n{listenersString}\n";
-        }
-        
-        private static Type GetTypeOfImplementedGenericInterface(Type type, string interfaceName)
-        {
-            foreach (Type interfaceType in type.GetInterfaces().Where(i => i.IsGenericType))
-            {
-                if (interfaceType.GetGenericTypeDefinition().Name.StartsWith(interfaceName, StringComparison.OrdinalIgnoreCase))
-                {
-                    return interfaceType;
-                }
-            }
-            return null;
         }
     }
 }
