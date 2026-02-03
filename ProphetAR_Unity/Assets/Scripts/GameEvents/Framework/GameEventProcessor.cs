@@ -31,7 +31,7 @@ namespace ProphetAR
         
         private long _numEventRaises;
         
-        public void AddListenerWithoutData<TListener>(IGameEventListener listenerInstance) where TListener : IGameEventWithoutDataListener<TListener>
+        public void AddListenerWithoutData<TListener>(TListener listenerInstance) where TListener : IGameEventWithoutDataListener<TListener>
         {
             // We need to figure out how to raise the event
             if (!_noDataListenerToEventRaises.TryGetValue(listenerInstance, out Dictionary<Type, Action> eventRaises))
@@ -43,8 +43,7 @@ namespace ProphetAR
             Type gameEventWithoutDataType = GameEventListenerUtils.GetEventTypeForListenerType<TListener>();
             if (!eventRaises.ContainsKey(gameEventWithoutDataType))
             {
-                IGameEventWithoutDataListener<TListener> typedListener = (IGameEventWithoutDataListener<TListener>) listenerInstance;
-                eventRaises.Add(gameEventWithoutDataType, typedListener.OnEvent);
+                eventRaises.Add(gameEventWithoutDataType, listenerInstance.OnEvent);
             }
             
             // Add the listener
@@ -65,7 +64,7 @@ namespace ProphetAR
             }
         }
         
-        public void AddListenerWithData<TListener, TListenerData>(IGameEventListener listenerInstance) where TListener : IGameEventWithTypedDataListener<TListener, TListenerData>
+        public void AddListenerWithData<TListener, TListenerData>(TListener listenerInstance) where TListener : IGameEventWithTypedDataListener<TListener, TListenerData>
         {
             // We need to figure out how to raise the event
             if (!_dataListenerToEventRaises.TryGetValue(listenerInstance, out Dictionary<Type, Action<object>> eventRaises))
@@ -77,8 +76,7 @@ namespace ProphetAR
             Type gameEventWithDataType = GameEventListenerUtils.GetEventTypeForListenerType<TListener>();
             if (!eventRaises.ContainsKey(gameEventWithDataType))
             {
-                IGameEventWithTypedDataListener<TListener, TListenerData> typedListener = (IGameEventWithTypedDataListener<TListener, TListenerData>) listenerInstance;
-                eventRaises.Add(gameEventWithDataType, data => typedListener.OnEvent((TListenerData) data));
+                eventRaises.Add(gameEventWithDataType, data => listenerInstance.OnEvent((TListenerData) data));
             }
             
             // Add the listener
@@ -99,7 +97,7 @@ namespace ProphetAR
             }
         }
         
-        public void RemoveListenerWithoutData<TListener>(IGameEventListener listenerInstance) where TListener : IGameEventListener
+        public void RemoveListenerWithoutData<TListener>(TListener listenerInstance) where TListener : IGameEventWithoutDataListener<TListener>
         {
             Type gameEventType = GameEventListenerUtils.GetEventTypeForListenerType<TListener>();
             if (!_gameEventWithoutDataListeners.TryGetValue(gameEventType, out List<IGameEventListener> listenersWithoutData)) 
@@ -131,7 +129,7 @@ namespace ProphetAR
             UpdateIterationsWithRemovedListener(gameEventType, removalIndex);
         }
         
-        public void RemoveListenerWithData<TListener>(IGameEventListener listenerInstance) where TListener : IGameEventListener
+        public void RemoveListenerWithData<TListener, TListenerData>(TListener listenerInstance) where TListener : IGameEventWithTypedDataListener<TListener, TListenerData>
         {
             Type gameEventWithDataType = GameEventListenerUtils.GetEventTypeForListenerType<TListener>();
             if (!_gameEventWithDataListeners.TryGetValue(gameEventWithDataType, out List<IGameEventListener> listenersWithData)) 

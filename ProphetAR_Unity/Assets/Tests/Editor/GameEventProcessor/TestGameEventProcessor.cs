@@ -29,7 +29,7 @@ namespace ProphetAR.Tests.GameEvents
             gameEventProcessor.RaiseEventWithData(new TestGameEventInt(2));
             Assert.IsTrue(sampleListener.LastIntData == 2);
             
-            gameEventProcessor.RemoveListenerWithData<ITestGameEventIntListener>(sampleListener);
+            gameEventProcessor.RemoveListenerWithData<ITestGameEventIntListener, int>(sampleListener);
             if (gameEventProcessor.TryGetListenersForDataEvent<TestGameEventInt>(out listeners))
             {
                 Assert.Fail($"Removed all listeners but there are still {listeners.Count} present");
@@ -89,8 +89,8 @@ namespace ProphetAR.Tests.GameEvents
             Assert.IsTrue(sampleListener.LastTestObjectCopyData.TestData == 2);
             Assert.IsTrue(sampleListener.NumTestObjectCopyEvents == 1);
             
-            gameEventProcessor.RemoveListenerWithData<ITestGameEventObjectListener>(sampleListener);
-            gameEventProcessor.RemoveListenerWithData<ITestGameEventObjectCopyListener>(sampleListener);
+            gameEventProcessor.RemoveListenerWithData<ITestGameEventObjectListener, TestObject>(sampleListener);
+            gameEventProcessor.RemoveListenerWithData<ITestGameEventObjectCopyListener, TestObject>(sampleListener);
         }
 
         [Test]
@@ -288,7 +288,7 @@ namespace ProphetAR.Tests.GameEvents
             Assert.IsTrue(sampleListener.NumTestObjectEvents == 1);
             Assert.IsTrue(sampleListener.LastTestObjectData is TestObjectDerived);
             
-            gameEventProcessor.RemoveListenerWithData<ITestGameEventObjectListener>(sampleListener);
+            gameEventProcessor.RemoveListenerWithData<ITestGameEventObjectListener, TestObject>(sampleListener);
         }
 
         /// <summary>
@@ -320,7 +320,7 @@ namespace ProphetAR.Tests.GameEvents
             // The cell has received the data
             Assert.IsTrue(cellGridEventListener.Data == gridEventData);
             
-            cellGridEventProcessor.RemoveListenerWithData<ITestGridEventSpecificListener>(cellGridEventListener);
+            cellGridEventProcessor.RemoveListenerWithData<ITestGridEventSpecificListener, TestGridEventDataSpecific>(cellGridEventListener);
         }
 
         private class SampleListener : 

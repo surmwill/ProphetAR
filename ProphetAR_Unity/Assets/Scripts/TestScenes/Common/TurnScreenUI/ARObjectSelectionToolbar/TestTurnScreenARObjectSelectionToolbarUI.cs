@@ -33,7 +33,7 @@ namespace ProphetAR
             }
             else
             {
-                Level.Current.EventProcessor.RemoveListenerWithData<IGameEventShowARObjectSelectionUIListener>(this);
+                Level.Current.EventProcessor.RemoveListenerWithData<IGameEventShowARObjectSelectionUIListener, GameEventShowARObjectSelectionUIOptionsData>(this);
                 Level.Current.EventProcessor.RemoveListenerWithoutData<IGameEventHideARObjectSelectionUIListener>(this);
             }
         }

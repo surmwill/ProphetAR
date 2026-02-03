@@ -46,9 +46,9 @@ namespace ProphetAR
                 }
                 else
                 {
-                    gamePlayer.EventProcessor.RemoveListenerWithData<IGameEventShowCharacterActionsUIListener>(this);
-                    gamePlayer.EventProcessor.RemoveListenerWithData<IGameEventCharacterTurnCompleteListener>(this);
-                    gamePlayer.EventProcessor.RemoveListenerWithData<IGameEventCharacterStatsModifiedListener>(this);
+                    gamePlayer.EventProcessor.RemoveListenerWithData<IGameEventShowCharacterActionsUIListener, Character>(this);
+                    gamePlayer.EventProcessor.RemoveListenerWithData<IGameEventCharacterTurnCompleteListener, Character>(this);
+                    gamePlayer.EventProcessor.RemoveListenerWithData<IGameEventCharacterStatsModifiedListener, GameEventCharacterStatsModifiedData>(this);
                 }   
             }
         }
