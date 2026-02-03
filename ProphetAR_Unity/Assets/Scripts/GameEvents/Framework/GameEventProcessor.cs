@@ -99,7 +99,7 @@ namespace ProphetAR
             {
                 if (!DataListenerTypeToEventRaiseMethodInfo.TryGetValue(listenerType, out MethodInfo eventRaiseMethodInfo))
                 {
-                    // Every listener that receives data should be implementing IGameEventWithTypedDataListener which contains the generic raise call for all the types of data
+                    // Every listener that receives data should be  implementing IGameEventWithTypedDataListener which contains the generic raise call for all the types of data
                     eventRaiseMethodInfo = GetTypeOfImplementedGenericInterface(listenerType, InterfaceNameTypedGameEventListener).GetMethod(IGameEventListener.OnEventMethodName);
                     DataListenerTypeToEventRaiseMethodInfo.Add(listenerType, eventRaiseMethodInfo);
                 }

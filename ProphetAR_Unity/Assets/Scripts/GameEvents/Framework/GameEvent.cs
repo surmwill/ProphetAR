@@ -7,5 +7,6 @@ namespace ProphetAR
     /// </summary>
     public abstract class GameEvent
     {
+        // Empty
     }
 }
