@@ -38,7 +38,7 @@ namespace ProphetAR
             ActionPoints = Math.Max(ActionPoints + amount, 0);
             character.Player.EventProcessor.RaiseEventWithData(new GameEventCharacterStatsModified(new GameEventCharacterStatsModifiedData(character, this)));
 
-            if (amount <= 0)
+            if (ActionPoints <= 0)
             {
                 character.CompleteTurn();
             }
