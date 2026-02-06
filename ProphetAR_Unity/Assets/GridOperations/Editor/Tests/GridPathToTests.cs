@@ -43,7 +43,7 @@ namespace GridOperations.Editor
                     {
                         char[,] gridWithPath = DrawPathOnGrid(instructionSet, grid);
                         
-                        Debug.Log(GridPathFinder.PrintGrid(gridWithPath));
+                        Debug.Log(GridUtils.PrintRawGrid(gridWithPath));
                         Debug.Log(instructionSet.ListInstructionsString());
                         Debug.Log(instructionSet.ListPathCoordinatesString());
                         

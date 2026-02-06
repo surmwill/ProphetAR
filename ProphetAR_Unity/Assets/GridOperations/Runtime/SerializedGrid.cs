@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 
 namespace GridOperations
 {
-    public struct SerializedGrid
+    public struct SerializedGrid : IEnumerable<char>
     {
         public (int numRows, int numCols) Dimensions { get; }
         
@@ -148,6 +149,16 @@ namespace GridOperations
                 ModificationSteps.RemoveAt(modificationStepIndex);
                 return;
             }
+        }
+        
+        public IEnumerator<char> GetEnumerator()
+        {
+            throw new System.NotImplementedException();
+        }
+        
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
