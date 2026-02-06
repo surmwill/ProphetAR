@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace GridPathFinding.Editor
+namespace GridOperations.Editor
 {
     public static class GridParser
     {

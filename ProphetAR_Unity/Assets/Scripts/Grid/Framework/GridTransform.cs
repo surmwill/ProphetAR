@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using GridPathFinding;
+using GridOperations;
 using UnityEngine;
 
 namespace ProphetAR

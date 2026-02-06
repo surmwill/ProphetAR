@@ -1,4 +1,4 @@
-﻿namespace GridPathFinding
+﻿namespace GridOperations
 {
     public struct NavigationInstruction
     {

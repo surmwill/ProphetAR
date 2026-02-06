@@ -1,4 +1,4 @@
-﻿using GridPathFinding;
+﻿using GridOperations;
 
 namespace ProphetAR
 {

@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
-using GridPathFinding;
+using GridOperations;
 using NUnit.Framework;
 using UnityEngine;
-using static GridPathFinding.NavigationInstruction;
+
+using static GridOperations.NavigationInstruction;
 
 namespace ProphetAR.Tests.NavigationInstructionSetSplitting
 {
-    public class TestNavigationInstructionSetSplitting
+    public class NavigationInstructionSetSplittingTests
     {
         [Test]
         public void TestIndividualSplitting()

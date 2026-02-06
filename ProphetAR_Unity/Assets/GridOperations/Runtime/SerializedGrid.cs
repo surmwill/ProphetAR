@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace GridPathFinding
+namespace GridOperations
 {
     public struct SerializedGrid
     {

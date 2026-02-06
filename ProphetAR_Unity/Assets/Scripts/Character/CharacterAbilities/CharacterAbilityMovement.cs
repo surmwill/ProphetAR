@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using DG.Tweening;
-using GridPathFinding;
+using GridOperations;
 using UnityEngine;
 
 namespace ProphetAR

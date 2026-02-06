@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using GridPathFinding;
-using GridPathFinding.Editor;
+using GridOperations;
+using GridOperations.Editor;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace GridPathPathFinding.Editor
+namespace GridOperations.Editor
 {
     public class GridPathToTests
     {

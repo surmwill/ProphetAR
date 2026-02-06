@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using GridPathPathFinding.Editor;
+using GridOperations.Editor;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace GridPathFinding.Editor
+namespace GridOperations.Editor
 {
     public class GridPathFromTests
     {

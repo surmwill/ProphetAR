@@ -1,5 +1,5 @@
 ﻿using System;
-using GridPathFinding;
+using GridOperations;
 using TMPro;
 using UnityEngine;
 
