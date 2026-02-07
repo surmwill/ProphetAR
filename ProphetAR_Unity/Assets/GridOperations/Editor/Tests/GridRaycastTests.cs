@@ -10,7 +10,7 @@ namespace GridOperations.Editor
         private static readonly string TestRaycastsFilePath = GridPathTestingUtils.GetTestFilePath("TestGridRaycasts.txt");
 
         [Test]
-        public void TestRaycasts()
+        public void TestPrintRaycasts()
         {
             List<char[,]> grids = GridParser.ParseGridsFromFile(TestRaycastsFilePath);
 

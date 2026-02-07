@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace GridOperations
 {
@@ -93,7 +94,7 @@ namespace GridOperations
             foreach ((KeyValuePair<(int row, int col), char> gridPoint, int index) in this.Select((gridPoint, index) => (gridPoint, index)))
             {
                 sb.Append(gridPoint.Value);
-                if (index + 1 % Dimensions.numCols == 0)
+                if ((index + 1) % Dimensions.numCols == 0)
                 {
                     sb.AppendLine();
                 }
