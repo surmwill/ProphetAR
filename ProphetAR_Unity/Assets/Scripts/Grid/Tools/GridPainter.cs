@@ -12,28 +12,49 @@ namespace ProphetAR
             Grid = grid;
         }
         
+        // Movement
         public DisposableGridPainter ShowMovementArea(NavigationDestinationSet destinations, GridSlice gridSlice)
         {
             foreach (GridCell gridCell in gridSlice)
             {
-                if (destinations.Destinations.TryGetValue((gridCell.Coordinates - gridSlice.TopLeft).ToTuple(), out NavigationDestination destination))
+                (int row, int col) normalizedCoordinates = (gridCell.Coordinates - gridSlice.TopLeft).ToTuple();
+                if (destinations.Destinations.TryGetValue(normalizedCoordinates, out NavigationDestination destination))
                 {
                     gridCell.GridCellPainter.ShowIsNavigable(true, destination.StepsRequired);
-                }
-                else
-                {
-                    gridCell.GridCellPainter.ShowIsNavigable(false);
                 }
             }
 
             return new DisposableGridPainter(() => ClearMovementArea(gridSlice));
         }
-
+        
         public void ClearMovementArea(GridSlice gridSlice)
         {
             foreach (GridCell gridCell in gridSlice)
             {
                 gridCell.GridCellPainter.ShowIsNavigable(false);
+            }
+        }
+
+        // Attack
+        public DisposableGridPainter ShowAttackableArea(NavigationDestinationSet locations, GridSlice gridSlice)
+        {
+            foreach (GridCell gridCell in gridSlice)
+            {
+                (int row, int col) normalizedCoordinates = (gridCell.Coordinates - gridSlice.TopLeft).ToTuple();
+                if (locations.Destinations.TryGetValue(normalizedCoordinates, out NavigationDestination location))
+                {
+                    gridCell.GridCellPainter.ShowIsAttackable(true, location.StepsRequired);
+                }
+            }
+
+            return new DisposableGridPainter(() => ClearAttackableArea(gridSlice));
+        }
+        
+        public void ClearAttackableArea(GridSlice gridSlice)
+        {
+            foreach (GridCell gridCell in gridSlice)
+            {
+                gridCell.GridCellPainter.ShowIsAttackable(false);
             }
         }
 

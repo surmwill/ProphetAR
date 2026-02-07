@@ -19,6 +19,12 @@ namespace ProphetAR
         [SerializeField]
         private TextMeshPro _navigableNumSteps = null;
 
+        [SerializeField]
+        private GameObject _attackableIndicator = null;
+
+        [SerializeField]
+        private TextMeshPro _attackableNumActionPoints = null;
+
         private void OnEnable()
         {
             #if UNITY_EDITOR
@@ -49,6 +55,19 @@ namespace ProphetAR
             else
             {
                 _navigableIndicator.gameObject.SetActive(false);   
+            }
+        }
+
+        public void ShowIsAttackable(bool show, int numActionPoints = 0)
+        {
+            if (show)
+            {
+                _attackableIndicator.gameObject.SetActive(true);
+                _attackableNumActionPoints.text = numActionPoints.ToString();
+            }
+            else
+            {
+                _attackableIndicator.gameObject.SetActive(false);
             }
         }
 
