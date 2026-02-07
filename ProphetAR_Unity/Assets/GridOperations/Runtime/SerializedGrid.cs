@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace GridOperations
 {
-    public struct SerializedGrid : IEnumerable<char>
+    public struct SerializedGrid : IEnumerable<KeyValuePair<(int row, int col), char>>
     {
         public (int numRows, int numCols) Dimensions { get; }
         
@@ -13,33 +15,38 @@ namespace GridOperations
         public (int row, int col)? Target { get; set; }
         
         // Non-null
-        public List<(int row, int col)> Obstacles { get; set; }
+        public HashSet<(int row, int col)> Obstacles { get; }
         
         // Non-null
-        public List<ModificationStep> ModificationSteps { get; set; }
+        public Dictionary<(int row, int col), ModificationStep> ModificationSteps { get; }
 
         public SerializedGrid(
             (int numRows, int numCols) dimensions, 
             (int row, int col)? origin = null, 
             (int row, int col)? target = null, 
-            List<(int row, int col)> obstacles = null, 
-            List<ModificationStep> modificationSteps = null)
+            IEnumerable<(int row, int col)> obstacles = null, 
+            IEnumerable<ModificationStep> modificationSteps = null)
         {
             Dimensions = dimensions;
 
             Origin = origin;
             Target = target;
         
-            Obstacles = obstacles ?? new List<(int row, int col)>();
-            ModificationSteps = modificationSteps ?? new List<ModificationStep>();
+            Obstacles = new HashSet<(int row, int col)>(obstacles ?? Enumerable.Empty<(int row, int col)>());
+            
+            ModificationSteps = new Dictionary<(int row, int col), ModificationStep>();
+            foreach (ModificationStep modificationStep in modificationSteps ?? Enumerable.Empty<ModificationStep>())
+            {
+                ModificationSteps.Add(modificationStep.Coordinates, modificationStep);
+            }
         }
 
         public SerializedGrid(char[,] grid)
         {
             Dimensions = (grid.GetLength(0), grid.GetLength(1));
             
-            Obstacles = new List<(int row, int col)>();
-            ModificationSteps = new List<ModificationStep>();
+            Obstacles = new HashSet<(int row, int col)>();
+            ModificationSteps = new Dictionary<(int row, int col), ModificationStep>();
 
             Origin = null;
             Target = null;
@@ -68,7 +75,8 @@ namespace GridOperations
                         {
                             if (GridPoints.IsModificationStep(gridPoint, out int numSteps))
                             {
-                                ModificationSteps.Add(new ModificationStep((row, col), numSteps));
+                                ModificationStep modificationStep = new ModificationStep((row, col), numSteps);
+                                ModificationSteps.Add(modificationStep.Coordinates, modificationStep);
                             }
 
                             break;
@@ -82,41 +90,13 @@ namespace GridOperations
         {
             StringBuilder sb = new StringBuilder();
             
-            for (int row = 0; row < Dimensions.numRows; row++)
+            foreach ((KeyValuePair<(int row, int col), char> gridPoint, int index) in this.Select((gridPoint, index) => (gridPoint, index)))
             {
-                for (int col = 0; col < Dimensions.numCols; col++)
+                sb.Append(gridPoint.Value);
+                if (index + 1 % Dimensions.numCols == 0)
                 {
-                    (int row, int col) coordinates = (row, col);
-
-                    if (coordinates == Origin)
-                    {
-                        sb.Append(GridPoints.Origin);
-                        continue;
-                    }
-                    
-                    if (coordinates == Target)
-                    {
-                        sb.Append(GridPoints.Target);
-                        continue;
-                    }
-                    
-                    if (Obstacles?.Contains(coordinates) ?? false)
-                    {
-                        sb.Append(GridPoints.Obstacle);
-                        continue;
-                    }
-                    
-                    int modificationStepIndex = ModificationSteps?.FindIndex(modificationStep => coordinates == modificationStep.Coordinates) ?? -1;
-                    if (modificationStepIndex >= 0)
-                    {
-                        sb.Append(GridPoints.ModificationStepValueToGridPoint(ModificationSteps[modificationStepIndex].Value));
-                        continue;
-                    }
-
-                    sb.Append(GridPoints.DEBUG_PRINT_CLEAR);
+                    sb.AppendLine();
                 }
-
-                sb.AppendLine();
             }
 
             return sb.ToString();
@@ -138,22 +118,54 @@ namespace GridOperations
 
         private void ClearCoordinate((int row, int col) coordinate)
         {
-            if (Obstacles.Remove(coordinate))
+            if (coordinate == Origin)
             {
-                return;
+                Origin = null;
             }
-            
-            int modificationStepIndex = ModificationSteps.FindIndex(modificationStep => coordinate == modificationStep.Coordinates);
-            if (modificationStepIndex >= 0)
+            else if (coordinate == Target)
             {
-                ModificationSteps.RemoveAt(modificationStepIndex);
-                return;
+                Target = null;
+            }
+            else if (Obstacles.Remove(coordinate))
+            {
+                // Empty
+            }
+            else if (ModificationSteps.Remove(coordinate))
+            {
+                // Empty
             }
         }
         
-        public IEnumerator<char> GetEnumerator()
+        public IEnumerator<KeyValuePair<(int row, int col), char>> GetEnumerator()
         {
-            throw new System.NotImplementedException();
+            for (int row = 0; row < Dimensions.numRows; row++)
+            {
+                for (int col = 0; col < Dimensions.numCols; col++)
+                {
+                    (int row, int col) coordinates = (row, col);
+
+                    if (coordinates == Origin)
+                    {
+                        yield return new KeyValuePair<(int row, int col), char>(coordinates, GridPoints.Origin);
+                    }
+                    else if (coordinates == Target)
+                    {
+                        yield return new KeyValuePair<(int row, int col), char>(coordinates, GridPoints.Target);
+                    }
+                    else if (Obstacles.Contains(coordinates))
+                    {
+                        yield return new KeyValuePair<(int row, int col), char>(coordinates, GridPoints.Obstacle);
+                    }
+                    else if (ModificationSteps.TryGetValue(coordinates, out ModificationStep modificationStep))
+                    {
+                        yield return new KeyValuePair<(int row, int col), char>(coordinates, GridPoints.ModificationStepValueToGridPoint(modificationStep.Value));
+                    }
+                    else
+                    {
+                        yield return new KeyValuePair<(int row, int col), char>(coordinates, GridPoints.DEBUG_PRINT_CLEAR);   
+                    }
+                }
+            }
         }
         
         IEnumerator IEnumerable.GetEnumerator()

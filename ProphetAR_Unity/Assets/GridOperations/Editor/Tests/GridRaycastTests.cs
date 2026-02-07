@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
 using UnityEngine;
 
 namespace GridOperations.Editor
@@ -7,6 +9,7 @@ namespace GridOperations.Editor
     {
         private static readonly string TestRaycastsFilePath = GridPathTestingUtils.GetTestFilePath("TestGridRaycasts.txt");
 
+        [Test]
         public void TestRaycasts()
         {
             List<char[,]> grids = GridParser.ParseGridsFromFile(TestRaycastsFilePath);
@@ -14,37 +17,37 @@ namespace GridOperations.Editor
             for (int i = 0; i < grids.Count; i++)
             {
                 char[,] grid = grids[i];
+                char[,] gridCopy = GridParser.CopyGrid(grid);
+                
                 SerializedGrid serializedGrid = new SerializedGrid(grid);
 
                 Debug.Log($"------------ Test Grid Raycasts {i} ------------");
                 
                 Debug.Log("Original grid");
-                Debug.Log(GridUtils.PrintRawGrid(grid));
+                Debug.Log(serializedGrid.ToString());
 
-                foreach (var VARIABLE in serializedGrid.)
+                bool hasCollisions = false;
+                foreach (((int row, int col) coordinates, char _) in serializedGrid.Where(
+                             gridPoint => gridPoint.Value != GridPoints.Obstacle && gridPoint.Value != GridPoints.Origin))
                 {
-                    
+                    if (!GridRaycaster.Raycast(serializedGrid.Origin.Value, coordinates, serializedGrid.Obstacles, out List<(int row, int col)> _))
+                    {
+                        gridCopy[coordinates.row, coordinates.col] = GridPoints.DEBUG_PRINT_RAY;
+                    }
+                    else
+                    {
+                        hasCollisions = true;
+                    }
                 }
-                
-                GridRaycaster.Raycast(serializedGrid.Origin, )
-                
-                
 
-                NavigationDestinationSet navigationDestinationSet = GridPathFinder.GetPathsFrom(serializedGrid, maxNumSteps);
-                if (navigationDestinationSet.CanMove)
+
+                if (hasCollisions)
                 {
-                    Debug.Log("Original grid");
-                    Debug.Log(GridPathFinder.PrintGrid(grid));
-                    
-                    Debug.Log("Drawing all paths");
-                    Debug.Log(GridPathFinder.PrintGrid(DrawDestinationsOnGrid(navigationDestinationSet, grid)));
-
-                    Debug.Log("Drawing furthest path");
-                    Debug.Log(GridPathFinder.PrintGrid(DrawFurthestDestinationOnGrid(navigationDestinationSet, grid)));
+                    Debug.Log(GridUtils.PrintRawGrid(gridCopy));
                 }
                 else
                 {
-                    Debug.Log("No valid destinations");
+                    Debug.Log("No collisions!");
                 }
             }
         }

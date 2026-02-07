@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace GridOperations
 {
@@ -7,23 +9,30 @@ namespace GridOperations
     {
         private const float Epsilon = 1e-6f;
         
-        public static List<(int row, int col)> Raycast((int row, int col) from, (int row, int col) to, List<(int row, int col)> obstacles)
+        public static bool Raycast((int row, int col) from, (int row, int col) to, IEnumerable<(int row, int col)> obstacles, out List<(int row, int col)> obstaclesHit)
         {
-            if (obstacles == null || obstacles.Count == 0)
+            obstaclesHit = new List<(int row, int col)>();
+            
+            if (from == to)
             {
-                return null;
+                Debug.LogWarning("Raycasting to and from the same point");
+                return false;
             }
-
-            List<(int row, int col)> obstaclesHit = null;
+            
+            if (!obstacles?.Any() ?? true)
+            {
+                return false;
+            }
+            
             foreach ((int row, int col) obstacle in obstacles)
             {
                 if (IsObstructedByObstacle(from, to, obstacle))
                 {
-                    (obstaclesHit ??= new List<(int row, int col)>()).Add(obstacle); 
+                    obstaclesHit.Add(obstacle); 
                 }
             }
 
-            return obstaclesHit;
+            return obstaclesHit.Count > 0;
         }
 
         public static bool IsObstructedByObstacle((int row, int col) from, (int row, int col) to, (int row, int col) obstacle)
