@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace ProphetAR
 {
-    public class TestTurnCharacterMovement : MonoBehaviour
+    public class TestLevelInitializer : MonoBehaviour
     {
         [SerializeField]
         private Level _level = null;
@@ -41,12 +40,12 @@ namespace ProphetAR
 
         private void OnValidate()
         {
-            if (_player0CharacterStats.Count < _player0CharacterPrefabs.Count)
+            if (_player0CharacterStats?.Count < _player0CharacterPrefabs?.Count)
             {
                 _player0CharacterStats.AddRange(Enumerable.Repeat(new CharacterStats(), _player0CharacterPrefabs.Count - _player0CharacterStats.Count));
             }
             
-            if (_player1CharacterStats.Count < _player1CharacterPrefabs.Count)
+            if (_player1CharacterStats?.Count < _player1CharacterPrefabs?.Count)
             {
                 _player1CharacterStats.AddRange(Enumerable.Repeat(new CharacterStats(), _player1CharacterPrefabs.Count - _player1CharacterStats.Count));
             }

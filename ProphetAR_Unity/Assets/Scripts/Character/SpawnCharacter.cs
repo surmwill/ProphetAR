@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using ProphetAR.Coroutines;
+using UnityEngine;
 
 namespace ProphetAR
 {
@@ -17,14 +20,16 @@ namespace ProphetAR
         private int _gamePlayerIndex = -1;
 
         [SerializeField]
-        private bool _onStart = false;
+        private bool _onInitialize = false;
 
-        private void Start()
+        private IEnumerator Start()
         {
-            if (_onStart)
+            if (!_level.IsInitialized)
             {
-                Spawn();
+                yield return new WaitForInitializedLevel();
             }
+            
+            Spawn();
         }
 
         public void Spawn()

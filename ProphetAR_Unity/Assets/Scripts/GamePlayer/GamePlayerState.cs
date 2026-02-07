@@ -15,11 +15,13 @@ namespace ProphetAR
         public void AddCharacter(Character character)
         {
             _characters.Add(character);
+            character.Player = Player;
         }
 
         public void RemoveCharacter(Character character)
         {
             _characters.Remove(character);
+            character.Player = null;
         }
         
         public GamePlayerState(GamePlayer player, GamePlayerConfig initConfig)
