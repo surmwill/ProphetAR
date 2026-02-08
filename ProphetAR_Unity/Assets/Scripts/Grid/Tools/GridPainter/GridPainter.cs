@@ -36,25 +36,21 @@ namespace ProphetAR
         }
 
         // Attack
-        public DisposableGridPainter ShowAttackableArea(NavigationDestinationSet locations, GridSlice gridSlice)
+        public DisposableGridPainter ShowAttackableArea(AttackRange attackRange)
         {
-            foreach (GridCell gridCell in gridSlice)
+            foreach (((int row, int col) coordinates, int actionPoints) in attackRange.Locations)
             {
-                (int row, int col) normalizedCoordinates = (gridCell.Coordinates - gridSlice.TopLeft).ToTuple();
-                if (locations.Destinations.TryGetValue(normalizedCoordinates, out NavigationDestination location))
-                {
-                    gridCell.GridCellPainter.ShowIsAttackable(true, location.StepsRequired);
-                }
+                Grid[coordinates.ToVector2Int()].GridCellPainter.ShowIsAttackable(true, actionPoints);
             }
 
-            return new DisposableGridPainter(() => ClearAttackableArea(gridSlice));
+            return new DisposableGridPainter(() => ClearAttackableArea(attackRange));
         }
         
-        public void ClearAttackableArea(GridSlice gridSlice)
+        public void ClearAttackableArea(AttackRange attackRange)
         {
-            foreach (GridCell gridCell in gridSlice)
+            foreach ((int row, int col) coordinates in attackRange.Locations.Keys)
             {
-                gridCell.GridCellPainter.ShowIsAttackable(false);
+                Grid[coordinates.ToVector2Int()].GridCellPainter.ShowIsAttackable(false);
             }
         }
 

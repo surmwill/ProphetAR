@@ -74,10 +74,35 @@ namespace ProphetAR
             return new GridSlice(this, botLeft, dimensions);
         }
 
+        public bool TryGetContainingCell(Transform t, out GridCell cell)
+        {
+            cell = null;
+            Vector3 localGridPosition = transform.InverseTransformPoint(t.position);
+            Debug.Log(localGridPosition);
+            
+            if (localGridPosition.z > 0 || localGridPosition.z < -_gridDimensions.x || 
+                localGridPosition.x < 0 || localGridPosition.x > _gridDimensions.y)
+            {
+                Debug.Log("no coordinates");
+                return false;
+            }
+            
+            Vector2Int coordinates = new Vector2Int(
+                Mathf.Approximately(localGridPosition.z, -_gridDimensions.x) ? _gridDimensions.x - 1 : -Mathf.CeilToInt(localGridPosition.z), 
+                Mathf.Approximately(localGridPosition.x, _gridDimensions.y) ? _gridDimensions.y - 1 : Mathf.FloorToInt(localGridPosition.x));
+            
+            Debug.Log(coordinates);
+
+            cell = this[coordinates];
+            return true;
+        }
+
         /// <summary>
-        /// A grid slice containing entire level. This is likely very large, operating on it is inefficient, and should only be used for testing or specific thought-out cases
+        /// A grid slice containing the entire level.
+        /// This is likely very large, unless you're in a confined testing environment.
+        /// Operating on it while be inefficient.
         /// </summary>
-        public GridSlice GetGlobalSliceExpensive()
+        public GridSlice GetExpensiveGlobalSlice()
         {
             return new GridSlice(this, _topLeftCoordinate, _gridDimensions);
         }

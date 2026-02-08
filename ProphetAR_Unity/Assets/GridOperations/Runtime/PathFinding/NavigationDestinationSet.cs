@@ -15,12 +15,19 @@ namespace GridOperations
 
         // Can we move further than the origin?
         public bool CanMove => Destinations.Count > 1 || (Destinations.Count == 1 && Destinations.Keys.First() != Origin);
+        
+        public SerializedGrid SerializedGrid { get; }
 
-        public NavigationDestinationSet((int row, int col) origin, int maxNumSteps, Dictionary<(int row, int col), NavigationDestination> destinations)
+        public NavigationDestinationSet(
+            (int row, int col) origin, 
+            int maxNumSteps, 
+            Dictionary<(int row, int col), NavigationDestination> destinations,
+            SerializedGrid source)
         {
             Origin = origin;
             MaxNumSteps = maxNumSteps;
             Destinations = destinations;
+            SerializedGrid = source;
         }
 
         public NavigationDestination? this[int row, int col]

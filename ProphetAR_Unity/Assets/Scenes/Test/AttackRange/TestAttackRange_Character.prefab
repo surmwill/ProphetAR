@@ -97,9 +97,9 @@ GameObject:
   - component: {fileID: 7027812677030942244}
   - component: {fileID: 8563755770520893034}
   - component: {fileID: 8805206095572177566}
-  - component: {fileID: 4297561922814150289}
+  - component: {fileID: 5359850562317676176}
   m_Layer: 0
-  m_Name: TestCharacterMovement_Character
+  m_Name: TestAttackRange_Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -150,7 +150,7 @@ MonoBehaviour:
     _actionPoints: 9999
     _maxActionPoints: 9999
     _actionPointsRegenPerTurn: 5
---- !u!114 &4297561922814150289
+--- !u!114 &5359850562317676176
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,4 +162,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00e7511b0c6447eb901fae840e253c0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grid: {fileID: 0}

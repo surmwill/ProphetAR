@@ -126,7 +126,7 @@ namespace ProphetAR
                 yield break;
             }
             
-            NavigationInstructionSet instructionSet = GridTransform.GetPathTo(targetCoordinates, Grid.GetGlobalSliceExpensive());
+            NavigationInstructionSet instructionSet = GridTransform.GetPathTo(targetCoordinates, Grid.GetExpensiveGlobalSlice());
             if (instructionSet == null)
             {
                 Debug.LogWarning($"Could not path to coordinates: {targetCoordinates}");

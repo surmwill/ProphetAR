@@ -165,7 +165,7 @@ namespace GridOperations
                 }
             }
             
-            return new NavigationDestinationSet(origin, maxNumSteps, navigationDestinations);
+            return new NavigationDestinationSet(origin, maxNumSteps, navigationDestinations, serializedGrid);
         }
 
         public static NavigationInstructionSet GetPathTo(SerializedGrid serializedGrid)

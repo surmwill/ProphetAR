@@ -8576,7 +8576,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _level: {fileID: 874366614}
   _player0CharacterPrefabs:
-  - {fileID: 8805206095572177566, guid: a623a53404a5d0f49ae87ff6e5d00009, type: 3}
+  - {fileID: 8805206095572177566, guid: 520e9b9326e6e9a48af88df6c2ed8d66, type: 3}
   _player0CharacterStats:
   - _actionPoints: 9999
     _maxActionPoints: 9999
