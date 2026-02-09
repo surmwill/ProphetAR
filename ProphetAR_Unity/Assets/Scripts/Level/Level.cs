@@ -99,21 +99,19 @@ namespace ProphetAR
             foreach (GamePlayer player in Players)
             {
                 // Spawn the characters of each player
-                List<Character> playerCharacterPrefabs = player.Config.CharacterPrefabs;
-                if (playerCharacterPrefabs == null || playerCharacterPrefabs.Count == 0)
+                List<CharacterConfig> playerCharacterConfigs = player.Config.CharacterConfigs;
+                if (playerCharacterConfigs == null || playerCharacterConfigs.Count == 0)
                 {
                     Debug.LogWarning($"No characters found for player {player.Index}: {player.Uid}");
                     continue;
                 }
                 
-                GamePlayerConfig playerConfig = player.Config;
-                
                 LevelConfig.PlayerSpawnPoints.TryGetValue(player.Index, out List<CharacterSpawnPoint> spawnPoints);
                 IEnumerator<Vector2Int> defaultSpawnCoordinates = GetNextDefaultCellSpawnCoordinates();
                 
-                for (int i = 0; i < playerCharacterPrefabs.Count; i++)
+                for (int i = 0; i < playerCharacterConfigs.Count; i++)
                 {
-                    Character characterPrefab = playerCharacterPrefabs[i];
+                    CharacterConfig characterConfig = playerCharacterConfigs[i];
 
                     CharacterSpawnPoint spawnPoint = default;
                     if (i < spawnPoints?.Count)
@@ -127,8 +125,8 @@ namespace ProphetAR
                         spawnPoint = new CharacterSpawnPoint(player.Index, defaultSpawnCoordinates.Current);
                     }
                     
-                    Character character = Grid.InstantiateGridObject(characterPrefab, spawnPoint.Coordinates);
-                    character.Initialize(player, playerConfig.CharacterStats[i]);
+                    Character character = Grid.InstantiateGridObject(characterConfig.Prefab, spawnPoint.Coordinates);
+                    character.Initialize(player, characterConfig.Uid, characterConfig.Stats);
                 }
             }
 

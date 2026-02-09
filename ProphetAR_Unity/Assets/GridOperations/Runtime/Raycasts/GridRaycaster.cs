@@ -35,11 +35,12 @@ namespace GridOperations
             return obstaclesHit.Count > 0;
         }
 
-        public static bool IsObstructedByObstacle((int row, int col) from, (int row, int col) to, (int row, int col) obstacle, HashSet<(int row, int col)> allObstacles)
+        private static bool IsObstructedByObstacle((int row, int col) from, (int row, int col) to, (int row, int col) obstacle, HashSet<(int row, int col)> allObstacles)
         {
             (float x, float y) fromMiddle = (from.col + 0.5f, from.row + 0.5f);
             (float x, float y) toMiddle = (to.col + 0.5f, to.row + 0.5f);
             
+            // Normally x represents our row index and y the column. But this ray represents the Euclidean vector between the two points
             (float x, float y) rayEuclidean = (toMiddle.x - fromMiddle.x, toMiddle.y - fromMiddle.y);
             
             float tNear = float.NegativeInfinity;
@@ -62,21 +63,32 @@ namespace GridOperations
                 return false;
             }
             
-            if (Mathf.Abs(tFar - tNear) < Epsilon)
-            {
-                int dirRow = Math.Sign(to.row - from.row);
-                int dirCol = Math.Sign(to.col - from.col);
-                
-                (int row, int col) coordinates
-            }
-
-            if (tFar - tNear > Epsilon)
+            // Passed through twice in the correct order, valid collision
+            if (tFar > tNear && tFar - tNear > Epsilon)
             {
                 return true;
             }
+            
+            // Special case: did we hit a corner (only a single point of intersection)?
+            // Ensure we can't see through the sliver of two diagonally touching obstacles
+            bool runDiagonalTest = allObstacles?.Count > 0;
+            if (Mathf.Abs(tFar - tNear) <= Epsilon && runDiagonalTest)
+            {
+                // Northeast ray: we either hit the top-left or bottom-right corner
+                if (rayEuclidean.x > 0 && rayEuclidean.y > 0)
+                {
+                    (int row, int col) topLeft = (obstacle.row - 1, obstacle.col - 1);
+                    (int row, int col) bottomRight = (obstacle.row + 1, obstacle.col + 1);
+                    
+                    if (IsObstructedByObstacle(from, to, topLeft, null) || 
+                        IsObstructedByObstacle(from, to, bottomRight, null))
+                    {
+                        return true;
+                    }
+                }
+            }
 
-
-
+            // Invalid collision
             return false;
         }
 

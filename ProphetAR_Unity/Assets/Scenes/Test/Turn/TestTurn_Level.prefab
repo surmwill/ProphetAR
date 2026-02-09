@@ -184,6 +184,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _level: {fileID: 3204096885368522553}
+  _playerConfigs:
+  - _playerUid: Player0
+    _isAI: 0
+    _characterConfigs:
+    - _prefab: {fileID: 9209426569718577995, guid: 6d33e3ca8203f0247a8f97a8a03b6a98, type: 3}
+      _uid: Character0
+      _stats:
+        _actionPoints: 10
+        _maxActionPoints: 10
+        _actionPointsRegenPerTurn: 5
+  - _playerUid: Player1
+    _isAI: 0
+    _characterConfigs:
+    - _prefab: {fileID: 363817041648072071, guid: d0d596273c8228c48a2ca0a0b0002267, type: 3}
+      _uid: Character1
+      _stats:
+        _actionPoints: 10
+        _maxActionPoints: 10
+        _actionPointsRegenPerTurn: 5
   _player0CharacterPrefabs:
   - {fileID: 9209426569718577995, guid: 6d33e3ca8203f0247a8f97a8a03b6a98, type: 3}
   _player0CharacterStats:

@@ -1,4 +1,9 @@
-﻿OOOO*
+﻿*****
+***O*
+**S**
+*****
+
+OOOO*
 OOO*O
 OO*OO
 S*OOO

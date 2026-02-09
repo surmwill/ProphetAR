@@ -1,23 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace ProphetAR
 {
+    [Serializable]
     public class GamePlayerConfig
     {
-        public string PlayerUid { get; }
-        
-        public bool IsAI { get; }
+        [SerializeField]
+        private string _playerUid = null;
 
-        public List<Character> CharacterPrefabs { get; }
-        
-        public List<CharacterStats> CharacterStats { get; } 
-        
-        public GamePlayerConfig(string playerUid, bool isAI, List<Character> characterPrefabs, List<CharacterStats> characterStats)
-        {
-            PlayerUid = playerUid;
-            IsAI = isAI;
-            CharacterPrefabs = characterPrefabs;
-            CharacterStats = characterStats;
-        }
+        [SerializeField]
+        private bool _isAI = false;
+
+        [SerializeField]
+        private List<CharacterConfig> _characterConfigs = null;
+
+        public string PlayerUid => _playerUid;
+
+        public bool IsAI => _isAI;
+
+        public List<CharacterConfig> CharacterConfigs => _characterConfigs;
     }
 }

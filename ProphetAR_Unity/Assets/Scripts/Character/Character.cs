@@ -17,7 +17,7 @@ namespace ProphetAR
         
         [ReadOnly]
         [SerializeField]
-        private string _characterUid = "TestCharacter";
+        private string _characterUid = null;
         
         [SerializeField]
         private CharacterStats _characterStats;
@@ -42,13 +42,17 @@ namespace ProphetAR
             }
         }
 
+        public string Uid
+        {
+            get => _characterUid;
+            set => _characterUid = value;
+        }
+
         public CharacterStats CharacterStats
         {
             get => _characterStats;
             set => _characterStats = value;
         }
-
-        public string Uid => _characterUid;
 
         public List<CharacterAbility> Abilities { get; } = new();
 
@@ -60,25 +64,31 @@ namespace ProphetAR
         private const float MovementTime = 0.5f;
         private const float TurnTime = 0.25f;
 
-        public void Initialize(GamePlayer player, CharacterStats characterStats)
+        public void Initialize(GamePlayer player, string uid, CharacterStats characterStats)
         {
-            Player = player;
+            Uid = uid;
             CharacterStats = characterStats;
             
             // Temporarily hard-coded: these should be loaded from the player config and change per character
             Abilities.AddRange(new CharacterAbility[]{ new CharacterAbilityMovement(this), new CharacterAbilityCompleteTurn(this)});
+            
+            Player = player;
         }
 
         private void OnPlayerChange(GamePlayer prevPlayer, GamePlayer currPlayer)
         {
             if (prevPlayer != null)
             {
+                prevPlayer.State.RemoveCharacter(this);
+                
                 prevPlayer.EventProcessor.RemoveListenerWithoutData<IGameEventOnPreGameTurnListener>(this);
                 prevPlayer.EventProcessor.RemoveListenerWithoutData<IGameEventBuildInitialGameTurnListener>(this);
             }
             
             if (currPlayer != null)
             {
+                currPlayer.State.AddCharacter(this);
+                
                 currPlayer.EventProcessor.AddListenerWithoutData<IGameEventOnPreGameTurnListener>(this);
                 currPlayer.EventProcessor.AddListenerWithoutData<IGameEventBuildInitialGameTurnListener>(this);
             }

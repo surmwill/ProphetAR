@@ -8575,6 +8575,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _level: {fileID: 874366614}
+  _playerConfigs:
+  - _playerUid: Player0
+    _isAI: 0
+    _characterConfigs:
+    - _prefab: {fileID: 8805206095572177566, guid: a623a53404a5d0f49ae87ff6e5d00009, type: 3}
+      _uid: Character0
+      _stats:
+        _actionPoints: 9999
+        _maxActionPoints: 9999
+        _actionPointsRegenPerTurn: 9999
   _player0CharacterPrefabs:
   - {fileID: 8805206095572177566, guid: a623a53404a5d0f49ae87ff6e5d00009, type: 3}
   _player0CharacterStats:
