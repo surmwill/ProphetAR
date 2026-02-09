@@ -26,7 +26,7 @@ namespace GridOperations.Editor
                 Debug.Log("Original grid");
                 Debug.Log(serializedGrid.ToString());
 
-                bool hasCollisions = false;
+                bool collidedWithObstacle = false;
                 foreach (((int row, int col) coordinates, char _) in serializedGrid.Where(
                              gridPoint => gridPoint.Value != GridPoints.Obstacle && gridPoint.Value != GridPoints.Origin))
                 {
@@ -36,18 +36,14 @@ namespace GridOperations.Editor
                     }
                     else
                     {
-                        hasCollisions = true;
+                        collidedWithObstacle = true;
                     }
                 }
-
-
-                if (hasCollisions)
+                
+                Debug.Log(GridUtils.PrintRawGrid(gridCopy));
+                if (!collidedWithObstacle)
                 {
-                    Debug.Log(GridUtils.PrintRawGrid(gridCopy));
-                }
-                else
-                {
-                    Debug.Log("No collisions!");
+                    Debug.Log("No raycasts to open cells were intercepted by obstacles!");
                 }
             }
         }

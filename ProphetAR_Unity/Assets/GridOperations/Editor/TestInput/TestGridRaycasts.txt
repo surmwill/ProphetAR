@@ -1,12 +1,12 @@
-﻿*****
-***O*
-**S**
-*****
-
-OOOO*
+﻿OOOO*
 OOO*O
 OO*OO
 S*OOO
+
+*****
+*O*O*
+**S**
+*O*O*
 
 OOOO*
 OOO**

@@ -35,7 +35,11 @@ namespace GridOperations
             return obstaclesHit.Count > 0;
         }
 
-        private static bool IsObstructedByObstacle((int row, int col) from, (int row, int col) to, (int row, int col) obstacle, HashSet<(int row, int col)> allObstacles)
+        private static bool IsObstructedByObstacle(
+            (int row, int col) from, 
+            (int row, int col) to, 
+            (int row, int col) obstacle, 
+            HashSet<(int row, int col)> allObstacles)
         {
             (float x, float y) fromMiddle = (from.col + 0.5f, from.row + 0.5f);
             (float x, float y) toMiddle = (to.col + 0.5f, to.row + 0.5f);
@@ -71,17 +75,58 @@ namespace GridOperations
             
             // Special case: did we hit a corner (only a single point of intersection)?
             // Ensure we can't see through the sliver of two diagonally touching obstacles
-            bool runDiagonalTest = allObstacles?.Count > 0;
-            if (Mathf.Abs(tFar - tNear) <= Epsilon && runDiagonalTest)
+            if (Mathf.Abs(tFar - tNear) <= Epsilon)
             {
+                bool runDiagonalTest = allObstacles != null;
+                if (!runDiagonalTest)
+                {
+                    return true;
+                }
+                
                 // Northeast ray: we either hit the top-left or bottom-right corner
-                if (rayEuclidean.x > 0 && rayEuclidean.y > 0)
+                if (rayEuclidean.x > 0 && rayEuclidean.y < 0)
                 {
                     (int row, int col) topLeft = (obstacle.row - 1, obstacle.col - 1);
                     (int row, int col) bottomRight = (obstacle.row + 1, obstacle.col + 1);
                     
-                    if (IsObstructedByObstacle(from, to, topLeft, null) || 
-                        IsObstructedByObstacle(from, to, bottomRight, null))
+                    if (allObstacles.Contains(topLeft) && IsObstructedByObstacle(from, to, topLeft, null) ||
+                        allObstacles.Contains(bottomRight) && IsObstructedByObstacle(from, to, bottomRight, null))
+                    {
+                        return true;
+                    } 
+                }
+                // Northwest ray: we either hit the top-right or bottom-left corner
+                else if (rayEuclidean.x < 0 && rayEuclidean.y < 0)
+                {
+                    (int row, int col) topRight = (obstacle.row - 1, obstacle.col + 1);
+                    (int row, int col) bottomLeft = (obstacle.row + 1, obstacle.col - 1);
+                    
+                    if (allObstacles.Contains(topRight) && IsObstructedByObstacle(from, to, topRight, null) || 
+                        allObstacles.Contains(bottomLeft) && IsObstructedByObstacle(from, to, bottomLeft, null))
+                    {
+                        return true;
+                    }
+                }
+                // Southeast ray: we either hit the top-right or bottom-left corner
+                else if (rayEuclidean.x > 0 && rayEuclidean.y > 0)
+                {
+                    (int row, int col) topRight = (obstacle.row - 1, obstacle.col + 1);
+                    (int row, int col) bottomLeft = (obstacle.row + 1, obstacle.col - 1);
+                    
+                    if (allObstacles.Contains(topRight) && IsObstructedByObstacle(from, to, topRight, null) || 
+                        allObstacles.Contains(bottomLeft) && IsObstructedByObstacle(from, to, bottomLeft, null))
+                    {
+                        return true;
+                    }
+                }
+                // Southwest ray: we either hit the top-left or bottom-right corner
+                else if (rayEuclidean.x < 0 && rayEuclidean.y > 0)
+                {
+                    (int row, int col) topLeft = (obstacle.row - 1, obstacle.col - 1);
+                    (int row, int col) bottomRight = (obstacle.row + 1, obstacle.col + 1);
+                    
+                    if (allObstacles.Contains(topLeft) && IsObstructedByObstacle(from, to, topLeft, null) || 
+                        allObstacles.Contains(bottomRight) && IsObstructedByObstacle(from, to, bottomRight, null))
                     {
                         return true;
                     }
@@ -91,7 +136,6 @@ namespace GridOperations
             // Invalid collision
             return false;
         }
-
         
         /// <summary>
         /// Returns whether there's an intersection in a given dimension
