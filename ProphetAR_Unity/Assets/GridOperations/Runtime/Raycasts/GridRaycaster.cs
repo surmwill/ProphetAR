@@ -9,7 +9,7 @@ namespace GridOperations
     {
         private const float Epsilon = 1e-6f;
         
-        public static bool Raycast((int row, int col) from, (int row, int col) to, IEnumerable<(int row, int col)> obstacles, out List<(int row, int col)> obstaclesHit)
+        public static bool Raycast((int row, int col) from, (int row, int col) to, HashSet<(int row, int col)> obstacles, out List<(int row, int col)> obstaclesHit)
         {
             obstaclesHit = new List<(int row, int col)>();
             
@@ -26,7 +26,7 @@ namespace GridOperations
             
             foreach ((int row, int col) obstacle in obstacles)
             {
-                if (IsObstructedByObstacle(from, to, obstacle))
+                if (IsObstructedByObstacle(from, to, obstacle, obstacles))
                 {
                     obstaclesHit.Add(obstacle); 
                 }
@@ -35,27 +35,49 @@ namespace GridOperations
             return obstaclesHit.Count > 0;
         }
 
-        public static bool IsObstructedByObstacle((int row, int col) from, (int row, int col) to, (int row, int col) obstacle)
+        public static bool IsObstructedByObstacle((int row, int col) from, (int row, int col) to, (int row, int col) obstacle, HashSet<(int row, int col)> allObstacles)
         {
             (float x, float y) fromMiddle = (from.col + 0.5f, from.row + 0.5f);
             (float x, float y) toMiddle = (to.col + 0.5f, to.row + 0.5f);
             
-            (float x, float y) ray = (toMiddle.x - fromMiddle.x, toMiddle.y - fromMiddle.y);
+            (float x, float y) rayEuclidean = (toMiddle.x - fromMiddle.x, toMiddle.y - fromMiddle.y);
             
             float tNear = float.NegativeInfinity;
             float tFar = float.PositiveInfinity;
 
-            if (!GetDimensionalIntersection(fromMiddle.x, ray.x, obstacle.col, obstacle.col + 1, ref tNear, ref tFar))
+            if (!GetDimensionalIntersection(fromMiddle.x, rayEuclidean.x, obstacle.col, obstacle.col + 1, ref tNear, ref tFar))
             {
                 return false;
             }
 
-            if (!GetDimensionalIntersection(fromMiddle.y, ray.y, obstacle.row, obstacle.row + 1, ref tNear, ref tFar))
+            if (!GetDimensionalIntersection(fromMiddle.y, rayEuclidean.y, obstacle.row, obstacle.row + 1, ref tNear, ref tFar))
             {
                 return false;
             }
 
-            return tNear < tFar && tNear < 1f && tFar > 0f;
+            // If our collision is right at the end of the ray, we don't consider that a collision.
+            // If our collision is right at the start of the ray, we don't consider that a collision either (we don't collide with ourselves)
+            if (tNear >= 1f || tFar <= 0f)
+            {
+                return false;
+            }
+            
+            if (Mathf.Abs(tFar - tNear) < Epsilon)
+            {
+                int dirRow = Math.Sign(to.row - from.row);
+                int dirCol = Math.Sign(to.col - from.col);
+                
+                (int row, int col) coordinates
+            }
+
+            if (tFar - tNear > Epsilon)
+            {
+                return true;
+            }
+
+
+
+            return false;
         }
 
         
@@ -86,7 +108,7 @@ namespace GridOperations
             tNear = Math.Max(tNear, tMin);
             tFar = Math.Min(tFar, tMax);
 
-            return true;
+            return tNear <= tFar;
         }
     }
 }

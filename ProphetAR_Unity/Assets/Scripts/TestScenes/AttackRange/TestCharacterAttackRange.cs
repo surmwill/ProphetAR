@@ -7,8 +7,6 @@ namespace ProphetAR
     [RequireComponent(typeof(Character))]
     public class TestCharacterAttackRange : MonoBehaviour
     {
-        private Vector2Int? _lastCoordinates;
-
         private IDisposable _gridCellPainter;
         
         private Character _character;
@@ -24,10 +22,10 @@ namespace ProphetAR
             _character.transform.localPosition = transform.localPosition.WithY(0f);
 
             // Using cell, create navigation destination set with infinite movement (all cells), take that navigation set
-            if (_character.Grid.TryGetContainingCell(_character.transform, out GridCell gridCell) && gridCell.Coordinates != _lastCoordinates)
+            if (_character.Grid.TryGetContainingCell(_character.transform, out GridCell gridCell) && gridCell.Coordinates != _character.GridTransform.Coordinates)
             {
+                _character.GridTransform.MoveToImmediate(gridCell.Coordinates);
                 OnCoordinatesChanged();
-                _lastCoordinates = gridCell.Coordinates;
             }
         }
 

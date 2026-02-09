@@ -15,11 +15,12 @@ namespace ProphetAR
         [SerializeField]
         private int _playerIndex = -1;
         
+        [ReadOnly]
+        [SerializeField]
+        private string _characterUid = "TestCharacter";
+        
         [SerializeField]
         private CharacterStats _characterStats;
-
-        private const float MovementTime = 0.5f;
-        private const float TurnTime = 0.25f;
         
         public delegate void OnWalkComplete(bool didStopEarly, GridCellContent stoppedAtCell);
 
@@ -47,11 +48,17 @@ namespace ProphetAR
             set => _characterStats = value;
         }
 
+        public string Uid => _characterUid;
+
         public List<CharacterAbility> Abilities { get; } = new();
 
         public List<CharacterAbility> CurrentlyExecutingAbilities { get; } = new();
 
         public bool IsExecutingAbility => CurrentlyExecutingAbilities.Count > 0;
+        
+        // Walking parameters
+        private const float MovementTime = 0.5f;
+        private const float TurnTime = 0.25f;
 
         public void Initialize(GamePlayer player, CharacterStats characterStats)
         {

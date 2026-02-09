@@ -23,10 +23,9 @@ namespace ProphetAR
             
             if (raycastLocations)
             {
-                IEnumerable<(int row, int col)> obstacles = destinationSet.SerializedGrid.Obstacles;
                 foreach (NavigationDestination destination in destinationSet)
                 {
-                    if (!GridRaycaster.Raycast(origin, destination.Position, obstacles, out _))
+                    if (!GridRaycaster.Raycast(origin, destination.Position, destinationSet.SerializedGrid.Obstacles, out _))
                     {
                         (int row, int col) nonNormalizedCoordinates = (destination.Position.ToVector2Int() + area.TopLeft).ToTuple();
                         locations.Add(nonNormalizedCoordinates, destination.StepsRequired);

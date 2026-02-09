@@ -96,7 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7027812677030942244}
   - component: {fileID: 8563755770520893034}
-  - component: {fileID: 8805206095572177566}
+  - component: {fileID: 5933776772043231590}
   - component: {fileID: 5359850562317676176}
   m_Layer: 0
   m_Name: TestAttackRange_Character
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee5f310633954e32b086e94edf76699f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8805206095572177566
+--- !u!114 &5933776772043231590
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142,10 +142,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6635799212570193993}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee6df3adf819482db7575bbb2447748f, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a4b716bf790491f83f56f89820dd6ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _playerIndex: -1
+  _characterUid: TestCharacter
   _characterStats:
     _actionPoints: 9999
     _maxActionPoints: 9999
