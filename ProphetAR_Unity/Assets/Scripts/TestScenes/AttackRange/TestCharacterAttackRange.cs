@@ -16,6 +16,11 @@ namespace ProphetAR
             _character = GetComponent<Character>();
         }
 
+        private void Start()
+        {
+            OnCoordinatesChanged();
+        }
+
         private void Update()
         {
             // Get position of character, flatten to XZ plane, transform point into local grid position, transform local grid position into cell
