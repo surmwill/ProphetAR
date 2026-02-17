@@ -44,7 +44,7 @@ namespace GridOperations
             (float x, float y) fromMiddle = (from.col + 0.5f, from.row + 0.5f);
             (float x, float y) toMiddle = (to.col + 0.5f, to.row + 0.5f);
             
-            // Normally x represents our row index and y the column. But this ray represents the Euclidean vector between the two points
+            // Normally x represents our row index and y the column. But this ray represents the Euclidean vector between the two points 
             (float x, float y) rayEuclidean = (toMiddle.x - fromMiddle.x, toMiddle.y - fromMiddle.y);
             
             float tNear = float.NegativeInfinity;
