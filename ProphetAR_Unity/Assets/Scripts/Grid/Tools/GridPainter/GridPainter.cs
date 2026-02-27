@@ -14,19 +14,19 @@ namespace ProphetAR
         }
         
         // Movement
-        public DisposableGridPainter ShowMovementArea(GridSliceNavigationDestinations sliceDestinations)
+        public DisposableGridPainter ShowMovementArea(GridSliceNavigationDestinations gridSliceDestinations)
         {
-            NavigationDestinationSet destinationSet = sliceDestinations.Destinations;
-            foreach (GridCell gridCell in sliceDestinations.Slice)
+            NavigationDestinationSet destinationSet = gridSliceDestinations.Destinations;
+            foreach (GridCell gridCell in gridSliceDestinations.Slice)
             {
-                (int row, int col) destinationSetCoords = sliceDestinations.GridToDestinationSetCoords(gridCell.Coordinates);
+                (int row, int col) destinationSetCoords = gridSliceDestinations.GridToDestinationSetCoords(gridCell.Coordinates);
                 if (destinationSet.Destinations.TryGetValue(destinationSetCoords, out NavigationDestination destination))
                 {
                     gridCell.GridCellPainter.ShowIsNavigable(true, destination.StepsRequired);
                 }
             }
 
-            return new DisposableGridPainter(() => ClearMovementArea(sliceDestinations.Slice));
+            return new DisposableGridPainter(() => ClearMovementArea(gridSliceDestinations.Slice));
         }
         
         public void ClearMovementArea(GridSlice gridSlice)

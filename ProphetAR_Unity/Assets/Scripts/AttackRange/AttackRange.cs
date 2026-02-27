@@ -28,21 +28,21 @@ namespace ProphetAR
             Locations = gridLocations?.ToDictionary(gridLocation => gridLocation, _ => uniformActionPoints) ?? new Dictionary<Vector2Int, int>();
         }
 
-        public static AttackRange FromGridSliceNavigation(GridSliceNavigationDestinations sliceNavigation, int? uniformActionPoints = null, bool raycastCheckLocations = true)
+        public static AttackRange FromGridSliceNavigationDestinations(GridSliceNavigationDestinations gridSliceDestinations, int? uniformActionPoints = null, bool raycastCheckLocations = true)
         {
             Dictionary<Vector2Int, int> gridAttackLocations = new Dictionary<Vector2Int, int>();
             
-            NavigationDestinationSet destinationSet = sliceNavigation.Destinations;
+            NavigationDestinationSet destinationSet = gridSliceDestinations.Destinations;
             foreach (NavigationDestination destination in destinationSet)
             {
-                Vector2Int gridCoordinates = sliceNavigation.DestinationSetToGridCoords(destination.Coordinates);
+                Vector2Int gridCoordinates = gridSliceDestinations.DestinationSetToGridCoords(destination.Coordinates);
                 if (!raycastCheckLocations || !GridRaycaster.Raycast(destination.Origin, destination.Coordinates, destinationSet.SerializedGrid.Obstacles, out _))
                 {
                     gridAttackLocations.Add(gridCoordinates, uniformActionPoints ?? destination.StepsRequired);
                 }
             }
 
-            Vector2Int gridOrigin = sliceNavigation.DestinationSetToGridCoords(sliceNavigation.Destinations.Origin);
+            Vector2Int gridOrigin = gridSliceDestinations.DestinationSetToGridCoords(gridSliceDestinations.Destinations.Origin);
             return new AttackRange(gridOrigin, gridAttackLocations);
         }
     }

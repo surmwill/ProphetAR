@@ -150,7 +150,8 @@ namespace ProphetAR
                 yield break;
             }
             
-            // This should not be 
+            // TODO: This should not be a global slice
+            // TODO: SplitOnDirectionChanges but for GridSliceNavigationInstructionSet
             NavigationInstructionSet instructionSet = GridTransform.GetPathTo(targetCoordinates, Grid.GetExpensiveGlobalSlice());
             if (instructionSet == null)
             {
