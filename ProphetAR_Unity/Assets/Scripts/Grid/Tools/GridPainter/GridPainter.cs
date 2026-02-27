@@ -14,9 +14,9 @@ namespace ProphetAR
         }
         
         // Movement
-        public DisposableGridPainter ShowMovementArea(GridSliceNavigationDestinationSet sliceDestinations)
+        public DisposableGridPainter ShowMovementArea(GridSliceNavigationDestinations sliceDestinations)
         {
-            NavigationDestinationSet destinationSet = sliceDestinations.DestinationSet;
+            NavigationDestinationSet destinationSet = sliceDestinations.Destinations;
             foreach (GridCell gridCell in sliceDestinations.Slice)
             {
                 (int row, int col) destinationSetCoords = sliceDestinations.GridToDestinationSetCoords(gridCell.Coordinates);

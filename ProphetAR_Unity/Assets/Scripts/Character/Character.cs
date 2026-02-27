@@ -128,14 +128,14 @@ namespace ProphetAR
         
         #region Movement
         
-        public GridSliceNavigationDestinationSet GetAttackArea()
+        public GridSliceNavigationDestinations GetAttackArea()
         {
             int maxRange = _stats.AttackRange;
             GridSlice area = GridSlice.ExtendFromCenter(Grid, GridTransform.Coordinates, maxRange);
             return GridTransform.GetPathsFrom(maxRange, area);
         }
 
-        public GridSliceNavigationDestinationSet GetMovementArea()
+        public GridSliceNavigationDestinations GetMovementArea()
         {
             int maxSteps = _stats.ActionPoints;
             GridSlice area = GridSlice.ExtendFromCenter(Grid, GridTransform.Coordinates, maxSteps);

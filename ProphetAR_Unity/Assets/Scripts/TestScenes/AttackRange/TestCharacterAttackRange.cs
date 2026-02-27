@@ -41,7 +41,7 @@ namespace ProphetAR
         private void OnCoordinatesChanged()
         {
             _gridCellPainter?.Dispose();
-            GridSliceNavigationDestinationSet locations = _character.GridTransform.GetPathsFrom(int.MaxValue, _character.Grid.GetExpensiveGlobalSlice());
+            GridSliceNavigationDestinations locations = _character.GridTransform.GetPathsFrom(int.MaxValue, _character.Grid.GetExpensiveGlobalSlice());
             _gridCellPainter = _character.Grid.GridPainter.ShowAttackableArea(AttackRange.FromGridSliceNavigation(locations, _character.Grid.GetExpensiveGlobalSlice()));
         }
     }
