@@ -13,15 +13,17 @@ namespace ProphetAR
     {
         public CustomGrid Grid { get; }
         
-        public Vector2Int BotLeft { get; }
-        
         public Vector2Int TopLeft { get; }
+        
+        public Vector2Int BotLeft { get; }
         
         public Vector2Int TopRight { get; }
         
         public Vector2Int BotRight { get; }
         
         public Vector2Int Middle { get; }
+        
+        public Vector2Int Origin => TopLeft;
         
         public Vector2Int Dimensions { get; }
         

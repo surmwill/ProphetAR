@@ -20,7 +20,7 @@ namespace ProphetAR
         private string _characterUid = null;
         
         [SerializeField]
-        private CharacterStats _characterStats;
+        private CharacterStats _stats;
         
         public delegate void OnWalkComplete(bool didStopEarly, GridCellContent stoppedAtCell);
 
@@ -48,10 +48,10 @@ namespace ProphetAR
             set => _characterUid = value;
         }
 
-        public CharacterStats CharacterStats
+        public CharacterStats Stats
         {
-            get => _characterStats;
-            set => _characterStats = value;
+            get => _stats;
+            set => _stats = value;
         }
 
         public List<CharacterAbility> Abilities { get; } = new();
@@ -67,7 +67,7 @@ namespace ProphetAR
         public void Initialize(GamePlayer player, string uid, CharacterStats characterStats)
         {
             Uid = uid;
-            CharacterStats = characterStats;
+            Stats = characterStats;
             
             // Temporarily hard-coded: these should be loaded from the player config and change per character
             Abilities.AddRange(new CharacterAbility[]{ new CharacterAbilityMovement(this), new CharacterAbilityCompleteTurn(this)});
@@ -121,18 +121,25 @@ namespace ProphetAR
 
         private void UpdateStatsForNewTurn()
         {
-            _characterStats.ActionPoints = Mathf.Min(_characterStats.ActionPoints + _characterStats.ActionPointsRegenPerTurn, _characterStats.MaxActionPoints);
+            _stats.ActionPoints = Mathf.Min(_stats.ActionPoints + _stats.ActionPointsRegenPerTurn, _stats.MaxActionPoints);
         }
         
         #endregion
         
         #region Movement
-
-        public (NavigationDestinationSet DestinationSet, GridSlice Area) GetMovementArea()
+        
+        public GridSliceNavigationDestinationSet GetAttackArea()
         {
-            int maxSteps = _characterStats.ActionPoints;
+            int maxRange = _stats.AttackRange;
+            GridSlice area = GridSlice.ExtendFromCenter(Grid, GridTransform.Coordinates, maxRange);
+            return GridTransform.GetPathsFrom(maxRange, area);
+        }
+
+        public GridSliceNavigationDestinationSet GetMovementArea()
+        {
+            int maxSteps = _stats.ActionPoints;
             GridSlice area = GridSlice.ExtendFromCenter(Grid, GridTransform.Coordinates, maxSteps);
-            return (GridTransform.GetPathsFrom(maxSteps, area), area);
+            return GridTransform.GetPathsFrom(maxSteps, area);
         }
         
         public IEnumerator WalkToCoordinates(Vector2Int targetCoordinates, OnWalkComplete onComplete = null)
@@ -143,6 +150,7 @@ namespace ProphetAR
                 yield break;
             }
             
+            // This should not be 
             NavigationInstructionSet instructionSet = GridTransform.GetPathTo(targetCoordinates, Grid.GetExpensiveGlobalSlice());
             if (instructionSet == null)
             {
@@ -167,9 +175,9 @@ namespace ProphetAR
                 NavigationDirection direction = instructionsToNextStop.PathToTarget.First().Direction;
 
                 // Previous stops might have reduced our action points and affected our stop position
-                if (CharacterStats.ActionPoints < distanceToStop)
+                if (Stats.ActionPoints < distanceToStop)
                 {
-                    int missingDistance = distanceToStop - CharacterStats.ActionPoints;
+                    int missingDistance = distanceToStop - Stats.ActionPoints;
                     distanceToStop -= missingDistance;
                     
                     switch (direction)
@@ -251,8 +259,8 @@ namespace ProphetAR
                     }
                 }
 
-                CharacterStats.ModifyActionPoints(this, -distanceToStop);
-                if (stoppedEarly || CharacterStats.ActionPoints == 0)
+                Stats.ModifyActionPoints(this, -distanceToStop);
+                if (stoppedEarly || Stats.ActionPoints == 0)
                 {
                     break;
                 }

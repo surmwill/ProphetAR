@@ -105,7 +105,7 @@ namespace GridOperations.Editor
             char[,] gridCopy = GridParser.CopyGrid(grid);
             foreach (NavigationDestination navigationDestination in navigationDestinationSet.Destinations.Values)
             {
-                gridCopy[navigationDestination.Position.row, navigationDestination.Position.col] = GridPoints.DEBUG_PRINT_PATH;
+                gridCopy[navigationDestination.Coordinates.row, navigationDestination.Coordinates.col] = GridPoints.DEBUG_PRINT_PATH;
             }
 
             gridCopy[navigationDestinationSet.Origin.row, navigationDestinationSet.Origin.col] = GridPoints.Origin;

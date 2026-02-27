@@ -1,5 +1,4 @@
 ﻿using System;
-using GridOperations;
 using UnityEngine;
 
 namespace ProphetAR
@@ -42,8 +41,8 @@ namespace ProphetAR
         private void OnCoordinatesChanged()
         {
             _gridCellPainter?.Dispose();
-            NavigationDestinationSet locations = _character.GridTransform.GetPathsFrom(int.MaxValue, _character.Grid.GetExpensiveGlobalSlice());
-            _gridCellPainter = _character.Grid.GridPainter.ShowAttackableArea(AttackRange.FromNavigationDestinations(locations, _character.Grid.GetExpensiveGlobalSlice()));
+            GridSliceNavigationDestinationSet locations = _character.GridTransform.GetPathsFrom(int.MaxValue, _character.Grid.GetExpensiveGlobalSlice());
+            _gridCellPainter = _character.Grid.GridPainter.ShowAttackableArea(AttackRange.FromGridSliceNavigation(locations, _character.Grid.GetExpensiveGlobalSlice()));
         }
     }
 }

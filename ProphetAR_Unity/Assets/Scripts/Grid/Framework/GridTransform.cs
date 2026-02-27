@@ -132,7 +132,7 @@ namespace ProphetAR
             gridCellContent.AddOccupier(this);
         }
 
-        public NavigationDestinationSet GetPathsFrom(int maxNumSteps, GridSlice area)
+        public GridSliceNavigationDestinationSet GetPathsFrom(int maxNumSteps, GridSlice area)
         {
             if (!area.ContainsCoordinates(Coordinates))
             {
@@ -140,10 +140,10 @@ namespace ProphetAR
             }
 
             SerializedGrid serializedGrid = area.GetSerializedGrid().WithOrigin((Coordinates - area.TopLeft).ToTuple());
-            return GridPathFinder.GetPathsFrom(serializedGrid, maxNumSteps, true);
+            return new GridSliceNavigationDestinationSet(area, GridPathFinder.GetPathsFrom(serializedGrid, maxNumSteps, true));
         }
         
-        public NavigationInstructionSet GetPathTo(Vector2Int target, GridSlice area)
+        public GridSliceNavigationDestination GetPathTo(Vector2Int target, GridSlice area)
         {
             if (!area.ContainsCoordinates(Coordinates))
             {
@@ -159,7 +159,7 @@ namespace ProphetAR
                 .WithOrigin((Coordinates - area.TopLeft).ToTuple())
                 .WithTarget(target.ToTuple());
 
-            return GridPathFinder.GetPathTo(serializedGrid);
+            return new GridSliceNavigationDestination(area, GridPathFinder.GetPathTo(serializedGrid));
         }
     }
 }

@@ -1,39 +1,49 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GridOperations;
+using UnityEngine;
 
 namespace ProphetAR
 {
     public readonly struct AttackRange
     {
-        // Non-null
-        public Dictionary<(int row, int col), int> Locations { get; }
+        /// <summary>
+        /// Non-null.
+        /// The grid cells which are in range of attack.
+        /// The keys are their coordinates, and the values are the action points required for attacking that coordinate.
+        /// </summary>
+        public Dictionary<Vector2Int, int> Locations { get; }
 
-        public (int row, int col) Origin { get; }
+        public Vector2Int Origin { get; }
 
-        public AttackRange((int row, int col) origin, Dictionary<(int row, int col), int> locations)
+        public AttackRange(Vector2Int origin, Dictionary<Vector2Int, int> gridLocationsWithActionPoints)
         {
             Origin = origin;
-            Locations = locations ?? new Dictionary<(int row, int col), int>();
+            Locations = gridLocationsWithActionPoints ?? new Dictionary<Vector2Int, int>();
+        }
+        
+        public AttackRange(Vector2Int origin, IEnumerable<Vector2Int> gridLocations, int uniformActionPoints)
+        {
+            Origin = origin;
+            Locations = gridLocations?.ToDictionary(gridLocation => gridLocation, _ => uniformActionPoints) ?? new Dictionary<Vector2Int, int>();
         }
 
-        public static AttackRange FromNavigationDestinations(NavigationDestinationSet destinationSet, GridSlice area, bool raycastLocations = true)
+        public static AttackRange FromGridSliceNavigation(GridSliceNavigationDestinationSet sliceNavigation, int? uniformActionPoints = null, bool raycastCheckLocations = true)
         {
-            (int row, int col) origin = destinationSet.Origin;
-            Dictionary<(int row, int col), int> locations = new Dictionary<(int row, int col), int>();
+            Dictionary<Vector2Int, int> gridAttackLocations = new Dictionary<Vector2Int, int>();
             
-            if (raycastLocations)
+            NavigationDestinationSet destinationSet = sliceNavigation.DestinationSet;
+            foreach (NavigationDestination destination in destinationSet)
             {
-                foreach (NavigationDestination destination in destinationSet)
+                Vector2Int gridCoordinates = sliceNavigation.DestinationSetToGridCoords(destination.Coordinates);
+                if (!raycastCheckLocations || !GridRaycaster.Raycast(destination.Origin, destination.Coordinates, destinationSet.SerializedGrid.Obstacles, out _))
                 {
-                    if (!GridRaycaster.Raycast(origin, destination.Position, destinationSet.SerializedGrid.Obstacles, out _))
-                    {
-                        (int row, int col) nonNormalizedCoordinates = (destination.Position.ToVector2Int() + area.TopLeft).ToTuple();
-                        locations.Add(nonNormalizedCoordinates, destination.StepsRequired);
-                    }
-                }   
+                    gridAttackLocations.Add(gridCoordinates, uniformActionPoints ?? destination.StepsRequired);
+                }
             }
 
-            return new AttackRange(origin, locations);
+            Vector2Int gridOrigin = sliceNavigation.DestinationSetToGridCoords(sliceNavigation.DestinationSet.Origin);
+            return new AttackRange(gridOrigin, gridAttackLocations);
         }
     }
 }

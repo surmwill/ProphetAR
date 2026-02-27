@@ -15,6 +15,9 @@ namespace ProphetAR
         [SerializeField]
         private int _actionPointsRegenPerTurn = 5;
 
+        [SerializeField] 
+        private int _attackRange = 2;
+
         public int ActionPoints
         {
             get => _actionPoints;
@@ -31,6 +34,12 @@ namespace ProphetAR
         {
             get => _actionPointsRegenPerTurn; 
             set => _actionPointsRegenPerTurn = value;
+        }
+
+        public int AttackRange
+        {
+            get => _attackRange;
+            set => _attackRange = value;
         }
 
         public void ModifyActionPoints(Character character, int amount)

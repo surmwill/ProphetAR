@@ -64,7 +64,7 @@ namespace ProphetAR
 
             _characterAbilitiesRecycler.AppendEntries(data.Abilities.Select(ability => new TestTurnScreenCharacterAbilitiesRecyclerUIData(ability)));
             
-            _abilityPointsText.text = $"Action points: {data.CharacterStats.ActionPoints.ToString()}";
+            _abilityPointsText.text = $"Action points: {data.Stats.ActionPoints.ToString()}";
             _currCharacterText.text = _currCharacter.name;
         }
         

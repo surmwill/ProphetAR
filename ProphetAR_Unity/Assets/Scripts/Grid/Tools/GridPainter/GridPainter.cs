@@ -1,5 +1,6 @@
 ﻿using System;
 using GridOperations;
+using UnityEngine;
 
 namespace ProphetAR
 {
@@ -13,18 +14,19 @@ namespace ProphetAR
         }
         
         // Movement
-        public DisposableGridPainter ShowMovementArea(NavigationDestinationSet destinations, GridSlice gridSlice)
+        public DisposableGridPainter ShowMovementArea(GridSliceNavigationDestinationSet sliceDestinations)
         {
-            foreach (GridCell gridCell in gridSlice)
+            NavigationDestinationSet destinationSet = sliceDestinations.DestinationSet;
+            foreach (GridCell gridCell in sliceDestinations.Slice)
             {
-                (int row, int col) normalizedCoordinates = (gridCell.Coordinates - gridSlice.TopLeft).ToTuple();
-                if (destinations.Destinations.TryGetValue(normalizedCoordinates, out NavigationDestination destination))
+                (int row, int col) destinationSetCoords = sliceDestinations.GridToDestinationSetCoords(gridCell.Coordinates);
+                if (destinationSet.Destinations.TryGetValue(destinationSetCoords, out NavigationDestination destination))
                 {
                     gridCell.GridCellPainter.ShowIsNavigable(true, destination.StepsRequired);
                 }
             }
 
-            return new DisposableGridPainter(() => ClearMovementArea(gridSlice));
+            return new DisposableGridPainter(() => ClearMovementArea(sliceDestinations.Slice));
         }
         
         public void ClearMovementArea(GridSlice gridSlice)
@@ -38,9 +40,9 @@ namespace ProphetAR
         // Attack
         public DisposableGridPainter ShowAttackableArea(AttackRange attackRange)
         {
-            foreach (((int row, int col) coordinates, int actionPoints) in attackRange.Locations)
+            foreach ((Vector2Int coordinates, int actionPoints) in attackRange.Locations)
             {
-                Grid[coordinates.ToVector2Int()].GridCellPainter.ShowIsAttackable(true, actionPoints);
+                Grid[coordinates].GridCellPainter.ShowIsAttackable(true, actionPoints);
             }
 
             return new DisposableGridPainter(() => ClearAttackableArea(attackRange));
@@ -48,9 +50,9 @@ namespace ProphetAR
         
         public void ClearAttackableArea(AttackRange attackRange)
         {
-            foreach ((int row, int col) coordinates in attackRange.Locations.Keys)
+            foreach (Vector2Int coordinates in attackRange.Locations.Keys)
             {
-                Grid[coordinates.ToVector2Int()].GridCellPainter.ShowIsAttackable(false);
+                Grid[coordinates].GridCellPainter.ShowIsAttackable(false);
             }
         }
 

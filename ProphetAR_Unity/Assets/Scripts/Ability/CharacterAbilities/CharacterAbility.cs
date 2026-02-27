@@ -9,7 +9,7 @@ namespace ProphetAR
 
         public override bool CanExecute()
         {
-            return !Character.IsExecutingAbility && Character.CharacterStats.ActionPoints >= MinNumActionPoints;
+            return !Character.IsExecutingAbility && Character.Stats.ActionPoints >= MinNumActionPoints;
         }
 
         public override void Execute(Action onComplete = null, Action onCancelled = null)
